@@ -1,0 +1,610 @@
+/* ==============================================
+   pages/home/home.wxss — AI 设计对话首页
+   轻复古·奶油风 Chat UI
+   ============================================== */
+
+/* ---------- 页面容器 ---------- */
+page {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.chat-page {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  padding-bottom: calc(100rpx + env(safe-area-inset-bottom));
+  background: var(--bg);
+  box-sizing: border-box;
+}
+
+/* ---------- 聊天滚动区 ---------- */
+.chat-scroll {
+  flex: 1;
+  min-height: 0;
+  padding: 0;
+}
+
+.chat-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+  padding: 16rpx 32rpx 24rpx;
+  box-sizing: border-box;
+}
+
+/* ---------- 消息行 ---------- */
+.chat-row {
+  display: flex;
+  width: 100%;
+  gap: 16rpx;
+  box-sizing: border-box;
+  animation: msgIn 0.35s var(--ease-spring);
+}
+
+@keyframes msgIn {
+  from { opacity: 0; transform: translateY(24rpx); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* 用户消息 — 右对齐胶囊 */
+.chat-bubble-user {
+  background: var(--gold-400);
+  color: var(--text-inverse);
+  border-radius: 32rpx;
+  padding: 20rpx 28rpx;
+  max-width: 80%;
+  margin-left: auto;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.chat-bubble-user .chat-text {
+  font-size: 28rpx;
+  line-height: 1.55;
+  color: var(--text-inverse);
+  word-break: break-all;
+  overflow-wrap: break-word;
+  white-space: pre-wrap;
+}
+
+.chat-time-user {
+  font-size: 20rpx;
+  color: rgba(255,255,255,0.7);
+  display: block;
+  margin-top: 6rpx;
+  text-align: right;
+}
+
+/* AI 消息 — 左对齐 */
+.chat-avatar {
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary), var(--gold-300));
+  color: var(--text-inverse);
+  font-size: 26rpx;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 4rpx 12rpx rgba(193,154,80,0.18);
+}
+
+.chat-bubble-agent {
+  background: var(--gold-100);
+  border-radius: 32rpx 32rpx 32rpx 8rpx;
+  padding: 20rpx 28rpx;
+  max-width: 80%;
+  box-shadow: var(--shadow-sm);
+}
+
+.chat-bubble-agent .chat-text {
+  font-size: 28rpx;
+  line-height: 1.6;
+  color: var(--text-primary);
+  word-break: break-all;
+  overflow-wrap: break-word;
+  white-space: pre-wrap;
+}
+
+.chat-time-agent {
+  font-size: 20rpx;
+  color: var(--gold-500);
+  display: block;
+  margin-top: 6rpx;
+}
+
+/* ---------- 方案卡片 ---------- */
+.chat-card-row {
+  display: flex;
+  width: 100%;
+  animation: msgIn 0.4s var(--ease-spring);
+}
+
+/* ---------- 案例推荐卡片（内联横向滚动） ---------- */
+.case-cards-row {
+  display: flex;
+  gap: 24rpx;
+  overflow-x: auto;
+  padding: 16rpx 0;
+  scrollbar-width: none;
+}
+.case-cards-row::-webkit-scrollbar { display: none; }
+
+.case-mini {
+  width: 240rpx;
+  height: 320rpx;
+  flex-shrink: 0;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--bg-card);
+  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+.case-mini:active { transform: scale(0.95); }
+
+.case-mini-img {
+  width: 100%;
+  height: 224rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.case-mini-info {
+  height: 96rpx;
+  padding: 12rpx 20rpx;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.case-mini-title {
+  font-size: 24rpx;
+  font-weight: 600;
+  color: var(--text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.case-mini-tag {
+  font-size: 20rpx;
+  color: var(--gold-500);
+  margin-top: 4rpx;
+}
+
+.proposal-card {
+  width: 100%;
+  padding: 32rpx;
+  cursor: pointer;
+  border: 2rpx solid rgba(193,154,80,0.12);
+  transition: transform var(--ease);
+}
+
+.proposal-card:active {
+  transform: scale(0.97);
+}
+
+.pc-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16rpx;
+}
+
+.pc-badge {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  font-size: 24rpx;
+  font-weight: 700;
+  color: var(--primary);
+  background: rgba(193,154,80,0.1);
+  padding: 8rpx 20rpx;
+  border-radius: 9999rpx;
+}
+
+.pc-total {
+  font-size: 36rpx;
+  font-weight: 800;
+  color: var(--text);
+}
+
+.pc-concept {
+  font-size: 26rpx;
+  color: var(--text-secondary);
+  line-height: 1.55;
+  display: block;
+  margin-bottom: 20rpx;
+}
+
+.pc-stats {
+  display: flex;
+  gap: 32rpx;
+  margin-bottom: 20rpx;
+}
+
+.pc-stat {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  font-size: 22rpx;
+  color: var(--text-muted);
+}
+
+.pc-cta {
+  font-size: 24rpx;
+  font-weight: 600;
+  color: var(--primary);
+  text-align: right;
+}
+
+/* ---------- 需求确认卡片 ---------- */
+.req-card {
+  width: 100%;
+  padding: 32rpx;
+  border: 2rpx solid rgba(193,154,80,0.15);
+  background: linear-gradient(135deg, var(--bg-card), var(--gold-50));
+}
+
+.req-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24rpx;
+}
+
+.req-title {
+  display: flex;
+  align-items: center;
+  gap: 10rpx;
+  font-size: 28rpx;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.req-hint {
+  font-size: 20rpx;
+  color: var(--text-muted);
+}
+
+.req-items {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16rpx;
+  margin-bottom: 28rpx;
+}
+
+.req-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4rpx;
+}
+
+.req-label {
+  font-size: 20rpx;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.req-val {
+  font-size: 26rpx;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.req-btn {
+  width: 100%;
+  padding: 24rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12rpx;
+  background: linear-gradient(135deg, var(--primary), var(--gold-mid));
+  color: var(--text-inverse);
+  border: none;
+  border-radius: var(--radius);
+  font-size: 30rpx;
+  font-weight: 700;
+  letter-spacing: 1rpx;
+}
+
+.req-btn:active {
+  transform: scale(0.96);
+  opacity: 0.9;
+}
+
+/* ---------- 快速引导区 ---------- */
+.suggest-area {
+  padding: 20rpx 32rpx;
+  border-top: 2rpx solid var(--gold-200);
+  background: var(--bg);
+}
+
+.suggest-title {
+  font-size: 22rpx;
+  color: var(--gold-500);
+  letter-spacing: 1rpx;
+  margin-bottom: 16rpx;
+  display: block;
+}
+
+.suggest-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16rpx;
+}
+
+.suggest-chip {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  padding: 16rpx 24rpx;
+  background: var(--bg-card);
+  border: 2rpx solid var(--gold-200);
+  border-radius: 9999rpx;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.suggest-chip:active {
+  transform: scale(0.96);
+  border-color: var(--gold-400);
+  background: var(--gold-50);
+}
+
+.suggest-text {
+  font-size: 22rpx;
+  color: var(--gold-700);
+  line-height: 1.4;
+  font-weight: 500;
+}
+
+/* ---------- 生成方案栏 ---------- */
+.gen-bar {
+  padding: 16rpx 32rpx;
+  background: var(--gold-50);
+  border-top: 2rpx solid var(--gold-200);
+}
+
+.gen-btn {
+  width: 100%;
+  height: 88rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12rpx;
+  background: linear-gradient(135deg, var(--gold-400), var(--gold-500));
+  color: var(--text-inverse);
+  border: none;
+  border-radius: 44rpx;
+  font-size: 30rpx;
+  font-weight: 600;
+  letter-spacing: 1rpx;
+}
+
+.gen-btn:active {
+  transform: scale(0.97);
+  opacity: 0.95;
+}
+
+/* ---------- 人工兜底 ---------- */
+.fallback-bar {
+  display: flex;
+  padding: 16rpx 32rpx;
+  gap: 16rpx;
+  background: var(--bg);
+  border-top: 2rpx solid var(--border);
+}
+
+.fallback-bar .btn-outline {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12rpx;
+}
+
+/* ---------- 输入栏 ---------- */
+.input-bar {
+  padding: 0 32rpx 16rpx;
+  background: var(--bg-card);
+  border-top: 2rpx solid var(--border);
+}
+
+/* ---------- 找灵感横条 ---------- */
+.inspiration-bar {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  height: 96rpx;
+  padding: 0 32rpx;
+  background: var(--gold-50);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.inspiration-bar:active {
+  background: var(--gold-100);
+}
+
+.inspiration-text {
+  flex: 1;
+  font-size: 28rpx;
+  font-weight: 500;
+  color: var(--gold-700);
+}
+
+.inspiration-arrow {
+  font-size: 36rpx;
+  color: var(--gold-500);
+  font-weight: 300;
+}
+
+.input-row {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+  padding: 16rpx 0;
+}
+
+.chat-input {
+  flex: 1;
+  height: 96rpx;
+  padding: 0 40rpx;
+  background: var(--bg);
+  border: 3rpx solid var(--gold-300);
+  border-radius: 48rpx;
+  font-size: 28rpx;
+  color: var(--text-primary);
+}
+
+.chat-input::placeholder {
+  color: var(--gold-400);
+}
+
+.chat-input:focus {
+  border-color: var(--gold-500);
+}
+
+.send-btn {
+  width: 80rpx;
+  height: 80rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--gold-200);
+  border-radius: 50%;
+  transition: all 0.2s;
+}
+
+.send-icon {
+  font-size: 28rpx;
+  font-weight: 700;
+  color: var(--text-inverse);
+}
+
+.send-btn-active {
+  background: var(--gold-400);
+  box-shadow: var(--shadow-gold);
+}
+
+/* ═══════════════════════════════════════════════
+   ENHANCED CHAT UI — Design Canvas Migration
+   从设计画布迁移的聊天界面增强样式
+   ═══════════════════════════════════════════════ */
+
+/* ---------- 聊天气泡渐变背景 ---------- */
+.chat-bubble-user {
+  background: linear-gradient(135deg, var(--gold-400), var(--gold-500));
+  box-shadow: 0 4rpx 16rpx rgba(193, 154, 80, 0.2);
+}
+
+.chat-bubble-agent {
+  background: linear-gradient(135deg, var(--bg-card), var(--gold-50));
+  border: 2rpx solid var(--gold-100);
+}
+
+/* ---------- 案例卡片增强 ---------- */
+.case-mini {
+  transition: all 0.3s ease;
+}
+
+.case-mini:active {
+  transform: translateY(-4rpx) scale(0.98);
+  box-shadow: var(--shadow-md);
+}
+
+/* ---------- 方案卡片增强 ---------- */
+.proposal-card {
+  background: linear-gradient(135deg, var(--bg-card), var(--gold-50));
+  box-shadow: var(--shadow-sm);
+}
+
+.proposal-card:active {
+  transform: scale(0.97);
+  box-shadow: var(--shadow-md);
+}
+
+/* ---------- 需求确认卡片增强 ---------- */
+.req-card {
+  background: linear-gradient(135deg, var(--bg-card), var(--gold-50));
+  box-shadow: var(--shadow-sm);
+}
+
+/* ---------- 快速引导芯片增强 ---------- */
+.suggest-chip {
+  transition: all 0.2s ease;
+}
+
+.suggest-chip:active {
+  transform: scale(0.96);
+  background: var(--gold-50);
+  border-color: var(--gold-400);
+  box-shadow: var(--shadow-sm);
+}
+
+/* ---------- 生成按钮增强 ---------- */
+.gen-btn {
+  position: relative;
+  overflow: hidden;
+}
+
+.gen-btn::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  animation: shimmerSlide 3s ease-in-out infinite;
+}
+
+/* ---------- 输入框增强 ---------- */
+.chat-input {
+  background: linear-gradient(135deg, var(--gold-50), var(--bg-card));
+  border: 3rpx solid var(--gold-200);
+  transition: all 0.2s ease;
+}
+
+.chat-input:focus {
+  border-color: var(--gold-400);
+  background: var(--bg-card);
+  box-shadow: 0 0 0 6rpx rgba(193, 154, 80, 0.1);
+}
+
+/* ---------- 发送按钮增强 ---------- */
+.send-btn-active {
+  background: linear-gradient(135deg, var(--gold-400), var(--gold-500));
+  box-shadow: var(--shadow-gold);
+  position: relative;
+  overflow: hidden;
+}
+
+.send-btn-active::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  animation: shimmerSlide 3s ease-in-out infinite;
+}
+
+/* ---------- 找灵感横条增强 ---------- */
+.inspiration-bar {
+  background: linear-gradient(135deg, var(--bg-card), var(--gold-50));
+  border: 2rpx solid var(--gold-100);
+  box-shadow: var(--shadow-sm);
+  transition: all 0.2s ease;
+}
+
+.inspiration-bar:active {
+  transform: translateY(-2rpx);
+  box-shadow: var(--shadow-md);
+}

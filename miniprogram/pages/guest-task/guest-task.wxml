@@ -1,0 +1,34 @@
+<nav-bar title="亲友团任务" show-back="{{true}}" />
+<view class="page">
+  <view wx:if="{{loading}}" class="loading-state"><view class="loading-spinner"></view></view>
+
+  <view wx:else>
+    <view class="card-premium" style="margin-bottom:32rpx;">
+      <view style="display:flex;align-items:center;gap:12rpx;">
+        <view class="svg-icon icon-18 icon-party-gold"></view>
+        <text style="font-size:30rpx;font-weight:600;">筹备亲友团任务看板</text>
+      </view>
+      <text style="display:block;font-size:24rpx;color:var(--text3);margin-top:8rpx;">
+        {{tasks.length > 0 ? '已有'+tasks.length+'位亲友参与筹备' : '策划师将为您指派亲友任务'}}
+      </text>
+    </view>
+
+    <view wx:if="{{tasks.length === 0}}" style="padding:80rpx 0;text-align:center;font-size:26rpx;color:var(--text3);">
+      暂未发布亲友任务，请联系策划师分配
+    </view>
+
+    <view wx:else>
+      <view wx:for="{{tasks}}" wx:key="index" class="card task-item" catchtap="toggleTask" data-index="{{index}}">
+        <view class="task-title">
+          <view wx:if="{{item.status === '已完成'}}" class="svg-icon icon-16 icon-check-square-gold"></view>
+          <view wx:else class="svg-icon icon-16 icon-square-gold"></view>
+          <text class="{{item.status === '已完成' ? 'task-done' : ''}}">{{item.task}}</text>
+        </view>
+        <view class="task-role">角色：{{item.role}}</view>
+        <view class="task-status {{item.status==='已完成'?'task-done':''}}" style="color:{{item.status==='已完成'?'var(--gold-dark)':'var(--text3)'}};">
+          {{item.status}}
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

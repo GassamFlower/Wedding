@@ -1,0 +1,332 @@
+<nav-bar title="婚礼详情" />
+<view class="page" wx:if="{{order || proposal}}">
+  <!-- 订单头部（订单模式） -->
+  <view class="card" wx:if="{{order}}">
+    <view class="flex-row gap-12">
+      <view class="avatar avatar-1">{{order.client ? order.client[0] : '?'}}</view>
+      <view class="flex-1">
+        <text class="order-name" style="font-size:34rpx;">{{order.client}}</text>
+        <text class="order-date" style="font-size:26rpx;">{{order.date}} · {{order.venue}}</text>
+      </view>
+      <view class="tag tag-{{order.statusClass||'progress'}}">{{order.status}}</view>
+    </view>
+    <view class="divider"></view>
+    <view class="flex-between">
+      <text class="text-muted text-sm">风格: {{order.style || proposal.style}}</text>
+      <text class="order-amount" style="font-size:36rpx;">¥{{order.budget || proposal.customerPrice}}</text>
+    </view>
+    <!-- 进度条 -->
+    <view class="mt-12"><view class="progress-bar"><view class="progress-bar-fill" style="width:{{order.progress||0}}%;"></view></view></view>
+    <view class="flex-between mt-4"><text class="text-xs text-muted">进度 {{order.progress||0}}%</text><text class="text-xs text-muted">已付 ¥{{order.paid}} / 待收 ¥{{order.balance}}</text></view>
+  </view>
+
+  <!-- 方案头部（方案模式，无订单时） -->
+  <view class="card" wx:if="{{!order && proposal}}">
+    <view class="flex-row gap-12">
+      <view class="avatar avatar-1">方案</view>
+      <view class="flex-1">
+        <text class="order-name" style="font-size:34rpx;">{{proposal.designConcept || '婚礼方案'}}</text>
+        <text class="order-date" style="font-size:26rpx;">{{proposal.venueName || ''}}</text>
+      </view>
+      <view class="tag tag-progress">方案详情</view>
+    </view>
+    <view class="divider"></view>
+    <view class="flex-between">
+      <text class="text-muted text-sm">风格: {{proposal.style || '--'}}</text>
+      <text class="order-amount" style="font-size:36rpx;">¥{{proposal.customerPrice || proposal.totalCost || '--'}}</text>
+    </view>
+  </view>
+
+  <!-- Tab 切换 -->
+  <view class="detail-tabs flex-row">
+    <view class="detail-tab {{tab==='info'?'active':''}}" catchtap="switchTab" data-tab="info">
+      <text>方案</text>
+    </view>
+    <view class="detail-tab {{tab==='props'?'active':''}}" catchtap="switchTab" data-tab="props">
+      <text>道具</text>
+    </view>
+    <view class="detail-tab {{tab==='finance'?'active':''}}" catchtap="switchTab" data-tab="finance">
+      <text>费用</text>
+    </view>
+    <view wx:if="{{isPlanner && plannerView}}" class="detail-tab {{tab==='cost'?'active':''}}" catchtap="switchTab" data-tab="cost">
+      <text>成本</text>
+    </view>
+    <view class="detail-tab {{tab==='timeline'?'active':''}}" catchtap="switchTab" data-tab="timeline">
+      <text>流程</text>
+    </view>
+  </view>
+
+  <!-- ========== 方案 Tab ========== -->
+  <view wx:if="{{tab==='info'}}">
+    <!-- AI 方案详情（优先展示） -->
+    <view wx:if="{{proposal}}" class="card">
+      <view class="section-title"><view class="gold-dot"></view>设计理念</view>
+      <text class="text-secondary" style="line-height:1.7;font-size:28rpx;">{{proposal.designConcept || proposal.summary || '暂无设计理念'}}</text>
+
+      <!-- 时间线 -->
+      <view wx:if="{{proposal.timeline && proposal.timeline.length}}" style="margin-top:32rpx;">
+        <view class="section-title"><view class="gold-dot"></view>执行时间线</view>
+        <view wx:for="{{proposal.timeline}}" wx:key="index" class="timeline-item">
+          <view class="tl-dot"></view>
+          <view class="flex-1">
+            <text class="text-sm font-600">{{item.phase || item.title}}</text>
+            <text class="text-xs text-muted" style="display:block;margin-top:4rpx;">{{item.time || item.desc}}</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 风险提示 -->
+      <view wx:if="{{proposal.riskNotes && proposal.riskNotes.length}}" style="margin-top:32rpx;">
+        <view class="section-title"><view class="gold-dot"></view>风险提示</view>
+        <view wx:for="{{proposal.riskNotes}}" wx:key="index" class="risk-item">
+          <view class="svg-icon icon-14 icon-warning-gold"></view>
+          <text class="text-sm">{{item}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 订单描述（兜底） -->
+    <view wx:elif="{{order.description}}" class="card">
+      <view class="section-title"><view class="gold-dot"></view>方案详情</view>
+      <text class="text-secondary" style="line-height:1.7;font-size:28rpx;">{{order.description}}</text>
+    </view>
+
+    <view wx:else class="empty-state">
+      <text>暂无方案信息</text>
+    </view>
+  </view>
+
+  <!-- ========== 道具 Tab ========== -->
+  <view wx:if="{{tab==='props'}}" class="card">
+    <view class="section-title"><view class="gold-dot"></view>道具清单</view>
+
+    <!-- AI 方案道具（优先） -->
+    <block wx:if="{{proposal && proposal.propList && proposal.propList.length}}">
+      <view wx:for="{{proposal.propList}}" wx:key="name" class="prop-item flex-between">
+        <view class="flex-1">
+          <text class="text-sm font-500">{{item.name}}</text>
+          <text class="text-xs text-muted" style="margin-left:16rpx;">×{{item.quantity || item.qty}}</text>
+        </view>
+        <view class="flex-row gap-8">
+          <text class="text-xs text-muted">{{item.source || '自有'}}</text>
+          <text class="text-sm font-600">¥{{item.estimatedCost || item.total || 0}}</text>
+        </view>
+      </view>
+    </block>
+
+    <!-- 订单道具（兜底） -->
+    <block wx:elif="{{order && order.propList && order.propList.length}}">
+      <view wx:for="{{order.propList}}" wx:key="name" class="prop-item flex-between">
+        <view class="flex-row gap-8">
+          <text class="text-sm">{{item.name}}</text>
+          <text class="text-xs text-muted">({{item.source}})</text>
+        </view>
+        <text class="text-xs tag {{item.status==='已出库'?'tag-done':'tag-pending'}}">{{item.status}}</text>
+      </view>
+    </block>
+
+    <view wx:else class="empty-state">
+      <text>暂无道具清单</text>
+    </view>
+  </view>
+
+  <!-- ========== 费用 Tab（客户视图） ========== -->
+  <view wx:if="{{tab==='finance'}}" class="card">
+    <view class="section-title"><view class="gold-dot"></view>费用明细</view>
+
+    <!-- AI 方案客户报价（优先） -->
+    <block wx:if="{{proposal && proposal.customerPricing && proposal.customerPricing.items}}">
+      <view wx:for="{{proposal.customerPricing.items}}" wx:key="title" class="cost-item flex-between">
+        <view class="flex-row gap-8">
+          <text>{{item.icon}}</text>
+          <text class="text-sm">{{item.title}}</text>
+        </view>
+        <text class="text-sm font-600">¥{{item.amount}}</text>
+      </view>
+      <view wx:if="{{proposal.customerPricing.note}}" style="margin-top:16rpx;">
+        <text class="text-xs text-muted">{{proposal.customerPricing.note}}</text>
+      </view>
+      <view class="divider"></view>
+      <view class="flex-between">
+        <text class="text-sm font-600">合计</text>
+        <text class="text-sm font-700 text-gold">¥{{proposal.customerPrice || proposal.totalCost}}</text>
+      </view>
+    </block>
+
+    <!-- 订单费用（兜底） -->
+    <block wx:elif="{{order && order.costItems && order.costItems.length}}">
+      <view wx:for="{{order.costItems}}" wx:key="name" class="cost-item flex-between">
+        <text class="text-sm">{{item.name}}</text>
+        <text class="text-sm font-600">¥{{item.amount}}</text>
+      </view>
+      <view class="divider"></view>
+      <view class="flex-between">
+        <text class="text-sm font-600">合计</text>
+        <text class="text-sm font-700 text-gold">¥{{order.budget}}</text>
+      </view>
+      <view class="divider"></view>
+      <view class="flex-between">
+        <text class="text-sm text-muted">场地押金</text>
+        <text class="text-sm">{{order.hotelInfo.deposit}}</text>
+      </view>
+      <view class="flex-between mt-4">
+        <text class="text-sm text-muted">押金状态</text>
+        <text class="text-sm tag {{order.hotelInfo.depositStatus==='已缴纳'?'tag-done':'tag-pending'}}">{{order.hotelInfo.depositStatus}}</text>
+      </view>
+    </block>
+
+    <view wx:else class="empty-state">
+      <text>暂无费用信息</text>
+    </view>
+  </view>
+
+  <!-- ========== 成本 Tab（策划师专属） ========== -->
+  <view wx:if="{{tab==='cost' && isPlanner && plannerView}}">
+    <!-- 利润概览 -->
+    <view class="card card-gradient" style="margin-bottom:24rpx;">
+      <view class="flex-between">
+        <view>
+          <text class="text-xs" style="opacity:0.8;">客户报价</text>
+          <text class="text-xl font-700" style="display:block;">¥{{plannerView.customerPrice}}</text>
+        </view>
+        <view style="text-align:center;">
+          <text class="text-xs" style="opacity:0.8;">毛利润</text>
+          <text class="text-xl font-700" style="display:block;">¥{{plannerView.profit}}</text>
+        </view>
+        <view style="text-align:right;">
+          <text class="text-xs" style="opacity:0.8;">利润率</text>
+          <text class="text-xl font-700" style="display:block;">{{plannerView.profitRate}}%</text>
+        </view>
+      </view>
+      <view style="margin-top:24rpx;padding-top:24rpx;border-top:2rpx solid rgba(255,255,255,0.2);">
+        <text class="text-xs" style="opacity:0.8;">建议报价区间：¥{{plannerView.suggestedRange.minimum}} ~ ¥{{plannerView.suggestedRange.premium}}</text>
+      </view>
+    </view>
+
+    <!-- 道具成本明细 -->
+    <view class="card">
+      <view class="section-title"><view class="gold-dot"></view>道具成本</view>
+      <view wx:for="{{plannerView.propCostDetail}}" wx:key="name" class="cost-item flex-between">
+        <view class="flex-1">
+          <text class="text-sm">{{item.name}}</text>
+          <text class="text-xs text-muted" style="margin-left:16rpx;">{{item.qty}}×¥{{item.unitCost}}</text>
+        </view>
+        <text class="text-sm font-600">¥{{item.total}}</text>
+      </view>
+    </view>
+
+    <!-- 花艺成本明细 -->
+    <view class="card" style="margin-top:24rpx;">
+      <view class="section-title"><view class="gold-dot"></view>花艺成本</view>
+      <view wx:for="{{plannerView.floralCostDetail}}" wx:key="name" class="cost-item flex-between">
+        <view class="flex-1">
+          <text class="text-sm">{{item.name}}</text>
+          <text class="text-xs text-muted" style="margin-left:16rpx;">{{item.qty}}×¥{{item.unitCost}}</text>
+        </view>
+        <text class="text-sm font-600">¥{{item.total}}</text>
+      </view>
+    </view>
+
+    <!-- 人工成本明细 -->
+    <view class="card" style="margin-top:24rpx;">
+      <view class="section-title"><view class="gold-dot"></view>人工成本</view>
+      <view wx:for="{{plannerView.laborCostDetail}}" wx:key="name" class="cost-item flex-between">
+        <view class="flex-1">
+          <text class="text-sm">{{item.name}}</text>
+          <text class="text-xs text-muted" style="margin-left:16rpx;">{{item.days}}天×¥{{item.rate}}</text>
+        </view>
+        <text class="text-sm font-600">¥{{item.total}}</text>
+      </view>
+    </view>
+
+    <!-- 运输成本 -->
+    <view class="card" style="margin-top:24rpx;">
+      <view class="section-title"><view class="gold-dot"></view>运输成本</view>
+      <view wx:for="{{plannerView.transportCostDetail}}" wx:key="name" class="cost-item flex-between">
+        <view class="flex-1">
+          <text class="text-sm">{{item.name}}</text>
+          <text class="text-xs text-muted" style="margin-left:16rpx;">{{item.trips}}趟×¥{{item.cost}}</text>
+        </view>
+        <text class="text-sm font-600">¥{{item.total}}</text>
+      </view>
+    </view>
+
+    <!-- 隐性成本 -->
+    <view class="card" style="margin-top:24rpx;">
+      <view class="section-title"><view class="gold-dot"></view>其他成本</view>
+      <view class="cost-item flex-between">
+        <text class="text-sm">灯光音响</text>
+        <text class="text-sm font-600">¥{{plannerView.hiddenCosts.lighting}}</text>
+      </view>
+      <view class="cost-item flex-between">
+        <text class="text-sm">消耗品</text>
+        <text class="text-sm font-600">¥{{plannerView.hiddenCosts.consumables}}</text>
+      </view>
+      <view class="cost-item flex-between">
+        <text class="text-sm">保险</text>
+        <text class="text-sm font-600">¥{{plannerView.hiddenCosts.insurance}}</text>
+      </view>
+      <view class="cost-item flex-between">
+        <text class="text-sm">意外损耗准备金</text>
+        <text class="text-sm font-600">¥{{plannerView.hiddenCosts.contingency}}</text>
+      </view>
+      <view class="cost-item flex-between">
+        <text class="text-sm">平台消耗</text>
+        <text class="text-sm font-600">¥{{plannerView.hiddenCosts.platform}}</text>
+      </view>
+      <view class="divider"></view>
+      <view class="flex-between">
+        <text class="text-sm font-600">总成本</text>
+        <text class="text-sm font-700 text-gold">¥{{plannerView.totalCost}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- ========== 流程 Tab ========== -->
+  <view wx:if="{{tab==='timeline'}}" class="card">
+    <view class="section-title"><view class="gold-dot"></view>婚礼流程</view>
+
+    <!-- AI 方案时间线（优先） -->
+    <block wx:if="{{proposal && proposal.timeline && proposal.timeline.length}}">
+      <view wx:for="{{proposal.timeline}}" wx:key="index" class="timeline-item">
+        <view class="tl-dot"></view>
+        <view class="flex-1">
+          <text class="text-sm font-600">{{item.phase || item.title}}</text>
+          <text class="text-xs text-muted" style="display:block;margin-top:4rpx;">{{item.time || item.desc}}</text>
+        </view>
+      </view>
+    </block>
+
+    <!-- 订单流程（兜底） -->
+    <block wx:elif="{{order}}">
+      <view class="timeline-item">
+        <view class="tl-dot"></view>
+        <text class="text-sm">入场搭建 {{order.hotelInfo.loadIn}}</text>
+      </view>
+      <view class="timeline-item">
+        <view class="tl-dot"></view>
+        <text class="text-sm">婚礼仪式</text>
+      </view>
+      <view class="timeline-item">
+        <view class="tl-dot"></view>
+        <text class="text-sm">撤场 {{order.hotelInfo.loadOut}}</text>
+      </view>
+    </block>
+
+    <view wx:else class="empty-state">
+      <text>暂无流程信息</text>
+    </view>
+  </view>
+
+  <!-- 底部操作 -->
+  <view class="detail-actions flex-row gap-8" style="margin-top:32rpx;">
+    <button class="btn btn-secondary flex-1" catchtap="contactClient">联系客户</button>
+    <button class="btn btn-primary flex-1" catchtap="updateProgress">更新进度</button>
+  </view>
+</view>
+
+<!-- 加载 -->
+<view wx:if="{{loading}}" class="loading-center">
+  <view class="loading-spinner"></view>
+  <text>加载中...</text>
+</view>

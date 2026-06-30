@@ -1,0 +1,2374 @@
+/* =============================================
+   app.wxss — 轻复古·奶油风 Design System
+   暖白基底 + 香槟金点缀
+   ============================================= */
+
+/* ---------- 轻复古·奶油风 Design Tokens ---------- */
+/* Based on ui-specification.md v1.1 — 2026-06-24 */
+page {
+  /* ═══ 核心色板 — 暖白基底 + 香槟金点缀 ═══ */
+  --bg-primary:    #FFF9F2;   /* 主背景 - 暖白基底 */
+  --bg-card:       #FFFFFF;   /* 卡片背景 - 纯白 */
+  --gold:          #D4AF37;   /* 品牌金（主色）- 香槟金 */
+  --gold-light:    #F5E6C8;   /* 辅助金（浅）- 标签底色、边框 */
+  --text-primary:  #2C2C2C;   /* 主文字 - 深灰 */
+  --text-secondary:#8C8C8C;   /* 次要文字 - 中灰 */
+  --glass-bg:      rgba(255, 255, 255, 0.72);  /* 毛玻璃底色 */
+  
+  /* ═══ 渐变 ═══ */
+  --gradient-gold: linear-gradient(135deg, #D4AF37 0%, #E8C86A 100%);
+  --gradient-warm: linear-gradient(180deg, #FFF9F2 0%, #FFFFFF 100%);
+  
+  /* ═══ 状态色 ═══ */
+  --success:       #67C23A;
+  --success-light: #E8F5E9;
+  --warning:       #E6A23C;
+  --warning-light: #FFF3E0;
+  --error:         #F56C6C;
+  --error-light:   #FFEBEE;
+  --info:          #909399;
+  --info-light:    #F5F5F5;
+  
+  /* ═══ 阴影系统 — 对齐 HTML 设计归档 ═══ */
+  --shadow-card: 0 4rpx 24rpx rgba(0, 0, 0, 0.06);
+  --shadow-btn: 0 4rpx 8rpx rgba(212, 175, 55, 0.2);
+  --shadow-hover: 0 8rpx 32rpx rgba(0, 0, 0, 0.10);
+  
+  /* ═══ 圆角系统 ═══ */
+  --radius-sm: 12rpx;
+  --radius-md: 20rpx;
+  --radius-lg: 32rpx;
+  --radius-full: 9999rpx;
+  
+  /* ═══ 间距系统 ═══ */
+  --spacing-sm: 16rpx;
+  --spacing-md: 24rpx;
+  --spacing-lg: 32rpx;
+  
+  /* ═══ 边框 ═══ */
+  --border-light: #F5E6C8;
+  --divider: #F5E6C8;
+  
+  /* ═══ 字体 ═══ */
+  --font-family: 'PingFang SC', 'Noto Sans SC', sans-serif;
+  --font-display: 'Playfair Display', Georgia, serif;
+  
+  /* ═══ 向后兼容别名 — 对齐 HTML 设计归档色阶 ═══ */
+  --primary:       var(--gold);
+  --primary-light: var(--gold-light);
+  --primary-dark:  #C09A2E;
+  --gold-50:       #FDF8EF;
+  --gold-100:      #FBF0D9;
+  --gold-200:      #F5E6C8;
+  --gold-300:      #E8D5A3;
+  --gold-400:      #D4AF37;
+  --gold-500:      #C09A2E;
+  --gold-600:      #A07D22;
+  --gold-700:      #7D6019;
+  --gold-800:      #5C4512;
+  --gold-900:      #3D2C0A;
+  --gold-bg:       rgba(212, 175, 55, 0.12);
+  --gold-bg-12:    rgba(212, 175, 55, 0.12);
+  --text:          var(--text-primary);
+  --text-muted:    var(--text-secondary);
+  --bg:            var(--bg-primary);
+  --bg-warm:       var(--gold-light);
+  --cream:         var(--bg-primary);
+  --cream-dark:    var(--gold-light);
+  --border:        var(--border-light);
+  --warm-brown:    var(--gold-700);
+  --light-beige:   var(--gold-200);
+  --red-warn:      var(--error);
+  --red-bg:        rgba(245, 108, 108, 0.08);
+
+  /* ═══ 灰色系别名（向后兼容） ═══ */
+  --gray:          #8C8C8C;
+  --gray-light:    #BFBFBF;
+  --grey-blue:     var(--gold-500);
+  --text-main:     var(--text-primary);
+  --text-second:   var(--text-secondary);
+  --text-inverse:  #FFFFFF;
+  --white:         #FFFFFF;
+  --dark:          var(--text-primary);
+  --bg-main:       var(--bg-primary);
+  --bg-input:      #F5F0E8;
+  --bg-secondary:  var(--bg-primary);
+  --border-line:   var(--border-light);
+  --border-default:var(--border-light);
+  --border-light:  #F5E6C8;
+  --ease:          .25s cubic-bezier(.34,1.56,.64,1);
+  --ease-spring:   cubic-bezier(.34,1.56,.64,1);
+  --shadow-watercolor: var(--shadow-sm);
+
+  /* ═══ 扩展圆角 ═══ */
+  --radius: 16rpx;
+  --radius-xl: 48rpx;
+
+  /* ═══ 扩展间距 ═══ */
+  --spacing-xs: 8rpx;
+  --spacing-xl: 64rpx;
+  --spacing-2xl: 96rpx;
+  --spacing-3xl: 128rpx;
+
+  /* ═══ 扩展阴影 ═══ */
+  --shadow-sm: 0 2rpx 4rpx rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 8rpx 16rpx rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 16rpx 32rpx rgba(0, 0, 0, 0.08);
+  --shadow-xl: 0 32rpx 64rpx rgba(0, 0, 0, 0.12);
+  --shadow-gold: 0 8rpx 24rpx rgba(212, 175, 55, 0.2);
+  --shadow-gold-lg: 0 16rpx 48rpx rgba(212, 175, 55, 0.3);
+
+  /* ═══ 字体 ═══ */
+  --font-serif: "Songti SC", "STSong", "Noto Serif CJK SC", "SimSun", serif;
+  --font-en-body: 'Lato', 'Helvetica Neue', sans-serif;
+  --font-en-display: 'Playfair Display', Georgia, serif;
+  --transition: .25s cubic-bezier(.34,1.56,.64,1);
+  --transition-slow: .4s cubic-bezier(.34,1.56,.64,1);
+}
+
+page { background:var(--bg); color:var(--text); font-size:28rpx; line-height:1.6; -webkit-font-smoothing:antialiased; }
+
+/* ---------- Cream Wash Decorators ---------- */
+.watercolor-blob {
+  position:absolute;
+  border-radius:50%;
+  pointer-events:none;
+  z-index:0;
+  filter:blur(80rpx);
+  opacity:0.06;
+}
+.watercolor-blob-1 {
+  width:600rpx; height:600rpx;
+  background:radial-gradient(ellipse, var(--gold-light), transparent);
+  top:-160rpx; right:-120rpx;
+}
+.watercolor-blob-2 {
+  width:400rpx; height:400rpx;
+  background:radial-gradient(ellipse, var(--gold), transparent);
+  bottom:-80rpx; left:-80rpx;
+}
+.watercolor-blob-3 {
+  width:360rpx; height:360rpx;
+  background:radial-gradient(ellipse, var(--gold-light), transparent);
+  top:50%; left:-120rpx;
+}
+
+/* ---------- Layered Card System (Card-based design with layered elements) ---------- */
+.card {
+  background:var(--bg-card);
+  border-radius:32rpx;
+  padding:24rpx;
+  box-shadow:var(--shadow-card);
+  position:relative;
+  overflow:hidden;
+  transition:opacity var(--transition);
+  border:2rpx solid var(--border-light);
+}
+.card:active { transform:scale(0.98); opacity:0.85; }
+.card::before {
+  content:'';
+  position:absolute;
+  top:0; left:0; right:0;
+  height:2rpx;
+  background:linear-gradient(90deg, transparent, rgba(212,175,55,0.08), transparent);
+}
+/* 紧凑变体：极致信息密度（列表/时间轴用） */
+.card-compact { padding:20rpx; }
+/* 预警变体：暖调粉底 + 左侧红线 */
+.card-warm {
+  background:var(--warning-light);
+  border-left:6rpx solid var(--warning);
+  padding:24rpx 28rpx;
+}
+.card-warm .card::before { display:none; }
+
+.card-premium {
+  background:var(--bg-card);
+  border-radius:32rpx;
+  padding:24rpx;
+  box-shadow:var(--shadow-hover);
+  position:relative;
+  overflow:hidden;
+  transition:all var(--transition);
+  border:2rpx solid var(--border-light);
+}
+.card-premium:active { transform:scale(0.98); opacity:0.85; }
+.card-premium::before {
+  content:'';
+  position:absolute;
+  top:0; left:0; right:0;
+  height:2rpx;
+  background:linear-gradient(90deg, transparent, rgba(212,175,55,0.12), transparent);
+}
+
+.card-elevated {
+  background:var(--bg-card);
+  border-radius:32rpx;
+  padding:32rpx;
+  box-shadow:var(--shadow-lg);
+  position:relative;
+  overflow:hidden;
+  border:2rpx solid var(--border-light);
+}
+
+.card-glass {
+  background:var(--glass-bg);
+  backdrop-filter:blur(40rpx);
+  -webkit-backdrop-filter:blur(40rpx);
+  border-radius:48rpx;
+  padding:36rpx;
+  box-shadow:var(--shadow-card);
+  border:2rpx solid rgba(245,230,200,0.3);
+}
+
+.card-gradient {
+  background:var(--gradient-gold);
+  border-radius:48rpx;
+  padding:48rpx;
+  color:#fff;
+  box-shadow:var(--shadow-gold);
+}
+
+/* ---------- Watercolor Wash Accent Layers ---------- */
+.wash-layer {
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  z-index:0;
+}
+.wash-layer::before {
+  content:'';
+  position:absolute;
+  top:-20%; right:-10%;
+  width:50%; height:80%;
+  background:radial-gradient(ellipse at center, rgba(193,154,80,0.04) 0%, transparent 65%);
+}
+.wash-layer::after {
+  content:'';
+  position:absolute;
+  bottom:-15%; left:-10%;
+  width:40%; height:60%;
+  background:radial-gradient(ellipse at center, rgba(232,197,187,0.03) 0%, transparent 55%);
+}
+
+/* ---------- Typography ---------- */
+
+/* ---------- Card Layout - Layered Information ---------- */
+.card-top-image { display:flex; flex-direction:column; }
+.card-top-image .card-media { width:100%; border-radius:var(--radius-lg) var(--radius-lg) var(--radius-sm) var(--radius-sm); overflow:hidden; position:relative; aspect-ratio:4/3; }
+.card-top-image .card-body { padding:24rpx 0 8rpx; display:flex; flex-direction:column; gap:10rpx; }
+.card-left-image { display:flex; flex-direction:row; gap:28rpx; }
+.card-left-image .card-media { width:160rpx; height:160rpx; border-radius:var(--radius-md); overflow:hidden; flex-shrink:0; }
+.card-left-image .card-body { flex:1; display:flex; flex-direction:column; justify-content:center; }
+.card-title { font-size:30rpx; font-weight:600; color:var(--text-primary); line-height:1.4; display:block; }
+.card-subtitle { font-size:24rpx; font-weight:400; color:var(--text-secondary); display:block; margin-top:4rpx; }
+.card-tags { display:flex; flex-wrap:wrap; gap:12rpx; }
+.card-tag { padding:4rpx 20rpx; background:var(--gold-light); border-radius:12rpx; font-size:22rpx; color:var(--gold); }
+.card-meta { font-size:24rpx; color:var(--text-secondary); display:flex; align-items:center; gap:8rpx; margin-top:4rpx; }
+
+/* ---------- Text System ---------- */
+.text-display { font-size:48rpx; font-weight:700; line-height:64rpx; letter-spacing:-1rpx; }
+.text-display-sm { font-size:44rpx; font-weight:700; line-height:60rpx; letter-spacing:-.6rpx; }
+.text-h1 { font-size:48rpx; font-weight:700; line-height:64rpx; }
+.text-h2 { font-size:36rpx; font-weight:600; line-height:52rpx; }
+.text-h3 { font-size:32rpx; font-weight:500; line-height:44rpx; }
+.text-body { font-size:28rpx; line-height:40rpx; }
+.text-body-sm { font-size:26rpx; line-height:36rpx; }
+.text-caption { font-size:24rpx; line-height:36rpx; color:var(--text-secondary); }
+.text-xs { font-size:22rpx; }
+.text-sm { font-size:26rpx; }
+.text-base { font-size:28rpx; }
+.text-lg { font-size:32rpx; }
+.text-xl { font-size:36rpx; }
+.text-2xl { font-size:44rpx; }
+.text-3xl { font-size:52rpx; }
+.font-400 { font-weight:400; }
+.font-500 { font-weight:500; }
+.font-600 { font-weight:600; }
+.font-700 { font-weight:700; }
+.font-800 { font-weight:800; }
+.text-center { text-align:center; }
+.text-left { text-align:left; }
+.text-right { text-align:right; }
+.text-primary { color:var(--text-primary); }
+.text-gold { color:var(--gold); }
+.text-muted { color:var(--text-secondary); }
+.text-secondary { color:var(--text-secondary); }
+.text-danger { color:var(--error); }
+.text-success { color:var(--success); }
+
+/* ---------- Serif Typography ---------- */
+.text-serif { font-family:var(--font-serif); }
+.text-display-serif { font-family:var(--font-display); font-size:56rpx; font-weight:700; line-height:1.35; letter-spacing:4rpx; }
+.text-quote-serif { font-family:var(--font-serif); font-size:36rpx; font-weight:600; line-height:1.7; letter-spacing:3rpx; color:var(--text-primary); }
+
+/* ---------- Spacing enhancements ---------- */
+.space-sm { height:16rpx; }
+.space-md { height:24rpx; }
+.space-lg { height:32rpx; }
+.space-xl { height:64rpx; }
+
+/* ---------- Layout ---------- */
+.page { padding:24rpx 32rpx calc(120rpx + env(safe-area-inset-bottom,0px)); background:var(--bg-primary); }
+.page-wrap { height:100%; overflow-y:auto; -webkit-overflow-scrolling:touch; }
+.flex-row { display:flex; flex-direction:row; align-items:center; }
+.flex-col { display:flex; flex-direction:column; }
+.flex-center { display:flex; align-items:center; justify-content:center; }
+.flex-between { display:flex; flex-direction:row; align-items:center; justify-content:space-between; }
+.flex-wrap { flex-wrap:wrap; }
+.flex-1 { flex:1; }
+.flex-shrink-0 { flex-shrink:0; }
+.gap-2 { gap:4rpx; }
+.gap-4 { gap:8rpx; }
+.gap-6 { gap:12rpx; }
+.gap-8 { gap:16rpx; }
+.gap-10 { gap:20rpx; }
+.gap-12 { gap:24rpx; }
+.gap-14 { gap:28rpx; }
+.gap-16 { gap:32rpx; }
+.gap-20 { gap:40rpx; }
+.gap-24 { gap:48rpx; }
+
+/* ---------- Gold Bar Decoration ---------- */
+.gold-bar { display:inline-block; width:8rpx; height:32rpx; background:var(--gradient-gold); border-radius:0; flex-shrink:0; vertical-align:middle; }
+.gold-dot { display:inline-block; width:16rpx; height:16rpx; background:var(--gold); border-radius:50%; margin-right:16rpx; flex-shrink:0; vertical-align:middle; }
+
+/* ---------- Dividers ---------- */
+.divider { height:2rpx; background:var(--border); margin:24rpx 0; }
+.divider-light { height:2rpx; background:rgba(193,154,80,0.04); margin:16rpx 0; }
+
+/* ---------- Avatar ---------- */
+.avatar { display:inline-flex; align-items:center; justify-content:center; border-radius:50%; flex-shrink:0; font-weight:600; color:#fff; width:80rpx; height:80rpx; font-size:32rpx; }
+.avatar-1 { background:var(--gradient-gold); }
+.avatar-2 { background:linear-gradient(135deg,var(--gold),var(--gold-light)); }
+.avatar-3 { background:linear-gradient(135deg,var(--gold-600),var(--gold-400)); }
+.avatar-4 { background:linear-gradient(135deg,var(--gold-500),var(--gold-300)); }
+.avatar-sm { width:56rpx; height:56rpx; font-size:24rpx; }
+.avatar-md { width:72rpx; height:72rpx; font-size:28rpx; }
+.avatar-lg { width:96rpx; height:96rpx; font-size:40rpx; }
+
+/* ---------- Tags ---------- */
+.tag { display:inline-block; padding:6rpx 20rpx; border-radius:48rpx; font-size:22rpx; font-weight:500; background:var(--gold-light); color:var(--gold); line-height:1.4; }
+/* pill 变体 */
+.tag-pill { border-radius:9999rpx; padding:6rpx 20rpx; font-size:22rpx; }
+/* 状态变体 */
+.tag--done { background:var(--success-light); color:var(--success); }
+.tag--pending { background:var(--warning-light); color:var(--warning); }
+.tag--progress { background:var(--gold-light); color:var(--gold); }
+/* 策划师端状态色 */
+.tag-progress { background:var(--gold-light); color:var(--gold); }
+.tag-done { background:var(--success-light); color:var(--success); }
+.tag-cancel { background:var(--error-light); color:var(--error); }
+.tag-pending { background:var(--info-light); color:var(--info); }
+.tag-red { background:var(--error-light); color:var(--error); }
+.tag-green { background:var(--success-light); color:var(--success); }
+.tag-yellow { background:var(--warning-light); color:var(--warning); }
+.tag-gold { background:var(--gold-light); color:var(--gold); }
+.tag-warn { background:var(--error-light); color:var(--error); }
+
+/* ---------- Buttons ---------- */
+/* 微信原生 button 重置 */
+button { margin:0; padding:0; line-height:1; }
+button::after { display:none; }
+
+.btn-gold {
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:var(--gradient-gold);
+  border-radius:9999rpx;
+  padding:0 64rpx;
+  height:96rpx;
+  font-size:26rpx;
+  color:#fff;
+  font-weight:600;
+  border:none;
+  cursor:pointer;
+  transition:all var(--transition);
+  box-shadow:var(--shadow-btn);
+  line-height:1.4;
+}
+.btn-gold:active { transform:scale(0.98); opacity:0.9; }
+.btn-primary {
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:var(--gradient-gold);
+  border-radius:9999rpx;
+  padding:0 64rpx;
+  height:96rpx;
+  font-size:26rpx;
+  color:#fff;
+  font-weight:600;
+  border:none;
+  cursor:pointer;
+  transition:all var(--transition);
+  box-shadow:var(--shadow-btn);
+  line-height:1.4;
+}
+.btn-primary:active { transform:scale(0.98); box-shadow:var(--shadow-card); }
+.btn-ghost {
+  display:inline-block;
+  background:var(--gold-light);
+  border-radius:9999rpx;
+  padding:12rpx 28rpx;
+  font-size:24rpx;
+  color:var(--gold);
+  font-weight:600;
+  border:none;
+  cursor:pointer;
+  transition:all var(--transition);
+}
+.btn-ghost:active { background:var(--gold-200); }
+/* 描边线框按钮 */
+.btn-outline {
+  display:inline-block;
+  background:var(--bg-card);
+  border-radius:9999rpx;
+  padding:12rpx 28rpx; font-size:24rpx;
+  color:var(--gold); font-weight:600;
+  border:3rpx solid var(--gold);
+  cursor:pointer; transition:all var(--transition);
+}
+.btn-outline:active { background:var(--gold-light); }
+.btn-sm { padding:10rpx 24rpx; font-size:24rpx; height:64rpx; }
+.btn-lg { padding:20rpx 48rpx; font-size:28rpx; height:96rpx; }
+
+/* ---------- Section Titles ---------- */
+.section-title { display:flex; align-items:center; gap:16rpx; font-size:30rpx; font-weight:700; color:var(--text-primary); margin-bottom:28rpx; margin-top:40rpx; }
+.section-title:first-child { margin-top:0; }
+.section-title .gold-bar + text,
+.section-title > text:last-child { flex:1; }
+
+/* ---------- Loading / Empty / Error ---------- */
+.loading-center { display:flex; flex-direction:column; align-items:center; justify-content:center; padding:120rpx 0; }
+.loading-spinner { width:52rpx; height:52rpx; border:5rpx solid var(--gold-light); border-top-color:var(--gold); border-radius:50%; animation:spin .7s linear infinite; }
+@keyframes spin { to { transform:rotate(360deg); } }
+.loading-text { font-size:26rpx; color:var(--text-secondary); margin-top:20rpx; }
+.empty-state { display:flex; flex-direction:column; align-items:center; justify-content:center; padding:96rpx 0; text-align:center; color:var(--text-muted); font-size:26rpx; }
+
+/* ---------- Form System ---------- */
+.form-overlay { position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.45); z-index:100; display:flex; align-items:flex-end; justify-content:center; }
+.form-modal { background:var(--bg-card); width:100%; border-radius:48rpx 48rpx 0 0; padding:48rpx 40rpx 64rpx; max-height:80vh; overflow-y:auto; animation:slideUp .35s var(--transition-slow); box-shadow:var(--shadow-xl); }
+@keyframes slideUp { from { transform:translateY(100%); } to { transform:translateY(0); } }
+.form-title { font-size:36rpx; font-weight:700; color:var(--text-primary); margin-bottom:40rpx; text-align:center; }
+.form-group { margin-bottom:28rpx; }
+.form-label { font-size:24rpx; color:var(--text-secondary); display:block; margin-bottom:8rpx; font-weight:500; }
+.form-input { width:100%; padding:22rpx 28rpx; background:var(--bg-card); border:3rpx solid var(--border-light); border-radius:20rpx; font-size:28rpx; color:var(--text-primary); transition:border-color var(--transition); height:96rpx; box-sizing:border-box; }
+.form-input:focus { border-color:var(--gold); background:var(--bg-card); outline:none; box-shadow:0 0 0 3rpx rgba(212,175,55,0.1); }
+.form-row { display:flex; gap:20rpx; }
+.form-btns { display:flex; gap:20rpx; margin-top:40rpx; }
+.btn-cancel {
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:var(--bg-card);
+  border-radius:9999rpx;
+  padding:0 40rpx;
+  height:96rpx;
+  font-size:26rpx;
+  color:var(--text-secondary);
+  font-weight:600;
+  border:3rpx solid var(--border-light);
+  cursor:pointer;
+  transition:all var(--transition);
+  line-height:1.4;
+}
+.btn-cancel:active { background:var(--gold-50); transform:scale(0.98); }
+.form-btns .btn-cancel, .form-btns .btn-primary, .form-btns .btn-gold { flex:1; text-align:center; }
+
+/* ---------- Tabs ---------- */
+.tabs { display:flex; gap:12rpx; overflow-x:auto; -webkit-overflow-scrolling:touch; }
+.tab { display:inline-flex; align-items:center; justify-content:center; gap:8rpx; padding:12rpx 28rpx; border-radius:32rpx; font-size:24rpx; font-weight:500; color:var(--text-secondary); background:var(--gold-100); white-space:nowrap; cursor:pointer; transition:all var(--transition); line-height:1; }
+.tab.active { background:var(--gradient-gold); color:#fff; font-weight:600; box-shadow:var(--shadow-btn); }
+.tab:active { transform:scale(0.98); }
+
+/* ---------- Search Box ---------- */
+.search-box { flex:1; background:var(--bg-card); border-radius:9999rpx; padding:16rpx 28rpx; border:2rpx solid var(--border-light); align-items:center; gap:12rpx; }
+.search-box-icon { font-size:28rpx; color:var(--gold-400); }
+.search-box-input { flex:1; font-size:26rpx; }
+.search-box:active { border-color:var(--gold-400); background:var(--bg-card); }
+
+/* ---------- Stat Cards ---------- */
+.stat-row { display:flex; gap:20rpx; margin-bottom:32rpx; align-items:stretch; }
+.stat-card {
+  flex:1;
+  background:var(--bg-card);
+  border-radius:48rpx;
+  padding:28rpx 16rpx;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  box-shadow:var(--shadow-card);
+  border:2rpx solid var(--border-light);
+}
+.stat-num { font-size:40rpx; font-weight:700; color:var(--gold); display:block; letter-spacing:-.6rpx; line-height:1.3; }
+.stat-label { font-size:22rpx; color:var(--text-secondary); display:block; margin-top:8rpx; }
+
+/* ---------- Ad Banner ---------- */
+.ad-banner { width:100%; border-radius:48rpx; overflow:hidden; margin:24rpx 0; position:relative; }
+.ad-placeholder { display:flex; align-items:center; justify-content:center; height:320rpx; background:var(--gradient-warm); border-radius:48rpx; position:relative; overflow:hidden; border:2rpx solid var(--border-light); }
+.ad-placeholder::before { content:''; position:absolute; top:-50%; left:-50%; width:200%; height:200%; background:linear-gradient(45deg, transparent 40%, rgba(255,255,255,0.25) 50%, transparent 60%); animation:shimmer 2.5s infinite; }
+@keyframes shimmer { to { transform:translateX(100%); } }
+.ad-placeholder text { position:relative; z-index:1; font-size:26rpx; color:var(--gold); letter-spacing:4rpx; }
+.ad-banner-sm .ad-placeholder { height:160rpx; }
+
+/* ---------- Skeleton ---------- */
+.skeleton-waterfall { display:flex; gap:20rpx; }
+.skeleton-col { flex:1; display:flex; flex-direction:column; gap:20rpx; }
+.skeleton-card { background:var(--bg-card); border-radius:48rpx; overflow:hidden; box-shadow:var(--shadow-card); border:2rpx solid var(--border-light); }
+.skeleton-cover { background:var(--gold-light); }
+.skeleton-body { padding:28rpx 32rpx 32rpx; }
+.skeleton-line { height:24rpx; background:linear-gradient(90deg, var(--gold-light) 25%, var(--bg-card) 50%, var(--gold-light) 75%); border-radius:var(--radius-sm); background-size:200% 100%; animation:shimmer 1.5s infinite; }
+.skeleton-waterfall-col .w-60 { width:60%; }
+.skeleton-waterfall-col .w-40 { width:40%; }
+.skeleton-waterfall-col .w-55 { width:55%; }
+.skeleton-waterfall-col .w-45 { width:45%; }
+.skeleton-waterfall-col .w-65 { width:65%; }
+.skeleton-waterfall-col .w-70 { width:70%; }
+.skeleton-waterfall-col .w-50 { width:50%; }
+.skeleton-waterfall-col .w-35 { width:35%; }
+
+/* ---------- Toast ---------- */
+.toast { position:fixed; top:160rpx; left:48rpx; right:48rpx; z-index:300; padding:24rpx 32rpx; border-radius:20rpx; font-size:26rpx; font-weight:500; display:flex; align-items:center; gap:16rpx; animation:toastIn .3s ease both; box-shadow:var(--shadow-lg); }
+@keyframes toastIn { from { opacity:0; transform:translateY(-24rpx); } to { opacity:1; transform:translateY(0); } }
+.toast-success { background:var(--success-light); color:var(--success); }
+.toast-error { background:var(--error-light); color:var(--error); }
+.toast-info { background:var(--gold-light); color:var(--gold); }
+
+/* ---------- Misc Helpers ---------- */
+.full-width { width:100%; }
+.block { display:block; }
+.relative { position:relative; }
+.hidden { display:none; }
+
+/* ---------- VueEditor 隐藏占位 ---------- */
+.hide { display:none !important; }
+
+/* ═══════ 全局时间轴组件 ═══════ */
+.timeline {
+  display:flex; flex-direction:column; gap:20rpx;
+  padding-left:28rpx; position:relative;
+}
+.timeline::before {
+  content:''; position:absolute;
+  left:8rpx; top:12rpx; bottom:12rpx;
+  width:4rpx; background:var(--border);
+}
+.tlnode { position:relative; }
+.tlnode::before {
+  content:''; position:absolute;
+  left:-28rpx; top:10rpx;
+  width:20rpx; height:20rpx;
+  border-radius:50%;
+  background:var(--bg-card);
+  border:4rpx solid var(--border);
+  transition:all .3s ease;
+}
+.tlnode.active::before {
+  background:var(--gold); border-color:var(--gold);
+  box-shadow:0 0 0 6rpx var(--gold-bg);
+}
+.tlnode-label { font-size:24rpx; color:var(--text-muted); display:block; }
+.tlnode.active .tlnode-label { color:var(--gold-dark); font-weight:600; }
+.tlnode-date { font-size:20rpx; color:var(--text-muted); display:block; margin-top:2rpx; }
+
+/* ---------- SVG Icon System (replaces emoji) ---------- */
+.svg-icon {
+  display: block;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  flex-shrink: 0;
+}
+
+/* 尺寸 */
+.icon-12 { width: 24rpx; height: 24rpx; }
+.icon-14 { width: 28rpx; height: 28rpx; }
+.icon-16 { width: 32rpx; height: 32rpx; }
+.icon-18 { width: 36rpx; height: 36rpx; }
+.icon-20 { width: 40rpx; height: 40rpx; }
+.icon-22 { width: 44rpx; height: 44rpx; }
+.icon-24 { width: 48rpx; height: 48rpx; }
+.icon-28 { width: 56rpx; height: 56rpx; }
+.icon-32 { width: 64rpx; height: 64rpx; }
+.icon-36 { width: 72rpx; height: 72rpx; }
+
+/* 金色图标 */
+.icon-sparkle-gold { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23C19A50'%3E%3Cpath d='M12 2L14.4 9.6L22 12L14.4 14.4L12 22L9.6 14.4L2 12L9.6 9.6L12 2Z'/%3E%3C/svg%3E"); }
+.icon-lantern-gold { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23C19A50'%3E%3Cpath d='M12 2C9.5 2 7.5 4 7.5 6.5C7.5 8.5 8.8 10.2 10.6 10.8V13H6C5.4 13 5 13.4 5 14V16C5 16.6 5.4 17 6 17H7V20C7 21.1 7.9 22 9 22H15C16.1 22 17 21.1 17 20V17H18C18.6 17 19 16.6 19 16V14C19 13.4 18.6 13 18 13H13.4V10.8C15.2 10.2 16.5 8.5 16.5 6.5C16.5 4 14.5 2 12 2ZM12 4C13.4 4 14.5 5.1 14.5 6.5C14.5 7.9 13.4 9 12 9C10.6 9 9.5 7.9 9.5 6.5C9.5 5.1 10.6 4 12 4Z'/%3E%3C/svg%3E"); }
+.icon-money-gold { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23C19A50'%3E%3Cpath d='M12 2C6.5 2 2 6.5 2 12C2 17.5 6.5 22 12 22C17.5 22 22 17.5 22 12C22 6.5 17.5 2 12 2ZM12 20C7.6 20 4 16.4 4 12C4 7.6 7.6 4 12 4C16.4 4 20 7.6 20 12C20 16.4 16.4 20 12 20ZM12.5 7V12.2L15.8 14.4L15 15.8L11 13.3V7H12.5Z'/%3E%3C/svg%3E"); }
+.icon-leaf-gold { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23C19A50'%3E%3Cpath d='M17 8C17 8 16.8 7.6 16.5 7.2C15.8 6.3 14.6 5.5 13 5.1C11.5 4.7 9.8 4.8 8.2 5.3C6.6 5.8 5.2 6.8 4.2 8.1C3.2 9.4 2.6 11 2.4 12.7C2.2 14.4 2.5 16.1 3.3 17.6C4.1 19.1 5.4 20.2 7 20.8C8.6 21.4 10.3 21.4 12 20.8C13.7 20.2 15.1 19 16.1 17.5C17.1 16 17.6 14.2 17.5 12.4C17.4 10.6 16.6 8.9 15.3 7.7L17 8ZM14.5 15.5C13.8 16.6 12.7 17.4 11.4 17.8C10.1 18.2 8.7 18.1 7.5 17.5C6.3 16.9 5.4 15.9 4.9 14.6C4.8 14.3 4.7 13.9 4.6 13.6C5.3 14.4 6.2 15 7.3 15.3C8.4 15.6 9.6 15.5 10.6 15.1C11.7 14.7 12.6 13.9 13.2 13C13.8 12 14.1 10.9 14 9.8C15.2 11.3 15.3 13.5 14.5 15.5Z'/%3E%3C/svg%3E"); }
+.icon-location-gold { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23C19A50'%3E%3Cpath d='M12 2C8.1 2 5 5.1 5 9C5 14.2 12 22 12 22C12 22 19 14.2 19 9C19 5.1 15.9 2 12 2ZM12 11.5C10.6 11.5 9.5 10.4 9.5 9C9.5 7.6 10.6 6.5 12 6.5C13.4 6.5 14.5 7.6 14.5 9C14.5 10.4 13.4 11.5 12 11.5Z'/%3E%3C/svg%3E"); }
+.icon-phone-gold { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23C19A50' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z'/%3E%3C/svg%3E"); }
+.icon-check-gold { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23C19A50' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E"); }
+.icon-check-white { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23FFFFFF' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E"); }
+.icon-check-square-gold { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23C19A50' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='3' width='18' height='18' rx='2' ry='2'/%3E%3Cpolyline points='9 12 12 15 16 10'/%3E%3C/svg%3E"); }
+.icon-square-gold { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23C19A50' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='3' width='18' height='18' rx='2' ry='2'/%3E%3C/svg%3E"); }
+.icon-close-gold { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23C19A50' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='18' y1='6' x2='6' y2='18'/%3E%3Cline x1='6' y1='6' x2='18' y2='18'/%3E%3C/svg%3E"); }
+.icon-warning-gold { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23C19A50' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z'/%3E%3Cline x1='12' y1='9' x2='12' y2='13'/%3E%3Cline x1='12' y1='17' x2='12.01' y2='17'/%3E%3C/svg%3E"); }
+.icon-party-gold { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23C19A50'%3E%3Cpath d='M12 2C12 2 11 4 11 6C11 8 12 10 12 10C12 10 13 8 13 6C13 4 12 2 12 2Z'/%3E%3Cpath d='M6 4C6 4 6.5 6 8 7C9.5 8 11.5 8 11.5 8C11.5 8 10.5 6.5 9 5.5C7.5 4.5 6 4 6 4Z'/%3E%3Cpath d='M18 4C18 4 17.5 6 16 7C14.5 8 12.5 8 12.5 8C12.5 8 13.5 6.5 15 5.5C16.5 4.5 18 4 18 4Z'/%3E%3Cpath d='M12 22C16.4183 22 20 18.4183 20 14H4C4 18.4183 7.58172 22 12 22Z'/%3E%3C/svg%3E"); }
+.icon-package-gold { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23C19A50' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z'/%3E%3Cpolyline points='3.27 6.96 12 12.01 20.73 6.96'/%3E%3Cline x1='12' y1='22.08' x2='12' y2='12'/%3E%3C/svg%3E"); }
+.icon-calendar-gold { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23C19A50' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='18' rx='2' ry='2'/%3E%3Cline x1='16' y1='2' x2='16' y2='6'/%3E%3Cline x1='8' y1='2' x2='8' y2='6'/%3E%3Cline x1='3' y1='10' x2='21' y2='10'/%3E%3C/svg%3E"); }
+.icon-heart-gold { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23C19A50'%3E%3Cpath d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z'/%3E%3C/svg%3E"); }
+.icon-chat-gold { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23C19A50'%3E%3Cpath d='M20 2H4C2.9 2 2 2.9 2 4V22L6 18H20C21.1 18 22 17.1 22 16V4C22 2.9 21.1 2 20 2Z'/%3E%3C/svg%3E"); }
+.icon-user-gold { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23C19A50'%3E%3Cpath d='M12 12C14.21 12 16 10.21 16 8C16 5.79 14.21 4 12 4C9.79 4 8 5.79 8 8C8 10.21 9.79 12 12 12ZM12 14C9.33 14 4 15.34 4 18V20H20V18C20 15.34 14.67 14 12 14Z'/%3E%3C/svg%3E"); }
+.icon-checklist-gold { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23C19A50' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 11l3 3L22 4'/%3E%3Cpath d='M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11'/%3E%3C/svg%3E"); }
+.icon-clock-gold { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23C19A50' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cpolyline points='12 6 12 12 16 14'/%3E%3C/svg%3E"); }
+.icon-doc-gold { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23C19A50' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z'/%3E%3Cpolyline points='14 2 14 8 20 8'/%3E%3Cline x1='16' y1='13' x2='8' y2='13'/%3E%3Cline x1='16' y1='17' x2='8' y2='17'/%3E%3C/svg%3E"); }
+.icon-palette-gold { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23C19A50' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='13.5' cy='6.5' r='.5'/%3E%3Ccircle cx='17.5' cy='10.5' r='.5'/%3E%3Ccircle cx='8.5' cy='7.5' r='.5'/%3E%3Ccircle cx='6.5' cy='12.5' r='.5'/%3E%3Cpath d='M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.9 0 1.8-.1 2.7-.4 1.6-.5 2.3-2.4 1.3-3.8-.4-.6-1.1-1-1.8-1h-.4c-1.7 0-3-1.3-3-3 0-.6.2-1.1.5-1.6.4-.6.6-1.3.6-2 0-1.7-1.3-3-3-3h-.5c-.5 0-1 .1-1.5.3C7.4 4.5 9.6 2 12 2z'/%3E%3C/svg%3E"); }
+.icon-add-gold { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23C19A50' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='12' y1='5' x2='12' y2='19'/%3E%3Cline x1='5' y1='12' x2='19' y2='12'/%3E%3C/svg%3E"); }
+.icon-box-gold { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23C19A50' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z'/%3E%3Cpolyline points='3.27 6.96 12 12.01 20.73 6.96'/%3E%3Cline x1='12' y1='22.08' x2='12' y2='12'/%3E%3C/svg%3E"); }
+.icon-flower-pink { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23C08572'%3E%3Cpath d='M12 2C13.1 2 14 2.9 14 4V6.5C14.6 6.2 15.3 6 16 6C17.7 6 19 7.3 19 9C19 9.7 18.8 10.4 18.5 11H21C22.1 11 23 11.9 23 13C23 14.1 22.1 15 21 15H18.5C18.8 15.6 19 16.3 19 17C19 18.7 17.7 20 16 20C15.3 20 14.6 19.8 14 19.5V22C14 23.1 13.1 24 12 24C10.9 24 10 23.1 10 22V19.5C9.4 19.8 8.7 20 8 20C6.3 20 5 18.7 5 17C5 16.3 5.2 15.6 5.5 15H3C1.9 15 1 14.1 1 13C1 11.9 1.9 11 3 11H5.5C5.2 10.4 5 9.7 5 9C5 7.3 6.3 6 8 6C8.7 6 9.4 6.2 10 6.5V4C10 2.9 10.9 2 12 2Z'/%3E%3C/svg%3E"); }
+.icon-leaf-green { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2385A594'%3E%3Cpath d='M17 8C17 8 16.8 7.6 16.5 7.2C15.8 6.3 14.6 5.5 13 5.1C11.5 4.7 9.8 4.8 8.2 5.3C6.6 5.8 5.2 6.8 4.2 8.1C3.2 9.4 2.6 11 2.4 12.7C2.2 14.4 2.5 16.1 3.3 17.6C4.1 19.1 5.4 20.2 7 20.8C8.6 21.4 10.3 21.4 12 20.8C13.7 20.2 15.1 19 16.1 17.5C17.1 16 17.6 14.2 17.5 12.4C17.4 10.6 16.6 8.9 15.3 7.7L17 8ZM14.5 15.5C13.8 16.6 12.7 17.4 11.4 17.8C10.1 18.2 8.7 18.1 7.5 17.5C6.3 16.9 5.4 15.9 4.9 14.6C4.8 14.3 4.7 13.9 4.6 13.6C5.3 14.4 6.2 15 7.3 15.3C8.4 15.6 9.6 15.5 10.6 15.1C11.7 14.7 12.6 13.9 13.2 13C13.8 12 14.1 10.9 14 9.8C15.2 11.3 15.3 13.5 14.5 15.5Z'/%3E%3C/svg%3E"); }
+
+/* 通用功能图标 — 金色 */
+.icon-warning { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23C19A50' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z'/%3E%3Cline x1='12' y1='9' x2='12' y2='13'/%3E%3Cline x1='12' y1='17' x2='12.01' y2='17'/%3E%3C/svg%3E"); }
+.icon-check { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23C19A50' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E"); }
+.icon-add { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23C19A50' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='12' y1='5' x2='12' y2='19'/%3E%3Cline x1='5' y1='12' x2='19' y2='12'/%3E%3C/svg%3E"); }
+.icon-chevron-r { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23C19A50' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='9 18 15 12 9 6'/%3E%3C/svg%3E"); }
+.icon-bulb { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23C19A50' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 18h6'/%3E%3Cpath d='M10 22h4'/%3E%3Cpath d='M15.09 14c.18-.98.65-1.74 1.41-2.41a6 6 0 1 0-8.99 0c.76.67 1.23 1.43 1.41 2.41'/%3E%3C/svg%3E"); }
+.icon-sparkles { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23C19A50' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 3L14.4 9.6L21 12L14.4 14.4L12 21L9.6 14.4L3 12L9.6 9.6L12 3Z'/%3E%3C/svg%3E"); }
+.icon-arrow-right { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23C19A50' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='5' y1='12' x2='19' y2='12'/%3E%3Cpolyline points='12 5 19 12 12 19'/%3E%3C/svg%3E"); }
+.icon-ring { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23C19A50' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='8'/%3E%3Ccircle cx='12' cy='12' r='4'/%3E%3C/svg%3E"); }
+.icon-box { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23C19A50' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z'/%3E%3Cpolyline points='3.27 6.96 12 12.01 20.73 6.96'/%3E%3Cline x1='12' y1='22.08' x2='12' y2='12'/%3E%3C/svg%3E"); }
+.icon-user { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23C19A50' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2'/%3E%3Ccircle cx='12' cy='7' r='4'/%3E%3C/svg%3E"); }
+
+/* 功能入口图标 — 金色 */
+.icon-clipboard { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23C19A50' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2'/%3E%3Crect x='8' y='2' width='8' height='4' rx='1' ry='1'/%3E%3C/svg%3E"); }
+.icon-package { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23C19A50' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z'/%3E%3Cpolyline points='3.27 6.96 12 12.01 20.73 6.96'/%3E%3Cline x1='12' y1='22.08' x2='12' y2='12'/%3E%3C/svg%3E"); }
+.icon-hotel { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23C19A50' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 21h18'/%3E%3Cpath d='M5 21V7l8-4v18'/%3E%3Cpath d='M19 21V11l-6-4'/%3E%3Cpath d='M9 9h.01'/%3E%3Cpath d='M9 13h.01'/%3E%3Cpath d='M9 17h.01'/%3E%3C/svg%3E"); }
+.icon-group { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23C19A50' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2'/%3E%3Ccircle cx='9' cy='7' r='4'/%3E%3Cpath d='M23 21v-2a4 4 0 0 0-3-3.87'/%3E%3Cpath d='M16 3.13a4 4 0 0 1 0 7.75'/%3E%3C/svg%3E"); }
+.icon-calendar { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23C19A50' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='18' rx='2' ry='2'/%3E%3Cline x1='16' y1='2' x2='16' y2='6'/%3E%3Cline x1='8' y1='2' x2='8' y2='6'/%3E%3Cline x1='3' y1='10' x2='21' y2='10'/%3E%3C/svg%3E"); }
+.icon-search { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23C19A50' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'/%3E%3C/svg%3E"); }
+.icon-settings { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23C19A50' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='3'/%3E%3Cpath d='M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z'/%3E%3C/svg%3E"); }
+
+/* 案例详情图标 — 金色 */
+.icon-star { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23C19A50' stroke='%23C19A50' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolygon points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'/%3E%3C/polygon%3E%3C/svg%3E"); }
+.icon-heart { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23C19A50' stroke='%23C19A50' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z'/%3E%3C/svg%3E"); }
+.icon-heart-o { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23C19A50' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z'/%3E%3C/svg%3E"); }
+.icon-share { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23C19A50' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='18' cy='5' r='3'/%3E%3Ccircle cx='6' cy='12' r='3'/%3E%3Ccircle cx='18' cy='19' r='3'/%3E%3Cline x1='8.59' y1='13.51' x2='15.42' y2='17.49'/%3E%3Cline x1='15.41' y1='6.51' x2='8.59' y2='10.49'/%3E%3C/svg%3E"); }
+.icon-art { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23C19A50' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='13.5' cy='6.5' r='.5'/%3E%3Ccircle cx='17.5' cy='10.5' r='.5'/%3E%3Ccircle cx='8.5' cy='7.5' r='.5'/%3E%3Ccircle cx='6.5' cy='12.5' r='.5'/%3E%3Cpath d='M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.9 0 1.8-.1 2.7-.4 1.6-.5 2.3-2.4 1.3-3.8-.4-.6-1.1-1-1.8-1h-.4c-1.7 0-3-1.3-3-3 0-.6.2-1.1.5-1.6.4-.6.6-1.3.6-2 0-1.7-1.3-3-3-3h-.5c-.5 0-1 .1-1.5.3C7.4 4.5 9.6 2 12 2z'/%3E%3C/svg%3E"); }
+.icon-location { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23C19A50' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z'/%3E%3Ccircle cx='12' cy='10' r='3'/%3E%3C/svg%3E"); }
+.icon-budget { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23C19A50' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='12' y1='1' x2='12' y2='23'/%3E%3Cpath d='M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6'/%3E%3C/svg%3E"); }
+.icon-building { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23C19A50' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='4' y='2' width='16' height='20' rx='2' ry='2'/%3E%3Cpath d='M9 22v-4h6v4'/%3E%3Cpath d='M8 6h.01'/%3E%3Cpath d='M16 6h.01'/%3E%3Cpath d='M12 6h.01'/%3E%3Cpath d='M12 10h.01'/%3E%3Cpath d='M12 14h.01'/%3E%3Cpath d='M16 10h.01'/%3E%3Cpath d='M16 14h.01'/%3E%3Cpath d='M8 10h.01'/%3E%3Cpath d='M8 14h.01'/%3E%3C/svg%3E"); }
+.icon-schedule { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23C19A50' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z'/%3E%3Cpolyline points='14 2 14 8 20 8'/%3E%3Cline x1='16' y1='13' x2='8' y2='13'/%3E%3Cline x1='16' y1='17' x2='8' y2='17'/%3E%3Cpolyline points='10 9 9 9 8 9'/%3E%3C/svg%3E"); }
+.icon-chat { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23C19A50' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z'/%3E%3C/svg%3E"); }
+.icon-target { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23C19A50' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Ccircle cx='12' cy='12' r='6'/%3E%3Ccircle cx='12' cy='12' r='2'/%3E%3C/svg%3E"); }
+.icon-gift { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23C19A50' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 12 20 22 4 22 4 12'/%3E%3Crect x='2' y='7' width='20' height='5'/%3E%3Cline x1='12' y1='22' x2='12' y2='7'/%3E%3Cpath d='M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z'/%3E%3Cpath d='M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z'/%3E%3C/svg%3E"); }
+.icon-image { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23C19A50' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='3' width='18' height='18' rx='2' ry='2'/%3E%3Ccircle cx='8.5' cy='8.5' r='1.5'/%3E%3Cpolyline points='21 15 16 10 5 21'/%3E%3C/svg%3E"); }
+.icon-lightbulb { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23C19A50' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 18h6'/%3E%3Cpath d='M10 22h4'/%3E%3Cpath d='M15.09 14c.18-.98.65-1.74 1.41-2.41a6 6 0 1 0-8.99 0c.76.67 1.23 1.43 1.41 2.41'/%3E%3C/svg%3E"); }
+.icon-clients { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23C19A50' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2'/%3E%3Ccircle cx='9' cy='7' r='4'/%3E%3Cpath d='M23 21v-2a4 4 0 0 0-3-3.87'/%3E%3Cpath d='M16 3.13a4 4 0 0 1 0 7.75'/%3E%3C/svg%3E"); }
+
+/* 白色图标 */
+.icon-phone-white { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23FFFFFF' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z'/%3E%3C/svg%3E"); }
+.icon-message-white { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23FFFFFF' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z'/%3E%3C/svg%3E"); }
+.icon-location-white { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23FFFFFF' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z'/%3E%3Ccircle cx='12' cy='10' r='3'/%3E%3C/svg%3E"); }
+.icon-send-white { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23FFFFFF' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='22' y1='2' x2='11' y2='13'/%3E%3Cpolygon points='22 2 15 22 11 13 2 9 22 2'/%3E%3C/svg%3E"); }
+.icon-palette-white { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23FFFFFF' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='13.5' cy='6.5' r='.5'/%3E%3Ccircle cx='17.5' cy='10.5' r='.5'/%3E%3Ccircle cx='8.5' cy='7.5' r='.5'/%3E%3Ccircle cx='6.5' cy='12.5' r='.5'/%3E%3Cpath d='M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.9 0 1.8-.1 2.7-.4 1.6-.5 2.3-2.4 1.3-3.8-.4-.6-1.1-1-1.8-1h-.4c-1.7 0-3-1.3-3-3 0-.6.2-1.1.5-1.6.4-.6.6-1.3.6-2 0-1.7-1.3-3-3-3h-.5c-.5 0-1 .1-1.5.3C7.4 4.5 9.6 2 12 2z'/%3E%3C/svg%3E"); }
+.icon-countdown-white { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23FFFFFF' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='18' rx='2' ry='2'/%3E%3Cline x1='16' y1='2' x2='16' y2='6'/%3E%3Cline x1='8' y1='2' x2='8' y2='6'/%3E%3Cline x1='3' y1='10' x2='21' y2='10'/%3E%3Cpath d='M8 14h.01'/%3E%3Cpath d='M12 14h.01'/%3E%3Cpath d='M16 14h.01'/%3E%3Cpath d='M8 18h.01'/%3E%3Cpath d='M12 18h.01'/%3E%3Cpath d='M16 18h.01'/%3E%3C/svg%3E"); }
+
+/* ═══════════════════════════════════════════════
+   ANIMATION SYSTEM — Cream Style Motion
+   轻复古·奶油风动画系统
+   ═══════════════════════════════════════════════ */
+
+/* ---------- Keyframes ---------- */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(40rpx); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-20rpx) rotate(2deg); }
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.05); opacity: 0.8; }
+}
+
+@keyframes watercolorFlow {
+  0% { transform: translate(0, 0) rotate(0deg); opacity: 0.6; }
+  50% { transform: translate(20rpx, -20rpx) rotate(5deg); opacity: 0.8; }
+  100% { transform: translate(0, 0) rotate(0deg); opacity: 0.6; }
+}
+
+@keyframes gentleBounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10rpx); }
+}
+
+@keyframes fadeInScale {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(40rpx); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-40rpx); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes bubbleIn {
+  from { opacity: 0; transform: translateY(20rpx); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+@keyframes shimmerSlide {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+@keyframes progressFill {
+  from { width: 0; }
+}
+
+/* ---------- Animation Utility Classes ---------- */
+.anim-fade-in-up { animation: fadeInUp 0.5s ease-out; }
+.anim-fade-in-scale { animation: fadeInScale 0.4s ease-out; }
+.anim-slide-in-right { animation: slideInRight 0.4s ease-out; }
+.anim-slide-in-left { animation: slideInLeft 0.4s ease-out; }
+.anim-bubble-in { animation: bubbleIn 0.35s ease-out; }
+.anim-float { animation: float 12s ease-in-out infinite; }
+.anim-pulse { animation: pulse 2s ease-in-out infinite; }
+.anim-gentle-bounce { animation: gentleBounce 2s ease-in-out infinite; }
+
+/* Staggered animation delays */
+.anim-delay-1 { animation-delay: 0.1s; }
+.anim-delay-2 { animation-delay: 0.2s; }
+.anim-delay-3 { animation-delay: 0.3s; }
+.anim-delay-4 { animation-delay: 0.4s; }
+.anim-delay-5 { animation-delay: 0.5s; }
+
+/* ═══════════════════════════════════════════════
+   CREAM TEXTURE BACKGROUNDS
+   奶油风纹理背景装饰系统
+   ═══════════════════════════════════════════════ */
+
+/* ---------- Page Background with Cream Wash ---------- */
+.page-watercolor {
+  position: relative;
+  background: var(--gradient-warm);
+}
+
+.page-watercolor::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background:
+    radial-gradient(ellipse at 20% 30%, rgba(212, 175, 55, 0.04) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 70%, rgba(245, 230, 200, 0.06) 0%, transparent 50%),
+    radial-gradient(ellipse at 40% 80%, rgba(255, 255, 255, 0.5) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ---------- Cream Splash Decorations ---------- */
+.watercolor-splash {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.watercolor-splash-gold {
+  background: radial-gradient(circle, rgba(212, 175, 55, 0.06) 0%, transparent 70%);
+}
+
+.watercolor-splash-cream {
+  background: radial-gradient(circle, rgba(245, 230, 200, 0.08) 0%, transparent 70%);
+}
+
+.watercolor-splash-white {
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.4) 0%, transparent 70%);
+}
+
+/* ---------- Cream Blob Positions ---------- */
+.watercolor-blob-top-right {
+  top: -160rpx;
+  right: -120rpx;
+  width: 400rpx;
+  height: 400rpx;
+}
+
+.watercolor-blob-bottom-left {
+  bottom: -80rpx;
+  left: -80rpx;
+  width: 320rpx;
+  height: 320rpx;
+}
+
+.watercolor-blob-center-left {
+  top: 50%;
+  left: -120rpx;
+  width: 280rpx;
+  height: 280rpx;
+}
+
+/* ═══════════════════════════════════════════════
+   GLASS MORPHISM SYSTEM
+   玻璃态效果系统 — 轻复古·奶油风
+   ═══════════════════════════════════════════════ */
+
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(40rpx);
+  -webkit-backdrop-filter: blur(40rpx);
+  border: 2rpx solid rgba(245, 230, 200, 0.3);
+}
+
+.glass-light {
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(32rpx);
+  -webkit-backdrop-filter: blur(32rpx);
+  border: 2rpx solid rgba(245, 230, 200, 0.2);
+}
+
+.glass-strong {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(48rpx);
+  -webkit-backdrop-filter: blur(48rpx);
+  border: 2rpx solid rgba(245, 230, 200, 0.4);
+}
+
+.glass-gold {
+  background: rgba(255, 249, 242, 0.85);
+  backdrop-filter: blur(40rpx);
+  -webkit-backdrop-filter: blur(40rpx);
+  border: 2rpx solid rgba(212, 175, 55, 0.15);
+}
+
+/* ═══════════════════════════════════════════════
+   ENHANCED CARD SYSTEM
+   增强卡片系统 — 从画布迁移
+   ═══════════════════════════════════════════════ */
+
+/* ---------- Card with Gradient Border ---------- */
+.card-gradient-border {
+  position: relative;
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  padding: 32rpx;
+  box-shadow: var(--shadow-card);
+  border: 2rpx solid var(--border-light);
+}
+
+.card-gradient-border::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4rpx;
+  background: var(--gradient-gold);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+}
+
+/* ---------- Card with Hover Lift Effect ---------- */
+.card-lift {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card-lift:active {
+  transform: translateY(-4rpx);
+  box-shadow: var(--shadow-hover);
+}
+
+/* ---------- Premium Card with Inner Glow ---------- */
+.card-premium-glow {
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  padding: 40rpx;
+  box-shadow: var(--shadow-hover);
+  position: relative;
+  overflow: hidden;
+  border: 2rpx solid var(--border-light);
+}
+
+.card-premium-glow::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle at center, rgba(212, 175, 55, 0.04) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+/* ---------- Stat Card Variants ---------- */
+.stat-card-gold {
+  background: var(--gradient-warm);
+  border: 2rpx solid var(--gold-light);
+  border-radius: var(--radius-lg);
+  padding: 32rpx;
+  box-shadow: var(--shadow-card);
+}
+
+.stat-card-pink {
+  background: linear-gradient(135deg, var(--bg-card), var(--warning-light));
+  border: 2rpx solid var(--warning-light);
+  border-radius: var(--radius-lg);
+  padding: 32rpx;
+  box-shadow: var(--shadow-card);
+}
+
+.stat-card-green {
+  background: linear-gradient(135deg, var(--bg-card), var(--success-light));
+  border: 2rpx solid var(--success-light);
+  border-radius: var(--radius-lg);
+  padding: 32rpx;
+  box-shadow: var(--shadow-card);
+}
+
+.stat-card-blue {
+  background: linear-gradient(135deg, var(--bg-card), var(--info-light));
+  border: 2rpx solid var(--info-light);
+  border-radius: var(--radius-lg);
+  padding: 32rpx;
+  box-shadow: var(--shadow-card);
+}
+
+/* ---------- Feature Card ---------- */
+.feature-card {
+  background: var(--gradient-warm);
+  border-radius: var(--radius-xl);
+  padding: 48rpx 32rpx;
+  text-align: center;
+  border: 2rpx solid var(--border-light);
+  transition: all 0.3s ease;
+}
+
+.feature-card:active {
+  transform: scale(0.98);
+  box-shadow: var(--shadow-hover);
+}
+
+/* ---------- Info Card with Icon ---------- */
+.info-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 24rpx;
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  padding: 32rpx;
+  box-shadow: var(--shadow-card);
+  border: 2rpx solid var(--border-light);
+}
+
+.info-card-icon {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.info-card-icon-gold {
+  background: var(--gold-light);
+  color: var(--gold);
+}
+
+.info-card-icon-pink {
+  background: var(--warning-light);
+  color: var(--warning);
+}
+
+.info-card-icon-green {
+  background: var(--success-light);
+  color: var(--success);
+}
+
+.info-card-icon-blue {
+  background: var(--info-light);
+  color: var(--info);
+}
+
+/* ═══════════════════════════════════════════════
+   PROGRESS & LOADING ENHANCEMENTS
+   进度条与加载效果增强
+   ═══════════════════════════════════════════════ */
+
+/* ---------- Progress Bar ---------- */
+.progress-bar {
+  height: 8rpx;
+  background: var(--gold-light);
+  border-radius: 4rpx;
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: var(--gradient-gold);
+  border-radius: 4rpx;
+  transition: width 0.3s ease;
+}
+
+/* ---------- Detail Tabs ---------- */
+.detail-tabs {
+  display: flex;
+  gap: 8rpx;
+  margin-bottom: 32rpx;
+  background: var(--bg-card);
+  padding: 8rpx;
+  border-radius: 24rpx;
+  box-shadow: var(--shadow-sm);
+}
+
+.detail-tab {
+  flex: 1;
+  padding: 20rpx 16rpx;
+  text-align: center;
+  font-size: 26rpx;
+  font-weight: 500;
+  color: var(--text-secondary);
+  border-radius: 16rpx;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.detail-tab.active {
+  background: var(--gradient-gold);
+  color: var(--text-inverse);
+  font-weight: 600;
+  box-shadow: var(--shadow-btn);
+}
+
+.detail-tab:active {
+  transform: scale(0.96);
+}
+
+/* ---------- Detail List Items ---------- */
+.prop-item,
+.cost-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20rpx 0;
+  border-bottom: 2rpx solid rgba(0, 0, 0, 0.03);
+}
+
+.prop-item:last-child,
+.cost-item:last-child {
+  border-bottom: none;
+}
+
+.risk-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12rpx;
+  padding: 16rpx 20rpx;
+  background: var(--warning-light);
+  border-radius: 16rpx;
+  margin-bottom: 12rpx;
+}
+
+.risk-item:last-child {
+  margin-bottom: 0;
+}
+
+/* ---------- Timeline Dot ---------- */
+.tl-dot {
+  width: 16rpx;
+  height: 16rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--gold-400), var(--gold-500));
+  box-shadow: 0 2rpx 6rpx rgba(193, 154, 80, 0.3);
+  flex-shrink: 0;
+  margin-top: 10rpx;
+  position: relative;
+  z-index: 1;
+}
+
+/* ---------- Detail Actions ---------- */
+.detail-actions {
+  display: flex;
+  gap: 20rpx;
+  margin-top: 32rpx;
+}
+
+.btn-secondary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-card);
+  border: 3rpx solid var(--gold-200);
+  border-radius: 9999rpx;
+  padding: 0 40rpx;
+  height: 96rpx;
+  font-size: 26rpx;
+  color: var(--gold-700);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.btn-secondary:active {
+  background: var(--gold-50);
+  transform: scale(0.98);
+}
+
+/* ---------- Animated Progress Bar ---------- */
+.progress-bar-animated {
+  height: 8rpx;
+  background: var(--gold-light);
+  border-radius: 4rpx;
+  overflow: hidden;
+}
+
+.progress-fill-animated {
+  height: 100%;
+  background: var(--gradient-gold);
+  border-radius: 4rpx;
+  animation: progressFill 1s ease-out;
+}
+
+/* ---------- Shimmer Loading Effect ---------- */
+.shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.shimmer::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  animation: shimmerSlide 2s ease-in-out infinite;
+}
+
+/* ---------- Pulse Dot ---------- */
+.pulse-dot {
+  width: 16rpx;
+  height: 16rpx;
+  border-radius: 50%;
+  background: var(--gold);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.pulse-dot-gold {
+  box-shadow: 0 0 16rpx var(--gold);
+}
+
+/* ═══════════════════════════════════════════════
+   GRADIENT BACKGROUNDS
+   渐变背景系统 — 轻复古·奶油风
+   ═══════════════════════════════════════════════ */
+
+.bg-gradient-gold {
+  background: var(--gradient-gold);
+}
+
+.bg-gradient-gold-soft {
+  background: linear-gradient(135deg, var(--gold-light), var(--gold-200));
+}
+
+.bg-gradient-warm {
+  background: var(--gradient-warm);
+}
+
+.bg-gradient-hero {
+  background: linear-gradient(175deg, #FFF9F2 0%, #FFFFFF 100%);
+}
+
+/* ═══════════════════════════════════════════════
+   DECORATIVE ELEMENTS
+   装饰性元素
+   ═══════════════════════════════════════════════ */
+
+/* ---------- Gold Divider with Gradient ---------- */
+.divider-gold {
+  height: 2rpx;
+  background: var(--gradient-gold);
+}
+
+.divider-gold-short {
+  width: 120rpx;
+  height: 4rpx;
+  background: var(--gradient-gold);
+  border-radius: 2rpx;
+}
+
+/* ---------- Section Title Decoration ---------- */
+.section-title-deco {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 32rpx;
+}
+
+.section-title-deco::before,
+.section-title-deco::after {
+  content: '';
+  width: 64rpx;
+  height: 4rpx;
+  border-radius: 2rpx;
+}
+
+.section-title-deco::before {
+  background: linear-gradient(90deg, transparent, var(--gold));
+}
+
+.section-title-deco::after {
+  background: linear-gradient(90deg, var(--gold), transparent);
+}
+
+/* ---------- Icon Circle ---------- */
+.icon-circle {
+  width: 96rpx;
+  height: 96rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.icon-circle-gold {
+  background: var(--gradient-gold);
+  color: white;
+  box-shadow: var(--shadow-gold);
+}
+
+.icon-circle-pink {
+  background: linear-gradient(135deg, var(--warning-light), var(--warning));
+  color: white;
+  box-shadow: 0 8rpx 24rpx rgba(230, 162, 60, 0.2);
+}
+
+.icon-circle-green {
+  background: linear-gradient(135deg, var(--success-light), var(--success));
+  color: white;
+  box-shadow: 0 8rpx 24rpx rgba(103, 194, 58, 0.2);
+}
+
+.icon-circle-blue {
+  background: linear-gradient(135deg, var(--info-light), var(--info));
+  color: white;
+  box-shadow: 0 8rpx 24rpx rgba(144, 147, 153, 0.2);
+}
+
+/* ---------- Badge ---------- */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 36rpx;
+  height: 36rpx;
+  padding: 0 10rpx;
+  border-radius: 18rpx;
+  font-size: 20rpx;
+  font-weight: 600;
+  background: var(--error);
+  color: white;
+}
+
+.badge-gold {
+  background: var(--gold);
+  color: white;
+}
+
+.badge-outline {
+  background: transparent;
+  border: 2rpx solid var(--gold);
+  color: var(--gold);
+}
+
+/* ═══════════════════════════════════════════════
+   TRANSITION UTILITIES
+   过渡效果工具类
+   ═══════════════════════════════════════════════ */
+
+.transition-all {
+  transition: all 0.3s ease;
+}
+
+.transition-transform {
+  transition: transform 0.3s ease;
+}
+
+.transition-opacity {
+  transition: opacity 0.3s ease;
+}
+
+.transition-shadow {
+  transition: box-shadow 0.3s ease;
+}
+
+/* ═══════════════════════════════════════════════
+   RESPONSIVE TEXT
+   响应式文字大小
+   ═══════════════════════════════════════════════ */
+
+.text-responsive-sm {
+  font-size: calc(24rpx + 0.5vw);
+}
+
+.text-responsive-base {
+  font-size: calc(28rpx + 0.5vw);
+}
+
+.text-responsive-lg {
+  font-size: calc(32rpx + 0.5vw);
+}
+
+/* ═══════════════════════════════════════════════
+   SAFE AREA UTILITIES
+   安全区域工具类
+   ═══════════════════════════════════════════════ */
+
+.pb-safe {
+  padding-bottom: env(safe-area-inset-bottom, 0);
+}
+
+.mb-safe {
+  margin-bottom: env(safe-area-inset-bottom, 0);
+}
+
+.bottom-safe {
+  bottom: env(safe-area-inset-bottom, 0);
+}
+
+/* ═══════════════════════════════════════════════
+   FOOTER
+   页脚样式
+   ═══════════════════════════════════════════════ */
+
+.mine-footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 64rpx 0 32rpx;
+  font-size: 22rpx;
+  color: var(--gold-500);
+}
+
+/* ═══════════════════════════════════════════════
+   QUICK ACTIONS (共用组件)
+   快捷操作按钮组 — dashboard/props/hotels 等多页面使用
+   ═══════════════════════════════════════════════ */
+
+.quick-actions {
+  display: flex;
+  gap: 24rpx;
+  margin-bottom: 24rpx;
+}
+
+.action-btn {
+  flex: 1;
+  background: linear-gradient(135deg, var(--bg-card), var(--gold-50));
+  border-radius: 24rpx;
+  padding: 28rpx 8rpx;
+  text-align: center;
+  border: 2rpx solid var(--gold-100);
+  box-shadow: var(--shadow-md);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.action-btn:active {
+  transform: translateY(-4rpx) scale(0.98);
+  box-shadow: var(--shadow-lg);
+}
+
+.action-icon {
+  display: block;
+  font-size: 40rpx;
+  color: var(--gold-500);
+  margin-bottom: 8rpx;
+}
+
+.action-label {
+  display: block;
+  font-size: 22rpx;
+  color: var(--gold-700);
+  font-weight: 500;
+}
+
+/* ═══════════════════════════════════════════════
+   TODO ITEM (共用组件)
+   待办事项列表 — dashboard/hotels/props 等多页面使用
+   ═══════════════════════════════════════════════ */
+
+.todo-item {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+  padding: 20rpx 0;
+  border-bottom: 2rpx solid rgba(0, 0, 0, 0.04);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.todo-item:last-child {
+  border-bottom: none;
+}
+
+.todo-item:active {
+  background: var(--gold-50);
+}
+
+.todo-check {
+  width: 40rpx;
+  height: 40rpx;
+  border-radius: 50%;
+  border: 4rpx solid var(--gold-200);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 22rpx;
+  color: var(--text-inverse);
+  transition: all 0.2s ease;
+}
+
+.todo-check.checked {
+  background: linear-gradient(135deg, var(--gold-400), var(--gold-500));
+  border-color: var(--gold-400);
+  box-shadow: var(--shadow-sm);
+}
+
+.todo-content {
+  flex: 1;
+}
+
+.todo-text {
+  display: block;
+  font-size: 28rpx;
+  color: var(--gold-800);
+}
+
+.todo-done .todo-text {
+  text-decoration: line-through;
+  color: var(--gold-500);
+}
+
+.todo-time {
+  display: block;
+  font-size: 22rpx;
+  color: var(--gold-500);
+  margin-top: 4rpx;
+}
+
+/* ═══════════════════════════════════════════════
+   SEARCH BAR (共用组件)
+   搜索栏 — dashboard 等页面使用
+   ═══════════════════════════════════════════════ */
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  background: linear-gradient(135deg, var(--gold-50), var(--bg-card));
+  border-radius: 9999rpx;
+  padding: 20rpx 32rpx;
+  margin-bottom: 24rpx;
+  border: 3rpx solid var(--gold-200);
+  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.search-bar:active {
+  border-color: var(--gold-400);
+  background: var(--bg-card);
+}
+
+.search-icon {
+  margin-right: 16rpx;
+  font-size: 30rpx;
+  color: var(--gold-400);
+}
+
+.search-placeholder {
+  font-size: 28rpx;
+  color: var(--gold-500);
+}
+
+/* ═══════════════════════════════════════════════
+   EMPTY STATE (共用组件)
+   空状态提示 — 多页面使用
+   ═══════════════════════════════════════════════ */
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 96rpx 0;
+  text-align: center;
+  color: var(--gold-500);
+  font-size: 26rpx;
+}
+
+.empty-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40rpx;
+}
+
+.empty-illustration-gift {
+  width: 160rpx;
+  height: 160rpx;
+  margin-bottom: 32rpx;
+  position: relative;
+}
+
+.gift-box {
+  width: 120rpx;
+  height: 80rpx;
+  background: linear-gradient(135deg, var(--gold-200), var(--gold-300));
+  border-radius: 16rpx;
+  position: absolute;
+  bottom: 0;
+  left: 20rpx;
+}
+
+.gift-lid {
+  width: 130rpx;
+  height: 24rpx;
+  background: linear-gradient(135deg, var(--gold-300), var(--gold-400));
+  border-radius: 12rpx;
+  position: absolute;
+  bottom: 80rpx;
+  left: 15rpx;
+}
+
+.gift-ribbon {
+  width: 16rpx;
+  height: 80rpx;
+  background: var(--gold-400);
+  position: absolute;
+  bottom: 0;
+  left: 72rpx;
+}
+
+.gift-bow {
+  width: 40rpx;
+  height: 24rpx;
+  background: var(--gold-400);
+  border-radius: 50%;
+  position: absolute;
+  bottom: 104rpx;
+  left: 60rpx;
+}
+
+.empty-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: var(--gold-700);
+  display: block;
+  margin-bottom: 12rpx;
+}
+
+.empty-desc {
+  font-size: 26rpx;
+  color: var(--gold-500);
+  display: block;
+  margin-bottom: 32rpx;
+}
+
+.empty-cta {
+  background: linear-gradient(135deg, var(--gold-400), var(--gold-500));
+  color: var(--text-inverse);
+  font-size: 28rpx;
+  font-weight: 600;
+  padding: 20rpx 48rpx;
+  border-radius: 9999rpx;
+  border: none;
+  box-shadow: var(--shadow-gold);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.empty-cta:active {
+  transform: scale(0.97);
+}
+
+.empty-text {
+  font-size: 26rpx;
+  color: var(--gold-500);
+}
+
+/* ═══════════════════════════════════════════════
+   STAT ROW (共用组件)
+   统计卡片行 — dashboard/profile/contracts/clients/orders 等多页面使用
+   ═══════════════════════════════════════════════ */
+
+.stat-row {
+  display: flex;
+  gap: 24rpx;
+  margin-bottom: 24rpx;
+  align-items: center;
+}
+
+.stat-item {
+  flex: 1;
+  background: linear-gradient(135deg, var(--bg-card), var(--gold-50));
+  border: 2rpx solid var(--gold-100);
+  box-shadow: var(--shadow-md);
+  border-radius: 24rpx;
+  padding: 24rpx 16rpx;
+  text-align: center;
+  transition: all 0.2s ease;
+}
+
+.stat-item:active {
+  transform: translateY(-2rpx);
+  box-shadow: var(--shadow-lg);
+}
+
+.stat-card {
+  flex: 1;
+  background: linear-gradient(135deg, var(--bg-card), var(--gold-50));
+  border: 2rpx solid var(--gold-100);
+  box-shadow: var(--shadow-md);
+  border-radius: 24rpx;
+  padding: 24rpx 16rpx;
+  text-align: center;
+  transition: all 0.2s ease;
+}
+
+.stat-card:active {
+  transform: translateY(-2rpx);
+  box-shadow: var(--shadow-lg);
+}
+
+.stat-num {
+  display: block;
+  font-size: 40rpx;
+  font-weight: 700;
+  color: var(--gold-600);
+  letter-spacing: -1rpx;
+  font-family: var(--font-en-display);
+}
+
+.stat-label {
+  display: block;
+  font-size: 22rpx;
+  color: var(--gold-500);
+  margin-top: 8rpx;
+}
+
+.stat-icon {
+  display: block;
+  font-size: 36rpx;
+  color: var(--gold-400);
+  margin-bottom: 12rpx;
+}
+
+/* ═══════════════════════════════════════════════
+   SECTION TITLE (共用组件)
+   区块标题 — 多页面使用
+   ═══════════════════════════════════════════════ */
+
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  font-size: 28rpx;
+  font-weight: 600;
+  color: var(--gold-800);
+  margin-bottom: 24rpx;
+}
+
+.gold-bar {
+  width: 6rpx;
+  height: 28rpx;
+  background: linear-gradient(180deg, var(--gold-400), var(--gold-500));
+  border-radius: 3rpx;
+}
+
+.gold-dot {
+  width: 12rpx;
+  height: 12rpx;
+  background: linear-gradient(135deg, var(--gold-400), var(--gold-500));
+  border-radius: 50%;
+  box-shadow: var(--shadow-sm);
+}
+
+.section-title .more {
+  margin-left: auto;
+  font-size: 24rpx;
+  color: var(--gold-500);
+  font-weight: 500;
+}
+
+/* ═══════════════════════════════════════════════
+   INSIGHT CARD (共用组件)
+   洞察卡片 — dashboard 页面使用
+   ═══════════════════════════════════════════════ */
+
+.insight-row {
+  display: flex;
+  gap: 24rpx;
+  margin-bottom: 24rpx;
+}
+
+.insight-card {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+  padding: 28rpx;
+}
+
+.insight-icon-wrap {
+  width: 72rpx;
+  height: 72rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.insight-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.insight-value {
+  display: block;
+  font-size: 36rpx;
+  font-weight: 700;
+  color: var(--gold-700);
+  font-family: var(--font-en-display);
+  line-height: 1.2;
+}
+
+.insight-label {
+  display: block;
+  font-size: 22rpx;
+  color: var(--gold-500);
+  margin-top: 4rpx;
+}
+
+/* ═══════════════════════════════════════════════
+   ALERT CARD (共用组件)
+   预警卡片 — dashboard 页面使用
+   ═══════════════════════════════════════════════ */
+
+.alert-card {
+  display: flex;
+  align-items: center;
+  gap: 24rpx;
+  padding: 28rpx 32rpx;
+  margin-bottom: 24rpx;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, var(--bg-card), var(--gold-50));
+  border: 2rpx solid var(--gold-100);
+  box-shadow: var(--shadow-md);
+  transition: all 0.2s ease;
+  border-radius: 24rpx;
+}
+
+.alert-card::before {
+  display: none;
+}
+
+.alert-card:active {
+  transform: translateY(-4rpx);
+  box-shadow: var(--shadow-lg);
+}
+
+.alert-bar {
+  width: 6rpx;
+  height: 72rpx;
+  background: linear-gradient(180deg, var(--warning), var(--warning-light));
+  border-radius: 4rpx;
+  flex-shrink: 0;
+}
+
+.alert-body {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.alert-left {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+}
+
+.alert-icon {
+  width: 44rpx;
+  height: 44rpx;
+  border-radius: 50%;
+  background: var(--warning-light);
+  color: var(--warning);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26rpx;
+  font-weight: 700;
+  box-shadow: var(--shadow-sm);
+}
+
+.alert-title {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.alert-right {
+  text-align: right;
+}
+
+.alert-count {
+  display: block;
+  font-size: 26rpx;
+  color: var(--gold-700);
+  font-weight: 700;
+}
+
+.alert-overdue {
+  display: block;
+  font-size: 22rpx;
+  color: var(--warning);
+  margin-top: 4rpx;
+}
+
+.alert-arrow {
+  font-size: 32rpx;
+  color: var(--text-secondary);
+  flex-shrink: 0;
+}
+
+/* ═══════════════════════════════════════════════
+   ORDER CARD (共用组件)
+   订单卡片 — dashboard/orders/schedule 等多页面使用
+   ═══════════════════════════════════════════════ */
+
+.order-card {
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.order-card:active {
+  opacity: 0.8;
+  transform: translateY(-2rpx);
+}
+
+.order-header {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+}
+
+.order-avatar {
+  width: 72rpx;
+  height: 72rpx;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28rpx;
+  font-weight: 600;
+  color: var(--text-inverse);
+  flex-shrink: 0;
+  background: linear-gradient(135deg, var(--gold-400), var(--gold-500));
+  box-shadow: var(--shadow-gold);
+}
+
+.order-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.order-name {
+  display: block;
+  font-size: 28rpx;
+  font-weight: 600;
+  color: var(--gold-800);
+}
+
+.order-date {
+  display: block;
+  font-size: 24rpx;
+  color: var(--gold-500);
+  margin-top: 4rpx;
+}
+
+.order-tag {
+  flex-shrink: 0;
+}
+
+.order-tags {
+  display: flex;
+  gap: 12rpx;
+  margin-top: 16rpx;
+  flex-wrap: wrap;
+}
+
+.order-tag-item {
+  display: inline-block;
+  padding: 4rpx 16rpx;
+  background: var(--gold-100);
+  border-radius: 24rpx;
+  font-size: 20rpx;
+  color: var(--gold-600);
+}
+
+.order-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 16rpx;
+  padding-top: 16rpx;
+  border-top: 2rpx solid var(--border);
+}
+
+.order-amount {
+  font-size: 28rpx;
+  font-weight: 700;
+  color: var(--gold-600);
+  font-family: var(--font-en-display);
+}
+
+/* ═══════════════════════════════════════════════
+   PROFILE GRID (共用组件)
+   功能入口网格 — profile 页面使用
+   ═══════════════════════════════════════════════ */
+
+.profile-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24rpx;
+  padding: 32rpx;
+}
+
+.profile-grid-item {
+  flex: 1;
+  min-width: calc(33.333% - 16rpx);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24rpx 16rpx;
+  background: var(--bg-card);
+  border-radius: 24rpx;
+  border: 2rpx solid var(--gold-100);
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.profile-grid-item:active {
+  transform: scale(0.96);
+  background: var(--gold-50);
+}
+
+.profile-grid-icon {
+  width: 56rpx;
+  height: 56rpx;
+  margin-bottom: 12rpx;
+  color: var(--gold);
+}
+
+.profile-grid-label {
+  font-size: 24rpx;
+  color: var(--text-primary);
+  font-weight: 500;
+  text-align: center;
+}
+
+.profile-name {
+  font-size: 36rpx;
+  font-weight: 700;
+  color: var(--text-inverse);
+  display: block;
+  margin-bottom: 8rpx;
+}
+
+.profile-role {
+  font-size: 26rpx;
+  color: rgba(255, 255, 255, 0.8);
+  display: block;
+}
+
+.profile-phone {
+  font-size: 24rpx;
+  color: rgba(255, 255, 255, 0.7);
+  display: block;
+  margin-top: 8rpx;
+}
+
+/* ═══════════════════════════════════════════════
+   LOADING STATE (共用组件)
+   加载状态 — 多页面使用
+   ═══════════════════════════════════════════════ */
+
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 96rpx 0;
+}
+
+/* ═══════════════════════════════════════════════
+   PAGE WRAPPER (共用组件)
+   页面容器 — hotels/props 等页面使用
+   ═══════════════════════════════════════════════ */
+
+.page-wrap {
+  padding: 24rpx 32rpx calc(120rpx + env(safe-area-inset-bottom, 0px));
+  background: var(--bg-primary);
+  min-height: 100vh;
+}
+
+/* ═══════════════════════════════════════════════
+   CLIENT RICH CARD (共用组件)
+   客户详情卡片 — hotels 页面使用
+   ═══════════════════════════════════════════════ */
+
+.client-rich-card {
+  background: linear-gradient(135deg, var(--bg-card), var(--gold-50));
+  border: 2rpx solid var(--gold-100);
+  box-shadow: var(--shadow-md);
+  border-radius: 32rpx;
+  margin-bottom: 24rpx;
+  overflow: hidden;
+  transition: all 0.2s ease;
+}
+
+.client-rich-card:active {
+  transform: translateY(-4rpx);
+  box-shadow: var(--shadow-lg);
+}
+
+.accent-bar {
+  width: 8rpx;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.accent-bar.active {
+  background: linear-gradient(180deg, var(--gold-400), var(--gold-500));
+}
+
+.accent-bar.inactive {
+  background: var(--gold-200);
+}
+
+.card-body {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+  padding: 28rpx 32rpx;
+}
+
+.card-avatar {
+  width: 72rpx;
+  height: 72rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28rpx;
+  font-weight: 600;
+  color: var(--text-inverse);
+  flex-shrink: 0;
+  background: linear-gradient(135deg, var(--gold-400), var(--gold-500));
+  box-shadow: var(--shadow-gold);
+}
+
+.card-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.ci-name {
+  display: block;
+  font-size: 28rpx;
+  font-weight: 600;
+  color: var(--gold-800);
+}
+
+.ci-date {
+  display: block;
+  font-size: 24rpx;
+  color: var(--gold-500);
+  margin-top: 4rpx;
+}
+
+.ci-tags {
+  display: flex;
+  gap: 12rpx;
+  margin-top: 12rpx;
+  flex-wrap: wrap;
+}
+
+.ci-tag {
+  display: inline-block;
+  padding: 4rpx 16rpx;
+  background: var(--gold-100);
+  border-radius: 24rpx;
+  font-size: 20rpx;
+  color: var(--gold-600);
+}
+
+.card-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8rpx;
+}
+
+.ci-status {
+  font-size: 22rpx;
+  padding: 6rpx 20rpx;
+  border-radius: 999rpx;
+  font-weight: 500;
+}
+
+.ci-status.active {
+  background: var(--success-light);
+  color: var(--success);
+}
+
+.ci-status.inactive {
+  background: var(--gold-100);
+  color: var(--gold-600);
+}
+
+/* ═══════════════════════════════════════════════
+   PROP STATS (共用组件)
+   道具统计 — hotels 页面使用
+   ═══════════════════════════════════════════════ */
+
+.prop-stats {
+  display: flex;
+  gap: 16rpx;
+  margin-bottom: 24rpx;
+}
+
+.ps {
+  flex: 1;
+  background: linear-gradient(135deg, var(--bg-card), var(--gold-50));
+  border: 2rpx solid var(--gold-100);
+  box-shadow: var(--shadow-sm);
+  border-radius: 20rpx;
+  padding: 20rpx 12rpx;
+  text-align: center;
+}
+
+.ps-num {
+  display: block;
+  font-size: 36rpx;
+  font-weight: 700;
+  color: var(--gold-600);
+  font-family: var(--font-en-display);
+}
+
+.ps-lbl {
+  display: block;
+  font-size: 20rpx;
+  color: var(--gold-500);
+  margin-top: 4rpx;
+}
+
+/* ═══════════════════════════════════════════════
+   PROP CATEGORY GRID (共用组件)
+   道具分类网格 — props 页面使用
+   ═══════════════════════════════════════════════ */
+
+.prop-cat-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+  margin-bottom: 24rpx;
+}
+
+.prop-cat {
+  flex: 0 0 calc(25% - 12rpx);
+  background: linear-gradient(135deg, var(--bg-card), var(--gold-50));
+  border: 2rpx solid var(--gold-100);
+  border-radius: 20rpx;
+  padding: 20rpx 12rpx;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.prop-cat:active {
+  transform: scale(0.95);
+}
+
+.prop-cat-active {
+  border-color: var(--gold);
+  background: linear-gradient(135deg, var(--gold-100), var(--gold-200));
+  box-shadow: var(--shadow-gold);
+}
+
+.pc-icon {
+  width: 40rpx;
+  height: 40rpx;
+  margin: 0 auto 8rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pc-name {
+  display: block;
+  font-size: 24rpx;
+  font-weight: 600;
+  color: var(--gold-700);
+  margin-bottom: 4rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pc-count {
+  display: block;
+  font-size: 18rpx;
+  color: var(--gold-500);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ═══════════════════════════════════════════════
+   EMPTY STATE (简化版)
+   空状态提示 — 多页面使用
+   ═══════════════════════════════════════════════ */
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80rpx 40rpx;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 26rpx;
+}
+
+/* ═══════════════════════════════════════════════
+   MORE LINK (共用组件)
+   更多链接 — section-title 右侧使用
+   ═══════════════════════════════════════════════ */
+
+.more {
+  font-size: 24rpx;
+  color: var(--gold);
+  font-weight: 500;
+  cursor: pointer;
+  margin-left: auto;
+}
+
+.more:active {
+  opacity: 0.7;
+}
+
+/* ═══════════════════════════════════════════════
+   PROP ITEM (共用组件)
+   道具列表项 — props 页面使用
+   ═══════════════════════════════════════════════ */
+
+.prop-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(135deg, var(--bg-card), var(--gold-50));
+  border: 2rpx solid var(--gold-100);
+  border-radius: 20rpx;
+  padding: 20rpx 24rpx;
+  margin-bottom: 12rpx;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.2s ease;
+}
+
+.prop-item:active {
+  transform: translateY(-2rpx);
+  box-shadow: var(--shadow-md);
+}
+
+.pi-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.pi-name {
+  display: block;
+  font-size: 26rpx;
+  font-weight: 600;
+  color: var(--gold-800);
+  margin-bottom: 4rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pi-meta {
+  display: block;
+  font-size: 22rpx;
+  color: var(--gold-500);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pi-actions {
+  display: flex;
+  gap: 12rpx;
+  flex-shrink: 0;
+  margin-left: 12rpx;
+}
+
+.pi-actions button {
+  background: linear-gradient(135deg, var(--gold-100), var(--gold-200));
+  border: 2rpx solid var(--gold-200);
+  color: var(--gold-700);
+  padding: 10rpx 20rpx;
+  border-radius: 20rpx;
+  font-size: 22rpx;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.pi-actions button:active {
+  transform: scale(0.95);
+  box-shadow: var(--shadow-sm);
+}
+
+.pi-actions button.primary {
+  background: linear-gradient(135deg, var(--gold-400), var(--gold-500));
+  border-color: var(--gold-400);
+  color: var(--text-inverse);
+  box-shadow: var(--shadow-gold);
+}
+

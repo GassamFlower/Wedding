@@ -1,0 +1,62 @@
+<nav-bar title="我的婚礼" show-back="{{true}}" />
+<view class="page">
+  <view wx:if="{{loading}}" class="loading-state"><view class="loading-spinner"></view></view>
+
+  <view wx:else>
+    <!-- 倒计时 -->
+    <view class="card-premium countdown-area">
+      <text class="t3" style="margin-bottom:8rpx;">距离大喜的日子还有</text>
+      <text class="days-num">{{daysLeft}}</text>
+      <text class="days-label">天</text>
+      <view class="ring-wrap">
+        <view class="ring-bg" style="--pct:{{percent}}%;"></view>
+        <view class="ring-center">{{percent}}%</view>
+      </view>
+      <text style="font-size:26rpx;color:var(--text);">{{coupleName}}</text>
+      <text style="font-size:22rpx;color:var(--text3);margin-top:4rpx;">{{venue}}{{style?' · '+style:''}}</text>
+    </view>
+
+    <!-- 物料看板 -->
+    <view wx:if="{{materials.length > 0}}">
+      <view class="section-title"><view class="gold-bar"></view>已锁定方案主物料看板</view>
+      <view class="card-premium">
+        <text class="t4" style="margin-bottom:20rpx;">策划师已为您锁定以下现场物料</text>
+        <view class="mat-grid">
+          <view wx:for="{{materials}}" wx:key="name" class="mat-item">
+            <view class="mat-color" style="background:{{item.color||'var(--gold-200)'}};"></view>
+            <view class="mat-name">{{item.name}}</view>
+            <view class="mat-status" style="color:{{item.status==='已锁定'?'var(--gold-dark)':'var(--text3)'}};">{{item.status}}</view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 进度时间轴（实时更新） -->
+    <view class="section-title"><view class="gold-bar"></view>场景交付进度</view>
+    <view class="card-premium">
+      <text class="t4" style="margin-bottom:24rpx;">策划师每完成一个节点将实时更新</text>
+      <view class="timeline">
+        <view wx:for="{{stages}}" wx:key="label" class="tlnode {{item.done?'done':''}}">
+          <view class="tlnode-label">{{item.label}}</view>
+          <view wx:if="{{item.note}}" class="tlnode-date">{{item.note.text}}</view>
+          <image wx:if="{{item.note&&item.note.image}}" class="tlnode-note-img" src="{{item.note.image}}" mode="aspectFill" />
+        </view>
+      </view>
+    </view>
+
+    <!-- 亲友团入口 -->
+    <view class="card-premium">
+      <view class="section-title" style="margin-bottom:16rpx;"><view class="gold-bar"></view>筹备亲友团</view>
+      <view class="guest-entry" catchtap="goGuestTasks">
+        <view class="guest-avatars">
+          <view wx:for="{{friends}}" wx:for-item="f" wx:key="assignee" class="guest-avatar" wx:if="{{index < 3}}">
+            {{f.role[0]}}
+          </view>
+        </view>
+        <text wx:if="{{friendCount > 0}}" class="guest-count">{{friendCount}}位亲友已加入</text>
+        <text wx:else class="guest-count" style="color:var(--text3);">还没有亲友加入</text>
+      </view>
+      <button class="btn-outline" style="margin-top:20rpx;font-size:26rpx;" catchtap="inviteFriend">邀请来参加筹备的亲友 →</button>
+    </view>
+  </view>
+</view>

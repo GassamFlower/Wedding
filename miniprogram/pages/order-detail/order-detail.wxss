@@ -1,0 +1,245 @@
+/* 订单详情 — 轻复古·奶油风 · 24rpx 基准 */
+
+/* 订单头部 */
+.order-header-section {
+  background: linear-gradient(135deg, var(--bg-card), var(--gold-50));
+  border: 2rpx solid var(--gold-100);
+  box-shadow: var(--shadow-md);
+  border-radius: 32rpx;
+  padding: 32rpx;
+  margin-bottom: 32rpx;
+}
+
+.order-header {
+  display: flex;
+  align-items: center;
+  gap: 24rpx;
+  padding-bottom: 32rpx;
+  margin-bottom: 16rpx;
+  border-bottom: 2rpx solid var(--border);
+}
+
+.order-avatar {
+  width: 88rpx;
+  height: 88rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--gold-200), var(--gold-400));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36rpx;
+  font-weight: 600;
+  color: var(--text-inverse);
+  flex-shrink: 0;
+  box-shadow: var(--shadow-gold);
+}
+
+.order-info {
+  flex: 1;
+}
+
+.order-name {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: var(--gold-800);
+  display: block;
+}
+
+.order-date {
+  font-size: 26rpx;
+  color: var(--gold-500);
+  margin-top: 4rpx;
+  display: block;
+}
+
+.order-status {
+  font-size: 24rpx;
+  padding: 8rpx 24rpx;
+  border-radius: 999rpx;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.status-draft {
+  background: linear-gradient(135deg, var(--gold-100), var(--gold-200));
+  color: var(--gold-700);
+  border: 2rpx solid var(--gold-200);
+}
+
+.status-confirmed {
+  background: linear-gradient(135deg, var(--success-light), var(--success-light));
+  color: var(--success);
+  border: 2rpx solid var(--success-light);
+}
+
+.status-cancelled {
+  background: linear-gradient(135deg, var(--error-light), var(--error-light));
+  color: var(--error);
+  border: 2rpx solid var(--error-light);
+}
+
+/* 订单金额 */
+.order-amount {
+  font-family: var(--font-en-display);
+  font-size: 40rpx;
+  font-weight: 700;
+  color: var(--gold-600);
+  text-align: center;
+  padding: 24rpx 0;
+}
+
+/* 信息区块 */
+.info-section {
+  background: linear-gradient(135deg, var(--bg-card), var(--gold-50));
+  border: 2rpx solid var(--gold-100);
+  box-shadow: var(--shadow-md);
+  border-radius: 32rpx;
+  padding: 32rpx;
+  margin-bottom: 32rpx;
+}
+
+.section-title {
+  font-size: 30rpx;
+  font-weight: 700;
+  color: var(--gold-800);
+  margin-bottom: 24rpx;
+  padding-bottom: 16rpx;
+  border-bottom: 2rpx solid var(--gold-100);
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20rpx 0;
+  border-bottom: 2rpx solid rgba(0, 0, 0, 0.03);
+}
+
+.info-row:last-child {
+  border-bottom: none;
+}
+
+.info-label {
+  font-size: 26rpx;
+  color: var(--gold-500);
+  flex-shrink: 0;
+}
+
+.info-value {
+  font-size: 26rpx;
+  color: var(--gold-800);
+  text-align: right;
+  font-weight: 500;
+}
+
+/* 时间线 */
+.timeline {
+  margin-top: 24rpx;
+}
+
+.timeline-item {
+  display: flex;
+  gap: 20rpx;
+  padding-bottom: 24rpx;
+  position: relative;
+}
+
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  left: 8rpx;
+  top: 24rpx;
+  bottom: 0;
+  width: 2rpx;
+  background: var(--gold-200);
+}
+
+.timeline-item:last-child::before {
+  display: none;
+}
+
+.timeline-dot {
+  width: 16rpx;
+  height: 16rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--gold-400), var(--gold-500));
+  box-shadow: var(--shadow-gold);
+  flex-shrink: 0;
+  margin-top: 10rpx;
+  position: relative;
+  z-index: 1;
+}
+
+.timeline-body {
+  flex: 1;
+}
+
+.timeline-text {
+  font-size: 26rpx;
+  color: var(--gold-800);
+  line-height: 1.6;
+  font-weight: 500;
+}
+
+.timeline-time {
+  font-size: 22rpx;
+  color: var(--gold-500);
+  margin-top: 4rpx;
+}
+
+/* 操作按钮 */
+.action-buttons {
+  display: flex;
+  gap: 20rpx;
+  margin-top: 32rpx;
+}
+
+.btn-gold {
+  flex: 1;
+  background: linear-gradient(135deg, var(--gold-400), var(--gold-500));
+  color: var(--text-inverse);
+  font-size: 28rpx;
+  font-weight: 600;
+  padding: 24rpx;
+  border-radius: 999rpx;
+  text-align: center;
+  border: none;
+  cursor: pointer;
+  box-shadow: var(--shadow-gold);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-gold::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  animation: shimmerSlide 3s ease-in-out infinite;
+}
+
+.btn-gold:active {
+  transform: scale(0.97);
+  box-shadow: 0 4rpx 16rpx rgba(193, 154, 80, 0.3);
+}
+
+.btn-outline {
+  flex: 1;
+  background: linear-gradient(135deg, var(--bg-card), var(--gold-50));
+  color: var(--gold-700);
+  font-size: 26rpx;
+  font-weight: 600;
+  padding: 24rpx;
+  border-radius: 999rpx;
+  text-align: center;
+  border: 2rpx solid var(--gold-200);
+  cursor: pointer;
+}
+
+.btn-outline:active {
+  background: var(--gold-50);
+  transform: scale(0.97);
+}

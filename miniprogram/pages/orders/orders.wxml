@@ -1,0 +1,92 @@
+<nav-bar title="婚礼订单" />
+<view class="page">
+  <!-- 统计卡片 -->
+  <view class="stat-row">
+    <view class="stat-card"><text class="stat-num">{{totalOrders}}</text><text class="stat-label">全部订单</text></view>
+    <view class="stat-card"><text class="stat-num">¥{{revenueStr}}</text><text class="stat-label">总流水</text></view>
+    <view class="stat-card" style="background:rgba(212,175,55,0.08);border-color:var(--gold);"><text class="stat-num" style="color:var(--gold);">¥{{pendingStr}}</text><text class="stat-label">待收款</text></view>
+  </view>
+
+  <!-- 搜索栏 -->
+  <view class="flex-row gap-8" style="margin-bottom:24rpx;">
+    <view class="search-box flex-row flex-1">
+      <view class="search-box-icon icon icon-search" style="width:36rpx;height:36rpx;"></view>
+      <input class="search-box-input" placeholder="搜索客户/场地/电话..." value="{{keyword}}" bindinput="onSearchInput" bindconfirm="onSearchConfirm" />
+    </view>
+    <view class="sort-btn" catchtap="toggleSort">
+      <text>排序</text>
+      <text wx:if="{{showSortPicker}}">▲</text><text wx:else>▼</text>
+    </view>
+  </view>
+
+  <!-- 排序选择器 -->
+  <view wx:if="{{showSortPicker}}" class="sort-picker card">
+    <view wx:for="{{sortOptions}}" wx:key="key" class="sort-option {{sortBy===item.key?'active':''}}" catchtap="selectSort" data-key="{{item.key}}">
+      <text>{{item.label}}</text>
+      <view wx:if="{{sortBy===item.key}}" class="svg-icon icon-14 icon-check-gold"></view>
+    </view>
+  </view>
+
+  <!-- 状态筛选Tab -->
+  <scroll-view class="status-tabs" scroll-x enhanced show-scrollbar="{{false}}">
+    <view wx:for="{{statusConfig}}" wx:key="key" class="status-tab {{status===item.key?'active':''}}" catchtap="switchTab" data-key="{{item.key}}">
+      <view class="icon icon-{{item.icon}} status-tab-icon"></view>
+      <text class="status-tab-label">{{item.label}}</text>
+      <text class="status-tab-count">{{item.count}}</text>
+    </view>
+  </scroll-view>
+
+  <!-- 订单列表 -->
+  <view wx:if="{{filtered.length===0 && !loading}}" class="empty-state">
+    <text>暂无订单</text>
+    <text class="text-sm text-gold mt-8" catchtap="openCreate">新建第一笔订单 →</text>
+  </view>
+
+  <view wx:for="{{filtered}}" wx:key="id" class="order-card card" catchtap="goDetail" data-id="{{item.id}}">
+    <view class="order-header">
+      <view class="order-avatar avatar avatar-{{item.avatarClass||1}}" catchtap="callClient" data-phone="{{item.phone}}" hover-class="none">{{item.short}}</view>
+      <view class="order-info">
+        <text class="order-name">{{item.client}}</text>
+        <text class="order-date">{{item.date}} · {{item.venue}}</text>
+        <text wx:if="{{item.phone}}" class="order-phone text-xs text-muted">{{item.phone}}</text>
+      </view>
+      <view class="order-tag tag tag-{{item.statusClass||'progress'}}">{{item.status}}</view>
+    </view>
+    <view class="order-tags">
+      <text class="order-tag-item">{{item.style}}</text>
+      <text class="order-tag-item">押金 ¥{{item.deposit}}</text>
+      <text class="order-tag-item">{{item.depositStatus}}</text>
+    </view>
+    <view class="order-footer">
+      <text class="text-sm">¥{{item.budget}}</text>
+      <view class="flex-row gap-8">
+        <text class="text-xs text-muted">已付 ¥{{item.paid}}</text>
+        <text wx:if="{{item.balance !== '' && item.balance !== '0'}}" class="text-xs" style="color:#DC2626;">待收 ¥{{item.balance}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- Loading -->
+  <view wx:if="{{loading}}" class="loading-center"><view class="loading-spinner"></view><text>加载中...</text></view>
+
+  <!-- FAB -->
+  <view class="fab" catchtap="openCreate">+</view>
+
+  <!-- 新建弹窗 -->
+  <view wx:if="{{showForm}}" class="form-overlay" catchtap="closeForm">
+    <view class="form-modal" catchtap="">
+      <view class="form-title">新建订单</view>
+      <view class="form-group"><text class="form-label">新人姓名 *</text><input class="form-input" placeholder="如：张先生 & 李女士" value="{{formData.clientName}}" bindinput="onFormInput" data-field="clientName" /></view>
+      <view class="form-row">
+        <view class="form-group" style="flex:1;"><text class="form-label">婚礼日期</text><input class="form-input" placeholder="如：6月15日" value="{{formData.weddingDate}}" bindinput="onFormInput" data-field="weddingDate" /></view>
+        <view class="form-group" style="flex:1;"><text class="form-label">预算(¥)</text><input class="form-input" type="number" placeholder="如：12000" value="{{formData.budget}}" bindinput="onFormInput" data-field="budget" /></view>
+      </view>
+      <view class="form-group"><text class="form-label">场地</text><input class="form-input" placeholder="如：万达酒店·宴会厅" value="{{formData.venue}}" bindinput="onFormInput" data-field="venue" /></view>
+      <view class="form-row">
+        <view class="form-group" style="flex:1;"><text class="form-label">风格</text><input class="form-input" placeholder="新中式/韩式/森系" value="{{formData.style}}" bindinput="onFormInput" data-field="style" /></view>
+        <view class="form-group" style="flex:1;"><text class="form-label">电话</text><input class="form-input" type="number" maxlength="11" placeholder="手机号" value="{{formData.phone}}" bindinput="onFormInput" data-field="phone" /></view>
+      </view>
+      <view class="form-btns"><button class="btn-cancel" catchtap="closeForm">取消</button><button class="btn-primary" catchtap="submitForm">创建</button></view>
+    </view>
+  </view>
+</view>

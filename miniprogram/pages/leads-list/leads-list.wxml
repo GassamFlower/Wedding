@@ -1,0 +1,50 @@
+<nav-bar title="线索管理" show-back="{{true}}" />
+<view class="page">
+  <!-- 状态 Tab -->
+  <scroll-view class="tab-scroll" scroll-x>
+    <view class="tab-row">
+      <view class="tab-item {{activeTab===item.key?'tab-active':''}}" wx:for="{{statusTabs}}" wx:key="key" catchtap="switchTab" data-tab="{{item.key}}">
+        {{item.label}}
+      </view>
+    </view>
+  </scroll-view>
+
+  <!-- 线索列表 -->
+  <view wx:if="{{loading && leads.length===0}}" class="loading-state">
+    <view class="skeleton-card">
+      <view class="skeleton-line w-70 skeleton-shimmer"></view>
+      <view class="skeleton-line w-40 skeleton-shimmer" style="margin-top:16rpx;"></view>
+    </view>
+  </view>
+
+  <view wx:elif="{{leads.length===0}}" class="empty-state">
+    <text class="empty-title">暂无线索</text>
+    <text class="empty-desc">新人提交咨询后会出现在这里</text>
+  </view>
+
+  <view wx:else>
+    <view wx:for="{{leads}}" wx:key="_id" class="lead-card card-premium {{item.overdue?'lead-overdue':''}}" catchtap="goDetail" data-id="{{item._id}}">
+      <view wx:if="{{item.overdue}}" class="lead-overdue-bar"></view>
+      <view class="lead-header">
+        <view class="lead-avatar">{{item.name ? item.name[0] : '?'}}</view>
+        <view class="lead-main">
+          <view class="lead-name-row">
+            <text class="lead-name">{{item.name}}</text>
+            <text class="lead-phone">{{item.phone}}</text>
+          </view>
+          <view class="lead-meta">
+            <text wx:if="{{item.weddingDate}}">{{item.displayDate}}婚期</text>
+            <text wx:if="{{item.budget}}"> · 预算¥{{item.budget}}</text>
+            <text wx:if="{{item.stylePreference}}"> · {{item.stylePreference}}</text>
+          </view>
+        </view>
+        <view class="lead-status {{item.status==='待跟进'?'status-pending':item.status==='已转化'?'status-done':'status-normal'}}">
+          {{item.status}}
+        </view>
+      </view>
+      <view wx:if="{{item.lastFollowUpAt}}" class="lead-footer">
+        <text class="lead-follow-time">最近跟进：{{item.lastFollowUpAt}}</text>
+      </view>
+    </view>
+  </view>
+</view>

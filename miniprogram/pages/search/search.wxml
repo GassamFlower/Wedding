@@ -1,0 +1,46 @@
+<nav-bar />
+
+<view class="search-page">
+  <!-- 搜索栏 -->
+  <view class="search-bar-wrap">
+    <view class="search-input-box">
+      <view class="icon icon-search search-input-icon"></view>
+      <input class="search-input" placeholder="搜索订单、道具、酒店、合同…" value="{{keyword}}" bindinput="onInput" bindconfirm="onConfirm" confirm-type="search" focus="true" />
+      <view wx:if="{{showClear}}" class="search-clear" bindtap="onClear"><view class="svg-icon icon-14 icon-close-gold"></view></view>
+    </view>
+    <view class="search-btn" bindtap="onSearch">搜索</view>
+  </view>
+
+  <!-- 初始引导 -->
+  <view wx:if="{{!hasSearched && !loading}}" class="search-hint">
+    <view class="hint-icon"><view class="icon icon-search icon-lg"></view></view>
+    <text class="hint-text">搜索订单客户、道具名称、酒店、合同服务</text>
+  </view>
+
+  <!-- 加载中 -->
+  <view wx:elif="{{loading}}" class="loading-state"><view class="loading-spinner"></view><view class="loading-text">搜索中...</view></view>
+
+  <!-- 搜索结果 -->
+  <view wx:elif="{{results.length > 0}}" class="search-results">
+    <view class="result-group" wx:for="{{results}}" wx:key="type">
+      <view class="group-header">
+        <view class="group-icon"><view class="icon {{item.meta.icon}}" style="color:{{item.meta.color}}"></view></view>
+        <text class="group-label">{{item.meta.label}}</text>
+        <text class="group-count">{{item.items.length}}条</text>
+      </view>
+      <view class="result-item" wx:for="{{item.items}}" wx:key="id" catchtap="onResultTap" data-route="{{item.route}}">
+        <view class="result-content">
+          <text class="result-title">{{item.title}}</text>
+          <text wx:if="{{item.subtitle}}" class="result-subtitle">{{item.subtitle}}</text>
+        </view>
+        <view wx:if="{{item.extra}}" class="result-extra">{{item.extra}}</view>
+        <view wx:if="{{item.route}}" class="result-arrow"><view class="icon icon-arrow-right icon-sm"></view></view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 无结果 -->
+  <view wx:elif="{{hasSearched && !loading}}" class="search-empty">
+    <text class="empty-text">未找到与"{{keyword}}"相关的内容</text>
+  </view>
+</view>

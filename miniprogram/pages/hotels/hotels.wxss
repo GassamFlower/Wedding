@@ -1,0 +1,35 @@
+/* 酒店管理 — 轻复古·奶油风 · 24rpx 基准 */
+
+/* ═══ 酒店卡片增强 ═══ */
+.hotel-card {
+  background: linear-gradient(135deg, var(--bg-card), var(--gold-50));
+  border: 2rpx solid var(--gold-100);
+  box-shadow: var(--shadow-md);
+  border-radius: 32rpx;
+  transition: all 0.2s ease;
+}
+
+.hotel-card:active {
+  transform: translateY(-4rpx);
+  box-shadow: var(--shadow-lg);
+}
+
+/* ═══ 酒店名称增强 ═══ */
+.hotel-name {
+  color: var(--gold-800);
+  font-weight: 700;
+}
+
+/* ═══ 酒店标签增强 ═══ */
+.hotel-tag {
+  background: linear-gradient(135deg, var(--gold-100), var(--gold-200));
+  color: var(--gold-600);
+  border: 2rpx solid var(--gold-200);
+}
+
+/* ═══ 价格增强 ═══ */
+.hotel-price {
+  font-family: var(--font-en-display);
+  color: var(--gold-600);
+  font-weight: 700;
+}

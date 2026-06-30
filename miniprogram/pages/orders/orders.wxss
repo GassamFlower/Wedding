@@ -1,0 +1,96 @@
+/* 订单管理 — 轻复古·奶油风 · 24rpx 基准 */
+
+/* 搜索栏 */
+.search-box { flex:1; background:var(--bg-card); border-radius:9999rpx; padding:14rpx 24rpx; border:2rpx solid var(--border-light); align-items:center; gap:10rpx; }
+.search-box-icon { font-size:26rpx; }
+.search-box-input { flex:1; font-size:24rpx; }
+.sort-btn { padding:14rpx 24rpx; background:var(--bg-card); border-radius:14rpx; font-size:22rpx; border:2rpx solid var(--border-light); cursor:pointer; white-space:nowrap; display:flex; align-items:center; gap:8rpx; }
+
+/* 排序选择器 */
+.sort-picker { padding:14rpx 8rpx; margin-bottom:14rpx; }
+.sort-option { display:flex; align-items:center; justify-content:space-between; padding:18rpx 20rpx; font-size:24rpx; border-radius:12rpx; cursor:pointer; }
+.sort-option.active { background:var(--gold-bg-12); color:var(--gold); font-weight:600; }
+.sort-option:active { background:var(--border-line); }
+
+/* 状态Tab滚动 */
+.status-tabs { white-space:nowrap; margin-bottom:20rpx; padding:4rpx 0; }
+.status-tab { display:inline-flex; align-items:center; gap:8rpx; padding:10rpx 24rpx; background:var(--bg-card); border-radius:28rpx; margin-right:14rpx; border:2rpx solid var(--border-light); cursor:pointer; }
+.status-tab.active { background:var(--gold-bg-12); border-color:var(--gold); }
+.status-tab-icon { width:28rpx; height:28rpx; }
+.status-tab-label { font-size:22rpx; font-weight:500; }
+.status-tab-count { font-size:18rpx; color:var(--text-muted); background:var(--bg-main); padding:0 10rpx; border-radius:20rpx; }
+
+/* 订单卡片增强 */
+.order-card { cursor:pointer; }
+.order-card:active { opacity:0.85; }
+.order-header { display:flex; align-items:center; gap:16rpx; }
+.order-avatar { width:64rpx; height:64rpx; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-size:26rpx; font-weight:600; color:var(--white); flex-shrink:0; cursor:pointer; }
+.order-info { flex:1; min-width:0; }
+.order-name { display:block; font-size:26rpx; font-weight:600; color:var(--dark); }
+.order-date { display:block; font-size:22rpx; color:var(--text-second); margin-top:4rpx; }
+.order-tag { flex-shrink:0; }
+.order-tags { display:flex; gap:10rpx; margin-top:14rpx; flex-wrap:wrap; }
+.order-tag-item { display:inline-block; padding:2rpx 14rpx; background:var(--gold-bg-12); border-radius:20rpx; font-size:18rpx; color:var(--gold-500); }
+.order-footer { display:flex; justify-content:space-between; align-items:center; margin-top:14rpx; padding-top:14rpx; border-top:2rpx solid rgba(0,0,0,0.04); }
+
+/* ═══ 增强样式 ═══ */
+.search-box {
+  background: linear-gradient(135deg, var(--gold-50), var(--bg-card));
+  border: 3rpx solid var(--gold-200);
+  box-shadow: var(--shadow-sm);
+}
+.search-box:active {
+  border-color: var(--gold-400);
+  background: var(--bg-card);
+}
+.search-box-icon { color: var(--gold-400); }
+
+.sort-btn {
+  background: linear-gradient(135deg, var(--bg-card), var(--gold-50));
+  border: 2rpx solid var(--gold-200);
+  box-shadow: var(--shadow-sm);
+}
+.sort-btn:active { transform: scale(0.95); }
+
+.status-tab {
+  background: linear-gradient(135deg, var(--bg-card), var(--gold-50));
+  border: 2rpx solid var(--gold-200);
+  box-shadow: var(--shadow-sm);
+}
+.status-tab:active { transform: scale(0.95); }
+.status-tab.active {
+  background: linear-gradient(135deg, var(--gold-400), var(--gold-500));
+  border-color: var(--gold-400);
+  box-shadow: var(--shadow-gold);
+  color: var(--text-inverse);
+}
+.status-tab-label { font-weight: 600; }
+.status-tab-count {
+  background: rgba(255, 255, 255, 0.3);
+  color: var(--text-inverse);
+}
+
+.order-card {
+  background: linear-gradient(135deg, var(--bg-card), var(--gold-50));
+  border: 2rpx solid var(--gold-100);
+  box-shadow: var(--shadow-md);
+}
+.order-card:active { transform: translateY(-4rpx); box-shadow: var(--shadow-lg); }
+.order-avatar {
+  background: linear-gradient(135deg, var(--gold-400), var(--gold-500));
+  box-shadow: var(--shadow-gold);
+}
+.order-name { color: var(--gold-800); }
+.order-tag-item {
+  background: linear-gradient(135deg, var(--gold-100), var(--gold-200));
+  color: var(--gold-600);
+  border: 2rpx solid var(--gold-200);
+}
+
+.sort-option { transition: all 0.2s ease; }
+.sort-option.active {
+  background: linear-gradient(135deg, var(--gold-100), var(--gold-200));
+  color: var(--gold-700);
+  font-weight: 700;
+}
+.sort-option:active { background: var(--gold-50); transform: scale(0.98); }

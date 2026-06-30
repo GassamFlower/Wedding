@@ -1,0 +1,52 @@
+<nav-bar title="个人中心" />
+<view class="page">
+  <!-- 用户信息 -->
+  <view class="card profile-header">
+    <view class="flex-row gap-16" style="align-items:center;">
+      <view class="avatar avatar-1" style="width:112rpx;height:112rpx;font-size:48rpx;">{{nickName[0]}}</view>
+      <view class="flex-1">
+        <text class="profile-name">{{nickName}}</text>
+        <text class="profile-role">策划师</text>
+        <text wx:if="{{phone}}" class="profile-phone">{{phone}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 数据统计 -->
+  <view class="stat-row" style="margin-top:24rpx;">
+    <view class="stat-card"><text class="stat-num">{{stats.monthOrders}}</text><text class="stat-label">本月订单</text></view>
+    <view class="stat-card"><text class="stat-num">{{stats.totalOrders}}</text><text class="stat-label">进行中</text></view>
+    <view class="stat-card"><text class="stat-num">{{stats.clientsCount}}</text><text class="stat-label">累计客户</text></view>
+    <view class="stat-card"><text class="stat-num" style="color:var(--gold);" wx:if="{{stats.todayWeddings>0}}">{{stats.todayWeddings}}</text><text class="stat-num" wx:if="{{stats.todayWeddings===0}}">0</text><text class="stat-label">今日婚礼</text></view>
+  </view>
+
+  <!-- 快捷入口 -->
+  <view class="section-title" style="margin-top:16rpx;"><view class="gold-dot"></view>功能入口</view>
+  <view class="profile-grid card">
+    <view wx:for="{{quickLinks}}" wx:key="page" class="profile-grid-item" catchtap="goPage" data-page="{{item.page}}">
+      <view class="icon icon-{{item.icon}} profile-grid-icon"></view>
+      <text class="profile-grid-label">{{item.label}}</text>
+    </view>
+  </view>
+
+  <!-- 操作区 -->
+  <view class="card" style="margin-top:24rpx;">
+    <view class="menu-item flex-between" catchtap="goSetting">
+      <view class='flex-row gap-8'><view class='icon icon-settings' style='width:36rpx;height:36rpx;'></view><text class='text-sm'>系统设置</text></view>
+      <text class="text-muted">›</text>
+    </view>
+  </view>
+
+  <!-- 角色切换 -->
+  <view class="card" style="margin-top:24rpx;background:rgba(202,138,4,0.06);">
+    <view class="flex-between">
+      <view><text class="text-sm text-gold">当前为策划师模式</text><text class="text-xs text-muted" style="display:block;margin-top:8rpx;">点击下方按钮可切换回新人端</text></view>
+      <button class="btn-switch" catchtap="switchToNewbie">切换到新人</button>
+    </view>
+  </view>
+
+  <view class="mine-footer text-center">
+    <text class="text-xs text-muted">大喜的日子 · 婚礼场景策划工作室</text>
+    <text class="text-xs text-muted" style="margin-top:8rpx;">版本 v1.0</text>
+  </view>
+</view>

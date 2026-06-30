@@ -1,0 +1,203 @@
+/* 预算计算器 — 轻复古·奶油风 · 24rpx 基准 */
+
+/* 计算器头部 */
+.calc-header {
+  background: linear-gradient(135deg, var(--bg-card), var(--gold-50));
+  border: 2rpx solid var(--gold-100);
+  box-shadow: var(--shadow-md);
+  border-radius: 32rpx;
+  padding: 32rpx;
+  margin-bottom: 32rpx;
+  text-align: center;
+}
+
+.calc-title {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: var(--gold-800);
+  margin-bottom: 8rpx;
+}
+
+.calc-subtitle {
+  font-size: 24rpx;
+  color: var(--gold-500);
+}
+
+/* 预算输入区 */
+.budget-input-section {
+  background: linear-gradient(135deg, var(--bg-card), var(--gold-50));
+  border: 2rpx solid var(--gold-100);
+  box-shadow: var(--shadow-md);
+  border-radius: 32rpx;
+  padding: 32rpx;
+  margin-bottom: 32rpx;
+}
+
+.input-group {
+  margin-bottom: 24rpx;
+}
+
+.input-group:last-child {
+  margin-bottom: 0;
+}
+
+.input-label {
+  font-size: 26rpx;
+  font-weight: 600;
+  color: var(--gold-700);
+  margin-bottom: 12rpx;
+  display: block;
+}
+
+.input-wrap {
+  display: flex;
+  align-items: center;
+  background: linear-gradient(135deg, var(--gold-50), var(--bg-card));
+  border: 3rpx solid var(--gold-200);
+  border-radius: 24rpx;
+  padding: 20rpx 28rpx;
+  transition: all 0.2s ease;
+}
+
+.input-wrap:focus-within {
+  border-color: var(--gold-400);
+  background: var(--bg-card);
+  box-shadow: 0 0 0 6rpx rgba(193, 154, 80, 0.1);
+}
+
+.input-prefix {
+  font-size: 28rpx;
+  color: var(--gold-500);
+  margin-right: 16rpx;
+  font-weight: 600;
+}
+
+.budget-input {
+  flex: 1;
+  font-size: 32rpx;
+  font-weight: 600;
+  color: var(--gold-800);
+  background: transparent;
+  border: none;
+}
+
+.input-suffix {
+  font-size: 24rpx;
+  color: var(--gold-500);
+  margin-left: 16rpx;
+}
+
+/* 预算分配 */
+.allocation-section {
+  background: linear-gradient(135deg, var(--bg-card), var(--gold-50));
+  border: 2rpx solid var(--gold-100);
+  box-shadow: var(--shadow-md);
+  border-radius: 32rpx;
+  padding: 32rpx;
+  margin-bottom: 32rpx;
+}
+
+.allocation-title {
+  font-size: 30rpx;
+  font-weight: 700;
+  color: var(--gold-800);
+  margin-bottom: 24rpx;
+  padding-bottom: 16rpx;
+  border-bottom: 2rpx solid var(--gold-100);
+}
+
+.allocation-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20rpx 0;
+  border-bottom: 2rpx solid rgba(0, 0, 0, 0.03);
+}
+
+.allocation-item:last-child {
+  border-bottom: none;
+}
+
+.allocation-label {
+  font-size: 26rpx;
+  color: var(--gold-700);
+  font-weight: 500;
+}
+
+.allocation-value {
+  font-family: var(--font-en-display);
+  font-size: 32rpx;
+  font-weight: 700;
+  color: var(--gold-600);
+}
+
+.allocation-percent {
+  font-size: 24rpx;
+  color: var(--gold-500);
+  margin-left: 12rpx;
+}
+
+/* 总计 */
+.total-section {
+  background: linear-gradient(135deg, var(--gold-400), var(--gold-500));
+  border-radius: 32rpx;
+  padding: 32rpx;
+  margin-bottom: 32rpx;
+  box-shadow: var(--shadow-gold);
+  text-align: center;
+}
+
+.total-label {
+  font-size: 26rpx;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 12rpx;
+}
+
+.total-value {
+  font-family: var(--font-en-display);
+  font-size: 48rpx;
+  font-weight: 700;
+  color: var(--text-inverse);
+}
+
+/* 操作按钮 */
+.action-buttons {
+  display: flex;
+  gap: 20rpx;
+}
+
+.btn-gold {
+  flex: 1;
+  background: linear-gradient(135deg, var(--gold-400), var(--gold-500));
+  color: var(--text-inverse);
+  font-size: 28rpx;
+  font-weight: 600;
+  padding: 24rpx;
+  border-radius: 999rpx;
+  text-align: center;
+  border: none;
+  cursor: pointer;
+  box-shadow: var(--shadow-gold);
+}
+
+.btn-gold:active {
+  transform: scale(0.97);
+}
+
+.btn-outline {
+  flex: 1;
+  background: linear-gradient(135deg, var(--bg-card), var(--gold-50));
+  color: var(--gold-700);
+  font-size: 26rpx;
+  font-weight: 600;
+  padding: 24rpx;
+  border-radius: 999rpx;
+  text-align: center;
+  border: 2rpx solid var(--gold-200);
+  cursor: pointer;
+}
+
+.btn-outline:active {
+  background: var(--gold-50);
+  transform: scale(0.97);
+}

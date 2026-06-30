@@ -1,0 +1,14 @@
+<view class="nb-wrap {{glass ? 'nb-glass' : (transparent ? 'nb-transparent' : '')}}" style="background:{{glass ? (transparent ? 'rgba(255,255,255,0.15)' : 'rgba(255,255,255,0.7)') : (transparent ? 'transparent' : bgColor)}};color:{{color}};">
+  <view class="nb-status" style="height:{{statusBarHeight}}px;"></view>
+
+  <view class="nb-bar" style="height:{{navHeight}}px;padding-right:{{menuRight + menuHeight + 8}}px;">
+    <view wx:if="{{showBack}}" class="nb-back" bindtap="onBack" hover-class="nb-back-hover" hover-stay-time="80">
+      <view class="nb-back-icon" style="border-color:{{color}};"></view>
+      <text class="nb-back-text">返回</text>
+    </view>
+
+    <view class="nb-title" style="color:{{color}};">{{title}}</view>
+  </view>
+</view>
+
+<view wx:if="{{!transparent}}" class="nb-placeholder" style="height:{{statusBarHeight + navHeight}}px;"></view>

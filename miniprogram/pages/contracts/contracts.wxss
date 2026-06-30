@@ -1,0 +1,64 @@
+/* 合同管理 — 轻复古·奶油风 · 24rpx 基准 */
+
+/* 收款按钮 */
+.btn-pay {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 16rpx 36rpx !important;
+  font-size: 26rpx !important;
+  font-weight: 600;
+  color: var(--gold-700);
+  background: var(--bg-card) !important;
+  border: 3rpx solid var(--gold-200);
+  border-radius: 12rpx;
+  line-height: 1.2 !important;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-height: auto !important;
+  height: 72rpx !important;
+  width: auto !important;
+  box-sizing: border-box !important;
+}
+.btn-pay:active {
+  background: var(--gold-50) !important;
+  transform: scale(0.96);
+}
+
+/* 合同卡片增强 */
+.contract-card {
+  background: linear-gradient(135deg, var(--bg-card), var(--gold-50));
+  border: 2rpx solid var(--gold-100);
+  box-shadow: var(--shadow-md);
+  border-radius: 32rpx;
+  transition: all 0.2s ease;
+}
+.contract-card:active {
+  transform: translateY(-4rpx);
+  box-shadow: var(--shadow-lg);
+}
+
+/* 合同状态增强 */
+.contract-status { font-weight: 600; }
+.status-draft {
+  background: linear-gradient(135deg, var(--gold-100), var(--gold-200));
+  color: var(--gold-700);
+  border: 2rpx solid var(--gold-200);
+}
+.status-signed {
+  background: linear-gradient(135deg, var(--success-light), var(--success-light));
+  color: var(--success);
+  border: 2rpx solid var(--success-light);
+}
+.status-expired {
+  background: linear-gradient(135deg, var(--error-light), var(--error-light));
+  color: var(--error);
+  border: 2rpx solid var(--error-light);
+}
+
+/* 合同金额增强 */
+.contract-amount {
+  font-family: var(--font-en-display);
+  color: var(--gold-600);
+  font-weight: 700;
+}

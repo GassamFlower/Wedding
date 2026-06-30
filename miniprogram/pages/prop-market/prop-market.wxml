@@ -1,0 +1,78 @@
+<nav-bar title="道具市场参考" show-back="{{true}}" />
+
+<view class="pm-page">
+  <!-- 页面头部 -->
+  <view class="pm-header">
+    <text class="pm-header-title">多平台价格对比</text>
+    <text class="pm-header-sub">淘宝 · 京东 · 闲鱼 · 本地租赁商</text>
+  </view>
+
+  <!-- 搜索框 -->
+  <view class="pm-search">
+    <view class="pm-search-icon">
+      <view class="icon icon-search" style="width:32rpx;height:32rpx;"></view>
+    </view>
+    <input class="pm-search-input" placeholder="搜索道具名称..." value="{{keyword}}" bindinput="onSearch" confirm-type="search" />
+  </view>
+
+  <!-- 分类切换 -->
+  <scroll-view class="pm-categories" scroll-x enhanced show-scrollbar="{{false}}">
+    <view wx:for="{{categories}}" wx:key="key"
+          class="pm-cat {{activeCategory === item.key ? 'pm-cat-active' : ''}}"
+          catchtap="filterByCategory" data-key="{{item.key}}">
+      <text>{{item.label}}</text>
+    </view>
+  </scroll-view>
+
+  <!-- 加载状态 -->
+  <view wx:if="{{loading}}" class="pm-loading">
+    <view class="loading-spinner"></view>
+    <text class="pm-loading-text">加载市场价格数据...</text>
+  </view>
+
+  <!-- 空状态 -->
+  <view wx:elif="{{filteredItems.length === 0}}" class="pm-empty">
+    <view class="icon icon-search" style="width:80rpx;height:80rpx;opacity:0.3;"></view>
+    <text class="pm-empty-title">未找到相关道具</text>
+    <text class="pm-empty-desc">试试其他关键词或分类</text>
+  </view>
+
+  <!-- 道具价格列表 -->
+  <view wx:else class="pm-list">
+    <view wx:for="{{filteredItems}}" wx:key="id" class="pm-item" catchtap="goDetail" data-id="{{item.id}}">
+      <!-- 左侧图标 -->
+      <view class="pmi-icon pm-icon-{{item.category}}">
+        <view class="icon icon-{{item.icon}}" style="width:48rpx;height:48rpx;"></view>
+      </view>
+
+      <!-- 中间信息 -->
+      <view class="pmi-info">
+        <view class="pmi-name-row">
+          <text class="pmi-name">{{item.name}}</text>
+          <text class="pmi-tag pm-tag-{{item.tagType}}">{{item.tag}}</text>
+        </view>
+        <text class="pmi-spec">{{item.spec}}</text>
+
+        <!-- 多平台价格 -->
+        <view class="pmi-prices">
+          <view wx:for="{{item.prices}}" wx:key="platform" wx:for-item="price"
+                class="pmi-price-row {{price.isLowest ? 'pm-price-lowest' : ''}}">
+            <text class="pmi-platform">{{price.platform}}</text>
+            <text class="pmi-price">{{price.price}}</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 右侧箭头 -->
+      <view class="pmi-arrow">
+        <view class="icon icon-chevron-r" style="width:32rpx;height:32rpx;opacity:0.4;"></view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部提示 -->
+  <view class="pm-tip">
+    <view class="icon icon-bulb" style="width:28rpx;height:28rpx;color:var(--gold-500);"></view>
+    <text class="pm-tip-text">数据每周更新，点击查看详情</text>
+  </view>
+</view>

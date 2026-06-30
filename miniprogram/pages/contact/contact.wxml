@@ -1,0 +1,95 @@
+<nav-bar title="精选案例" show-back="{{false}}" glass="{{true}}" />
+
+<view class="cases-page">
+  <!-- 顶部视觉区 -->
+  <view class="cases-hero">
+    <view class="hero-text">
+      <text class="hero-title">灵感画廊</text>
+      <text class="hero-sub">每一场婚礼，都是独一无二的故事</text>
+    </view>
+    <view class="hero-stats">
+      <view class="hero-stat">
+        <text class="hero-stat-num">200+</text>
+        <text class="hero-stat-label">精选案例</text>
+      </view>
+      <view class="hero-stat-divider"></view>
+      <view class="hero-stat">
+        <text class="hero-stat-num">8</text>
+        <text class="hero-stat-label">风格类型</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 风格筛选 -->
+  <scroll-view class="style-filter" scroll-x enhanced show-scrollbar="{{false}}">
+    <view wx:for="{{styles}}" wx:key="key" 
+          class="filter-tag {{activeStyle===item.key?'active':''}}" 
+          catchtap="filterByStyle" data-key="{{item.key}}">
+      <text>{{item.label}}</text>
+      <text wx:if="{{item.count}}" class="filter-count">{{item.count}}</text>
+    </view>
+  </scroll-view>
+
+  <!-- 瀑布流案例列表 -->
+  <view wx:if="{{loading}}" class="skeleton-waterfall">
+    <view class="skeleton-col">
+      <view class="skeleton-card"><view class="skeleton-cover" style="height:360rpx"></view><view class="skeleton-body"><view class="skeleton-line w-70"></view><view class="skeleton-line w-40" style="margin-top:16rpx"></view></view></view>
+      <view class="skeleton-card"><view class="skeleton-cover" style="height:280rpx"></view><view class="skeleton-body"><view class="skeleton-line w-60"></view><view class="skeleton-line w-50" style="margin-top:16rpx"></view></view></view>
+    </view>
+    <view class="skeleton-col">
+      <view class="skeleton-card"><view class="skeleton-cover" style="height:300rpx"></view><view class="skeleton-body"><view class="skeleton-line w-65"></view><view class="skeleton-line w-45" style="margin-top:16rpx"></view></view></view>
+      <view class="skeleton-card"><view class="skeleton-cover" style="height:340rpx"></view><view class="skeleton-body"><view class="skeleton-line w-55"></view><view class="skeleton-line w-35" style="margin-top:16rpx"></view></view></view>
+    </view>
+  </view>
+
+  <view wx:elif="{{filteredCases.length===0}}" class="empty-state">
+    <text class="empty-title">暂无该风格案例</text>
+    <text class="empty-desc">换个风格试试吧</text>
+  </view>
+
+  <view wx:else class="waterfall">
+    <view class="waterfall-col">
+      <view wx:for="{{leftCol}}" wx:key="id" class="case-card" catchtap="goDetail" data-id="{{item.id}}">
+        <view class="case-cover" style="background:{{item.bg}};height:{{item.height}}px">
+          <view class="case-cover-icon">
+            <view class="icon icon-star" style="width:48rpx;height:48rpx;opacity:0.6"></view>
+          </view>
+          <view class="case-style-badge">{{item.style}}</view>
+        </view>
+        <view class="case-body">
+          <text class="case-title">{{item.coupleName}}</text>
+          <text class="case-meta">{{item.venue}} · ¥{{item.budgetRange}}</text>
+          <view class="case-tags">
+            <text wx:for="{{item.tags}}" wx:key="this" wx:for-item="tag" class="case-tag">{{tag}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+    <view class="waterfall-col">
+      <view wx:for="{{rightCol}}" wx:key="id" class="case-card" catchtap="goDetail" data-id="{{item.id}}">
+        <view class="case-cover" style="background:{{item.bg}};height:{{item.height}}px">
+          <view class="case-cover-icon">
+            <view class="icon icon-star" style="width:48rpx;height:48rpx;opacity:0.6"></view>
+          </view>
+          <view class="case-style-badge">{{item.style}}</view>
+        </view>
+        <view class="case-body">
+          <text class="case-title">{{item.coupleName}}</text>
+          <text class="case-meta">{{item.venue}} · ¥{{item.budgetRange}}</text>
+          <view class="case-tags">
+            <text wx:for="{{item.tags}}" wx:key="this" wx:for-item="tag" class="case-tag">{{tag}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部 CTA -->
+  <view class="cases-cta">
+    <text class="cta-text">找到喜欢的风格？</text>
+    <button class="cta-btn" catchtap="goAIDesign">
+      <view class="icon icon-sparkles" style="width:32rpx;height:32rpx;margin-right:12rpx"></view>
+      <text>AI 设计同款方案</text>
+    </button>
+  </view>
+</view>

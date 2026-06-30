@@ -1,0 +1,72 @@
+{
+    "pages":  [
+        "pages/home/home",
+        "pages/contact/contact",
+        "pages/mine/mine",
+        "pages/case-detail/case-detail",
+        "pages/budget-calc/budget-calc",
+        "pages/dashboard/dashboard",
+        "pages/orders/orders",
+        "pages/order-detail/order-detail",
+        "pages/schedule/schedule",
+        "pages/contracts/contracts",
+        "pages/hotels/hotels",
+        "pages/props/props",
+        "pages/clients/clients",
+        "pages/search/search",
+        "pages/profile/profile",
+        "pages/index/index",
+        "pages/leads-list/leads-list",
+        "pages/lead-detail/lead-detail",
+        "pages/countdown/countdown",
+        "pages/guest-task/guest-task",
+        "pages/checklist/checklist",
+        "pages/prop-market/prop-market"
+    ],
+    "window":  {
+        "navigationStyle":  "custom",
+        "backgroundColor":  "#faf8f5",
+        "backgroundTextStyle":  "dark"
+    },
+    "tabBar":  {
+        "custom":  true,
+        "color":  "rgba(0,0,0,0.35)",
+        "selectedColor":  "#C19A50",
+        "backgroundColor":  "#FBF7F0",
+        "borderStyle":  "white",
+        "list":  [
+            {
+                "pagePath":  "pages/home/home",
+                "text":  "AI设计"
+            },
+            {
+                "pagePath":  "pages/contact/contact",
+                "text":  "案例"
+            },
+            {
+                "pagePath":  "pages/mine/mine",
+                "text":  "我的"
+            },
+            {
+                "pagePath":  "pages/dashboard/dashboard",
+                "text":  "工作台"
+            },
+            {
+                "pagePath":  "pages/orders/orders",
+                "text":  "订单"
+            },
+            {
+                "pagePath":  "pages/schedule/schedule",
+                "text":  "排期"
+            },
+            {
+                "pagePath":  "pages/contracts/contracts",
+                "text":  "合同"
+            }
+        ]
+    },
+    "usingComponents":  {
+        "nav-bar":  "/components/nav-bar/nav-bar"
+    },
+    "sitemapLocation":  "sitemap.json"
+}

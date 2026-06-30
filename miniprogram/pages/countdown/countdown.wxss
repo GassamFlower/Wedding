@@ -1,0 +1,97 @@
+/* 倒计时区域 */
+.countdown-area { text-align: center; padding: 40rpx 0; }
+.days-num { font-size: 104rpx; font-weight: 800; color: var(--gold); line-height: 1; }
+.days-label { font-size: 32rpx; color: var(--text); margin-top: 8rpx; }
+.ring-wrap { position: relative; width: 260rpx; height: 260rpx; margin: 32rpx auto; }
+.ring-bg { position: absolute; inset: 0; border-radius: 50%; background: conic-gradient(var(--gold) var(--pct, 0%), var(--gold-bg) var(--pct, 0%) 100%); }
+.ring-center { position: absolute; inset: 32rpx; border-radius: 50%; background: var(--bg-card); display: flex; align-items: center; justify-content: center; font-size: 52rpx; font-weight: 700; color: var(--gold); }
+
+/* 进度时间轴 — 使用 app.wxss 全局 .timeline / .tlnode，此处仅页级微调 */
+.tlnode.done::before { background: var(--gold); border-color: var(--gold); box-shadow: 0 0 0 6rpx var(--gold-bg); }
+.tlnode.done .tlnode-label { color: var(--gold-dark); font-weight: 600; }
+
+/* 亲友团 */
+.guest-entry { display: flex; align-items: center; gap: 16rpx; }
+.guest-avatars { display: flex; }
+.guest-avatar { width: 56rpx; height: 56rpx; border-radius: 50%; background: var(--gold-bg); margin-right: -12rpx; border: 4rpx solid var(--bg-card); display: flex; align-items: center; justify-content: center; font-size: 22rpx; color: var(--gold-dark); font-weight: 600; }
+.guest-count { font-size: 22rpx; color: var(--text-muted); margin-left: 8rpx; }
+
+/* ═══════════════════════════════════════════════
+   ENHANCED COUNTDOWN — Design Canvas Migration
+   从设计画布迁移的倒计时增强样式
+   ═══════════════════════════════════════════════ */
+
+/* ---------- 倒计时区域增强 ---------- */
+.countdown-area {
+  background: linear-gradient(135deg, var(--bg-card), var(--gold-50));
+  border: 2rpx solid var(--gold-100);
+  box-shadow: var(--shadow-md);
+  border-radius: var(--radius-lg);
+  padding: 64rpx 40rpx;
+  margin-bottom: 32rpx;
+}
+
+.days-num {
+  font-family: var(--font-en-display);
+  color: var(--gold-600);
+  text-shadow: 0 4rpx 16rpx rgba(193, 154, 80, 0.15);
+}
+
+.days-label {
+  color: var(--gold-700);
+  font-weight: 500;
+}
+
+/* ---------- 环形进度增强 ---------- */
+.ring-wrap {
+  box-shadow: var(--shadow-md);
+}
+
+.ring-bg {
+  background: conic-gradient(
+    linear-gradient(135deg, var(--gold-400), var(--gold-500)) var(--pct, 0%),
+    var(--gold-100) var(--pct, 0%) 100%
+  );
+}
+
+.ring-center {
+  background: linear-gradient(135deg, var(--bg-card), var(--gold-50));
+  box-shadow: inset 0 4rpx 16rpx rgba(193, 154, 80, 0.1);
+}
+
+/* ---------- 时间轴节点增强 ---------- */
+.tlnode.done::before {
+  background: linear-gradient(135deg, var(--gold-400), var(--gold-500));
+  border-color: var(--gold-400);
+  box-shadow: 0 0 0 6rpx var(--gold-100), var(--shadow-gold);
+}
+
+.tlnode.done .tlnode-label {
+  color: var(--gold-700);
+}
+
+/* ---------- 亲友团入口增强 ---------- */
+.guest-entry {
+  background: linear-gradient(135deg, var(--bg-card), var(--gold-50));
+  border: 2rpx solid var(--gold-100);
+  box-shadow: var(--shadow-sm);
+  border-radius: var(--radius-md);
+  padding: 24rpx 32rpx;
+  transition: all 0.2s ease;
+}
+
+.guest-entry:active {
+  transform: translateY(-4rpx);
+  box-shadow: var(--shadow-md);
+}
+
+.guest-avatar {
+  background: linear-gradient(135deg, var(--gold-200), var(--gold-400));
+  border: 4rpx solid var(--bg-card);
+  box-shadow: var(--shadow-sm);
+}
+
+.guest-count {
+  color: var(--gold-600);
+  font-weight: 500;
+}

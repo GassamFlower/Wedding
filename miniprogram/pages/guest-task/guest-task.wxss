@@ -1,0 +1,45 @@
+.task-item { padding: 24rpx 0; border-bottom: 2rpx solid var(--border); }
+.task-title { display: flex; align-items: center; gap: 16rpx; font-size: 28rpx; font-weight: 600; color: var(--text); }
+.task-role { font-size: 24rpx; color: var(--text-muted); margin-top: 4rpx; }
+.task-status { font-size: 22rpx; margin-top: 8rpx; }
+.task-done { color: var(--gold-dark); text-decoration: line-through; }
+
+/* ═══════════════════════════════════════════════
+   ENHANCED GUEST TASK — Design Canvas Migration
+   从设计画布迁移的亲友团任务增强样式
+   ═══════════════════════════════════════════════ */
+
+/* ---------- 任务项增强 ---------- */
+.task-item {
+  background: linear-gradient(135deg, var(--bg-card), var(--gold-50));
+  border: 2rpx solid var(--gold-100);
+  box-shadow: var(--shadow-md);
+  border-radius: var(--radius-lg);
+  padding: 32rpx;
+  margin-bottom: 24rpx;
+  transition: all 0.2s ease;
+}
+
+.task-item:active {
+  transform: translateY(-4rpx);
+  box-shadow: var(--shadow-lg);
+}
+
+.task-title {
+  color: var(--gold-800);
+  font-weight: 700;
+}
+
+.task-role {
+  color: var(--gold-500);
+}
+
+.task-status {
+  color: var(--gold-600);
+  font-weight: 600;
+}
+
+.task-done {
+  color: var(--gold-400);
+  text-decoration-color: var(--gold-300);
+}

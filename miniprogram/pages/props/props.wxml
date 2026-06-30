@@ -1,0 +1,114 @@
+<nav-bar title="道具管理" back-url="/pages/schedule/schedule" />
+
+<view class="page-wrap">
+
+  <!-- 加载状态 -->
+  <view wx:if="{{loading}}" class="loading-state">
+    <view class="loading-spinner"></view>
+    <view class="loading-text">加载中...</view>
+  </view>
+
+  <!-- 错误状态 -->
+  <view wx:elif="{{error}}" class="empty">
+    <view class="icon icon-warning" style="width:80rpx;height:80rpx;margin-bottom:16rpx;display:inline-block;color:#b8860b;"></view>
+    <view>{{errorMsg}}</view>
+    <view class="btn-primary" style="margin-top:32rpx;width:auto;display:inline-block;padding:16rpx 48rpx;" bindtap="loadData">重试</view>
+  </view>
+
+  <!-- 内容区 -->
+  <view wx:else>
+    <view class="prop-stats">
+      <view class="ps"><view class="ps-num" style="color:var(--gold);">{{totalProps}}</view><view class="ps-lbl">总道具</view></view>
+      <view class="ps"><view class="ps-num" style="color:#c67a00;">{{inUse}}</view><view class="ps-lbl">使用中</view></view>
+      <view class="ps"><view class="ps-num" style="color:#2e7d32;">{{available}}</view><view class="ps-lbl">闲置</view></view>
+      <view class="ps"><view class="ps-num" style="color:#b71c1c;">{{needBuy}}</view><view class="ps-lbl">需采购</view></view>
+    </view>
+
+    <view class="quick-actions">
+      <view class="action-btn" bindtap="addProp">
+        <view class="action-icon-wrap"><view class="svg-icon icon-18 icon-add-gold"></view></view>
+        <view class="action-label">录入</view>
+      </view>
+      <view class="action-btn" bindtap="goPropMarket">
+        <view class="action-icon-wrap"><view class="svg-icon icon-18 icon-search-gold"></view></view>
+        <view class="action-label">市场参考</view>
+      </view>
+    </view>
+
+    <view class="section-title"><text>道具分类</text></view>
+    <view class="prop-cat-grid">
+      <view class="prop-cat {{filterCategory === item.key ? 'prop-cat-active' : ''}}" wx:for="{{categories}}" wx:key="key" catchtap="filterByCategory" data-key="{{item.key}}">
+        <view class="pc-icon"><view class="svg-icon icon-20 icon-{{item.icon}}-gold"></view></view>
+        <view class="pc-name">{{item.name}}</view>
+        <view class="pc-count">{{item.count}}件 · {{item.inUse}}使用中</view>
+      </view>
+    </view>
+
+    <view class="section-title" style="margin-top:32rpx;"><text>道具列表</text><text class="more" bindtap="addProp" style="font-size:26rpx;">+ 录入</text></view>
+    <view wx:if="{{propList.length === 0}}" class="empty" style="padding:24rpx 0;">暂无道具</view>
+    <view wx:else>
+      <view class="prop-item" wx:for="{{propList}}" wx:key="id">
+        <view class="pi-info">
+          <view class="pi-name">{{item.name}}</view>
+          <view class="pi-meta">{{item.categoryName}} · {{item.total}}件 · 使用中{{item.inUse}} · 闲置{{item.available}}</view>
+        </view>
+        <view class="pi-actions">
+          <text class="ci-tag" style="color:#c67a00;" catchtap="openEdit" data-id="{{item.id}}">编辑</text>
+          <text class="ci-tag" style="color:#b71c1c;" catchtap="confirmDelete" data-id="{{item.id}}" data-name="{{item.name}}">删除</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="section-title" style="margin-top:32rpx;"><text>待处理事项</text></view>
+    <view wx:if="{{todos.length === 0}}" class="empty" style="padding:40rpx;">暂无待处理事项</view>
+    <view wx:else>
+      <view class="todo-item" wx:for="{{todos}}" wx:key="id" catchtap="toggleTodo" data-id="{{item.id}}">
+        <view class="todo-check {{item.done?'checked':''}}"><view class="svg-icon icon-12 icon-check-white"></view></view>
+        <view class="todo-content"><text class="todo-text {{item.done?'todo-done':''}}">{{item.text}}</text><text class="todo-time">{{item.time}}</text></view>
+      </view>
+    </view>
+  </view>
+
+  <!-- ===== 新增/编辑弹窗 ===== -->
+  <view wx:if="{{showForm}}" class="form-overlay" catchtap="closeForm">
+    <view class="form-modal" catchtap=""><view class="form-title">{{formMode === 'edit' ? '编辑道具' : '新增道具'}}</view>
+
+      <view class="form-group">
+        <text class="form-label">道具名称 *</text>
+        <input class="form-input" placeholder="输入道具名称" value="{{formData.name}}" bindinput="onFormInput" data-field="name" />
+      </view>
+
+      <view class="form-group">
+        <text class="form-label">分类</text>
+        <picker class="form-input" mode="selector" range="{{categoryOptions}}" range-key="name" value="{{catIndex}}" bindchange="onFormCategoryChange">
+          <view>选择分类</view>
+        </picker>
+      </view>
+
+      <view class="form-row">
+        <view class="form-group" style="flex:1;">
+          <text class="form-label">总数</text>
+          <input class="form-input" type="number" placeholder="0" value="{{formData.total}}" bindinput="onFormInput" data-field="total" />
+        </view>
+        <view class="form-group" style="flex:1;">
+          <text class="form-label">使用中</text>
+          <input class="form-input" type="number" placeholder="0" value="{{formData.inUse}}" bindinput="onFormInput" data-field="inUse" />
+        </view>
+        <view class="form-group" style="flex:1;">
+          <text class="form-label">单位</text>
+          <input class="form-input" placeholder="件" value="{{formData.unit}}" bindinput="onFormInput" data-field="unit" />
+        </view>
+      </view>
+
+      <view class="form-group">
+        <text class="form-label">备注</text>
+        <input class="form-input" placeholder="可选备注" value="{{formData.notes}}" bindinput="onFormInput" data-field="notes" />
+      </view>
+
+      <view class="form-btns">
+        <button class="btn-cancel" bindtap="closeForm">取消</button>
+        <button class="btn-primary" bindtap="submitForm">{{formMode === 'edit' ? '保存' : '添加'}}</button>
+      </view>
+    </view>
+  </view>
+</view>

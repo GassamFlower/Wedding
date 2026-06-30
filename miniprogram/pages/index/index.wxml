@@ -1,0 +1,1 @@
+<view class="splash-page flex-center"><view class="splash-content"><view class="splash-icon"><view class="icon icon-ring" style="width:96rpx;height:96rpx;"></view></view><text class="splash-title">大喜的日子</text><text class="splash-subtitle">婚礼场景策划工作室</text><view class="loading-spinner" style="margin-top:64rpx;"></view></view></view>

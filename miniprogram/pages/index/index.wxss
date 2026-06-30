@@ -1,0 +1,50 @@
+.splash-page { min-height:100vh; background:var(--bg-secondary); }
+.splash-content { text-align:center; }
+.splash-icon { font-size:96rpx; display:block; margin-bottom:32rpx; }
+.splash-title { font-size:48rpx; font-weight:700; color:var(--text-primary); display:block; letter-spacing:-1rpx; }
+.splash-subtitle { font-size:28rpx; color:var(--text-secondary); display:block; margin-top:12rpx; }
+
+/* ═══════════════════════════════════════════════
+   ENHANCED INDEX — Design Canvas Migration
+   从设计画布迁移的启动页增强样式
+   ═══════════════════════════════════════════════ */
+
+/* ---------- 启动页增强 ---------- */
+.splash-page {
+  background: linear-gradient(135deg, var(--gold-50), var(--bg-secondary));
+  position: relative;
+  overflow: hidden;
+}
+
+.splash-page::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background:
+    radial-gradient(ellipse at 20% 30%, rgba(212, 165, 150, 0.06) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 70%, rgba(193, 154, 80, 0.04) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.splash-content {
+  position: relative;
+  z-index: 1;
+}
+
+.splash-icon {
+  color: var(--gold-500);
+  text-shadow: 0 8rpx 24rpx rgba(193, 154, 80, 0.2);
+}
+
+.splash-title {
+  color: var(--gold-800);
+  font-weight: 700;
+}
+
+.splash-subtitle {
+  color: var(--gold-600);
+}

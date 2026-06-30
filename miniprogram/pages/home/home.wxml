@@ -1,0 +1,162 @@
+<nav-bar title="大喜的日子" show-back="{{false}}" glass="{{true}}" />
+
+<view class="chat-page">
+
+  <!-- ===== 聊天消息区 ===== -->
+  <scroll-view class="chat-scroll"
+               scroll-y enhanced show-scrollbar="{{false}}"
+               scroll-into-view="{{scrollToView}}" scroll-with-animation>
+
+    <view class="chat-list">
+      <block wx:for="{{messages}}" wx:key="index">
+
+        <!-- 用户消息 -->
+        <view wx:if="{{item.role === 'user'}}" class="chat-row" id="msg-{{index}}">
+          <view class="chat-bubble chat-bubble-user" id="msg-{{index}}">
+            <text class="chat-text">{{item.content}}</text>
+            <text class="chat-time-user">{{item.time}}</text>
+          </view>
+        </view>
+
+        <!-- AI 文本消息 -->
+        <view wx:elif="{{item.role === 'agent' && item.type === 'text'}}" class="chat-row" id="msg-{{index}}">
+          <view class="chat-avatar">大</view>
+          <view class="chat-bubble chat-bubble-agent">
+            <text class="chat-text">{{item.content}}</text>
+            <text class="chat-time-agent">{{item.time}}</text>
+          </view>
+        </view>
+
+        <!-- 案例推荐卡片（内联横向滚动） -->
+        <view wx:elif="{{item.type === 'case_cards'}}" class="chat-row" id="msg-{{index}}">
+          <view class="case-cards-row">
+            <view wx:for="{{item.cases}}" wx:key="id" wx:for-item="caseItem" class="case-mini" catchtap="goCaseDetail" data-id="{{caseItem.id}}">
+              <view class="case-mini-img" style="background:{{caseItem.bg}}">
+                <view class="svg-icon icon-32 {{caseItem.iconClass}}"></view>
+              </view>
+              <view class="case-mini-info">
+                <text class="case-mini-title">{{caseItem.title}}</text>
+                <text class="case-mini-tag">{{caseItem.tag}}</text>
+              </view>
+            </view>
+          </view>
+        </view>
+
+        <!-- 方案卡片消息 -->
+        <view wx:elif="{{item.type === 'proposal'}}" class="chat-card-row" id="msg-{{index}}">
+          <view class="proposal-card card-premium" catchtap="viewProposal" data-id="{{item.content.proposalId}}">
+            <view class="pc-header">
+              <view class="pc-badge">
+                <view class="svg-icon icon-12 icon-doc-gold"></view>
+                <text>智能方案</text>
+              </view>
+              <text class="pc-total">¥{{item.content.totalCost}}</text>
+            </view>
+            <text class="pc-concept">{{item.content.designConcept}}</text>
+            <view class="pc-stats">
+              <view class="pc-stat">
+                <view class="svg-icon icon-12 icon-package-gold"></view>
+                <text>{{item.content.propCount}}项道具</text>
+              </view>
+              <view class="pc-stat">
+                <view class="svg-icon icon-12 icon-calendar-gold"></view>
+                <text>{{item.content.timelineCount}}个节点</text>
+              </view>
+            </view>
+            <view class="pc-cta">点击查看完整方案 →</view>
+          </view>
+        </view>
+
+        <!-- 需求确认卡片 -->
+        <view wx:elif="{{item.type === 'requirement_card'}}" class="chat-card-row" id="msg-{{index}}">
+          <view class="req-card card">
+            <view class="req-header">
+              <view class="req-title">
+                <view class="svg-icon icon-14 icon-check-gold"></view>
+                <text>AI 已整理你的需求</text>
+              </view>
+              <text class="req-hint">确认后可生成方案</text>
+            </view>
+            <view class="req-items">
+              <view class="req-item" wx:if="{{item.content.style}}">
+                <text class="req-label">风格</text>
+                <text class="req-val">{{item.content.style}}</text>
+              </view>
+              <view class="req-item" wx:if="{{item.content.venueType}}">
+                <text class="req-label">场地</text>
+                <text class="req-val">{{item.content.venueType}}</text>
+              </view>
+              <view class="req-item" wx:if="{{item.content.budget && item.content.budget.max}}">
+                <text class="req-label">预算</text>
+                <text class="req-val">¥{{item.content.budget.min}}-{{item.content.budget.max}}</text>
+              </view>
+              <view class="req-item" wx:if="{{item.content.guestCount}}">
+                <text class="req-label">人数</text>
+                <text class="req-val">{{item.content.guestCount}}人</text>
+              </view>
+            </view>
+            <button class="req-btn" catchtap="generateProposal" wx:if="{{canGenerateProposal}}">
+              <view class="svg-icon icon-16 icon-palette-white"></view>
+              <text>生成我的婚礼方案</text>
+            </button>
+          </view>
+        </view>
+      </block>
+    </view>
+  </scroll-view>
+
+  <!-- ===== 底部区域 ===== -->
+
+  <!-- 快速引导（仅当对话刚开始时显示） -->
+  <view wx:if="{{messages.length <= 2 && !sending}}" class="suggest-area">
+    <text class="suggest-title">试试问我...</text>
+    <view class="suggest-grid">
+      <view wx:for="{{suggestions}}" wx:key="text" class="suggest-chip" catchtap="tapSuggestion" data-text="{{item.text}}">
+        <view class="svg-icon icon-16 {{item.iconClass}}"></view>
+        <text class="suggest-text">{{item.text}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 生成方案按钮（浮在输入栏上方） -->
+  <view wx:if="{{canGenerateProposal && !sending}}" class="gen-bar">
+    <button class="gen-btn" catchtap="generateProposal">
+      <view class="svg-icon icon-16 icon-palette-white"></view>
+      <text>生成我的婚礼方案</text>
+    </button>
+  </view>
+
+  <!-- 人工兜底 -->
+  <view wx:if="{{showFallbackActions && !sending}}" class="fallback-bar">
+    <button class="btn-outline btn-sm" catchtap="contactHuman" style="flex:1;">
+      <view class="svg-icon icon-14 icon-phone-gold"></view>
+      <text>联系人工策划师</text>
+    </button>
+  </view>
+
+  <!-- 找灵感横条入口 -->
+  <view class="inspiration-bar" catchtap="showInspiration">
+    <view class="svg-icon icon-18 icon-sparkle-gold"></view>
+    <text class="inspiration-text">找灵感 — 浏览精选婚礼案例</text>
+    <text class="inspiration-arrow">›</text>
+  </view>
+
+  <!-- ===== 底部输入栏 ===== -->
+  <view class="input-bar">
+    <view class="input-row">
+      <input class="chat-input"
+             value="{{inputText}}"
+             placeholder="描述你梦想中的婚礼..."
+             bindinput="onInput"
+             bindconfirm="sendMessage"
+             confirm-type="send"
+             maxlength="500"
+             adjust-position="{{true}}" />
+      <view class="send-btn {{inputText ? 'send-btn-active' : ''}}"
+            catchtap="sendMessage">
+        <view wx:if="{{!sending}}" class="svg-icon icon-18 icon-send-white"></view>
+        <text wx:else class="send-icon">···</text>
+      </view>
+    </view>
+  </view>
+</view>

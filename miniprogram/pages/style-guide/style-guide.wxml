@@ -1,0 +1,401 @@
+<scroll-view scroll-y class="page-guide">
+
+  <!-- ===== 标题 ===== -->
+  <view class="sg-header">
+    <text class="sg-title">样式校准实验室</text>
+    <text class="sg-subtitle">轻复古·奶油风 — 暖白基底 + 香槟金点缀</text>
+  </view>
+
+  <!-- ===== 1. 色板 ===== -->
+  <view class="sg-section">
+    <view class="sg-section-title"><view class="gold-bar"></view><text>1. 色板 Colors</text></view>
+
+    <text class="sg-label">品牌色</text>
+    <view class="sg-color-row">
+      <view class="sg-swatch" style="background:#D4AF37;"><text class="sg-swatch-label">#D4AF37 品牌金</text></view>
+      <view class="sg-swatch" style="background:#F5E6C8;"><text class="sg-swatch-label">#F5E6C8 浅金</text></view>
+      <view class="sg-swatch" style="background:#E8C86A;"><text class="sg-swatch-label">#E8C86A 渐变终点</text></view>
+    </view>
+
+    <text class="sg-label">背景色</text>
+    <view class="sg-color-row">
+      <view class="sg-swatch sg-swatch-border" style="background:#FFF9F2;"><text class="sg-swatch-label">#FFF9F2 主背景</text></view>
+      <view class="sg-swatch sg-swatch-border" style="background:#FFFFFF;"><text class="sg-swatch-label">#FFFFFF 卡片背景</text></view>
+    </view>
+
+    <text class="sg-label">文字色</text>
+    <view class="sg-color-row">
+      <view class="sg-swatch" style="background:#2C2C2C;"><text class="sg-swatch-label-light">#2C2C2C 主文字</text></view>
+      <view class="sg-swatch" style="background:#8C8C8C;"><text class="sg-swatch-label-light">#8C8C8C 次要文字</text></view>
+      <view class="sg-swatch" style="background:#BFBFBF;"><text class="sg-swatch-label-light">#BFBFBF 提示文字</text></view>
+    </view>
+
+    <text class="sg-label">状态色</text>
+    <view class="sg-color-row">
+      <view class="sg-swatch" style="background:#67C23A;"><text class="sg-swatch-label-light">#67C23A 成功</text></view>
+      <view class="sg-swatch" style="background:#E6A23C;"><text class="sg-swatch-label-light">#E6A23C 警告</text></view>
+      <view class="sg-swatch" style="background:#F56C6C;"><text class="sg-swatch-label-light">#F56C6C 错误</text></view>
+      <view class="sg-swatch" style="background:#909399;"><text class="sg-swatch-label-light">#909399 信息</text></view>
+    </view>
+
+    <text class="sg-label">边框/分割线</text>
+    <view class="sg-color-row">
+      <view class="sg-swatch sg-swatch-border" style="background:#F5E6C8;"><text class="sg-swatch-label">#F5E6C8 边框</text></view>
+    </view>
+
+    <text class="sg-label">渐变</text>
+    <view class="sg-gradient-bar sg-gradient-gold">
+      <text class="sg-swatch-label-light">金色渐变 135deg #D4AF37 → #E8C86A</text>
+    </view>
+    <view class="sg-gradient-bar sg-gradient-warm">
+      <text class="sg-swatch-label">暖白渐变 180deg #FFF9F2 → #FFFFFF</text>
+    </view>
+  </view>
+
+  <!-- ===== 2. 字体系统 ===== -->
+  <view class="sg-section">
+    <view class="sg-section-title"><view class="gold-bar"></view><text>2. 字体 Typography</text></view>
+
+    <view class="sg-type-item">
+      <text class="sg-type-display">Display 24px/48rpx</text>
+      <text class="sg-type-meta">48rpx · 700 · line-height 64rpx</text>
+    </view>
+    <view class="sg-type-item">
+      <text class="sg-type-h1">H1 24px/48rpx</text>
+      <text class="sg-type-meta">48rpx · 700 · line-height 64rpx</text>
+    </view>
+    <view class="sg-type-item">
+      <text class="sg-type-h2">H2 18px/36rpx</text>
+      <text class="sg-type-meta">36rpx · 600 · line-height 52rpx</text>
+    </view>
+    <view class="sg-type-item">
+      <text class="sg-type-h3">H3 16px/32rpx</text>
+      <text class="sg-type-meta">32rpx · 500 · line-height 44rpx</text>
+    </view>
+    <view class="sg-type-item">
+      <text class="sg-type-body">Body 正文 14px/28rpx</text>
+      <text class="sg-type-meta">28rpx · 400 · line-height 40rpx</text>
+    </view>
+    <view class="sg-type-item">
+      <text class="sg-type-sm">Small 13px/26rpx</text>
+      <text class="sg-type-meta">26rpx · 400 · line-height 36rpx</text>
+    </view>
+    <view class="sg-type-item">
+      <text class="sg-type-caption">Caption 辅助 12px/24rpx</text>
+      <text class="sg-type-meta">24rpx · 400 · line-height 36rpx · #8C8C8C</text>
+    </view>
+    <view class="sg-type-item">
+      <text class="sg-type-xs">XS 最小 11px/22rpx</text>
+      <text class="sg-type-meta">22rpx · 400 · line-height 32rpx · #8C8C8C</text>
+    </view>
+  </view>
+
+  <!-- ===== 3. 间距系统 ===== -->
+  <view class="sg-section">
+    <view class="sg-section-title"><view class="gold-bar"></view><text>3. 间距 Spacing</text></view>
+
+    <view class="sg-spacing-item">
+      <view class="sg-spacing-bar" style="width:8rpx;"></view>
+      <text class="sg-spacing-label">4px / 8rpx — xs</text>
+    </view>
+    <view class="sg-spacing-item">
+      <view class="sg-spacing-bar" style="width:16rpx;"></view>
+      <text class="sg-spacing-label">8px / 16rpx — sm</text>
+    </view>
+    <view class="sg-spacing-item">
+      <view class="sg-spacing-bar" style="width:24rpx;"></view>
+      <text class="sg-spacing-label">12px / 24rpx — md</text>
+    </view>
+    <view class="sg-spacing-item">
+      <view class="sg-spacing-bar" style="width:32rpx;"></view>
+      <text class="sg-spacing-label">16px / 32rpx — lg</text>
+    </view>
+    <view class="sg-spacing-item">
+      <view class="sg-spacing-bar" style="width:48rpx;"></view>
+      <text class="sg-spacing-label">24px / 48rpx — xl</text>
+    </view>
+    <view class="sg-spacing-item">
+      <view class="sg-spacing-bar" style="width:64rpx;"></view>
+      <text class="sg-spacing-label">32px / 64rpx — 2xl</text>
+    </view>
+  </view>
+
+  <!-- ===== 4. 圆角系统 ===== -->
+  <view class="sg-section">
+    <view class="sg-section-title"><view class="gold-bar"></view><text>4. 圆角 Radius</text></view>
+
+    <view class="sg-radius-row">
+      <view class="sg-radius-box" style="border-radius:12rpx;"><text class="sg-radius-label">12rpx\n按钮</text></view>
+      <view class="sg-radius-box" style="border-radius:20rpx;"><text class="sg-radius-label">20rpx\n输入框</text></view>
+      <view class="sg-radius-box" style="border-radius:24rpx;"><text class="sg-radius-label">24rpx\n标签</text></view>
+      <view class="sg-radius-box" style="border-radius:32rpx;"><text class="sg-radius-label">32rpx\n弹窗</text></view>
+      <view class="sg-radius-box" style="border-radius:48rpx;"><text class="sg-radius-label">48rpx\n卡片</text></view>
+      <view class="sg-radius-box" style="border-radius:9999rpx;"><text class="sg-radius-label">9999rpx\n胶囊</text></view>
+    </view>
+  </view>
+
+  <!-- ===== 5. 阴影系统 ===== -->
+  <view class="sg-section">
+    <view class="sg-section-title"><view class="gold-bar"></view><text>5. 阴影 Shadow</text></view>
+
+    <view class="sg-shadow-row">
+      <view class="sg-shadow-box sg-shadow-sm">
+        <text class="sg-shadow-label">shadow-sm</text>
+        <text class="sg-shadow-meta">0 2rpx 4rpx rgba(0,0,0,0.04)</text>
+      </view>
+      <view class="sg-shadow-box sg-shadow-card">
+        <text class="sg-shadow-label">shadow-card</text>
+        <text class="sg-shadow-meta">0 4rpx 16rpx rgba(0,0,0,0.04)</text>
+      </view>
+      <view class="sg-shadow-box sg-shadow-hover">
+        <text class="sg-shadow-label">shadow-hover</text>
+        <text class="sg-shadow-meta">0 8rpx 24rpx rgba(0,0,0,0.08)</text>
+      </view>
+      <view class="sg-shadow-box sg-shadow-gold">
+        <text class="sg-shadow-label">shadow-gold</text>
+        <text class="sg-shadow-meta">0 4rpx 12rpx rgba(212,175,55,0.2)</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- ===== 6. 边框 ===== -->
+  <view class="sg-section">
+    <view class="sg-section-title"><view class="gold-bar"></view><text>6. 边框 Border</text></view>
+
+    <view class="sg-border-row">
+      <view class="sg-border-box sg-border-thin">
+        <text class="sg-border-label">2rpx 细边框</text>
+      </view>
+      <view class="sg-border-box sg-border-medium">
+        <text class="sg-border-label">3rpx 标准边框</text>
+      </view>
+      <view class="sg-border-box sg-border-gold">
+        <text class="sg-border-label">金色边框</text>
+      </view>
+    </view>
+    <view class="sg-divider"></view>
+    <view class="sg-divider-light"></view>
+    <text class="sg-label">分割线：上 2rpx 标准 / 下 2rpx 浅色</text>
+  </view>
+
+  <!-- ===== 7. 按钮 ===== -->
+  <view class="sg-section">
+    <view class="sg-section-title"><view class="gold-bar"></view><text>7. 按钮 Buttons</text></view>
+
+    <text class="sg-label">主按钮（胶囊型 9999rpx）</text>
+    <view class="sg-row">
+      <view class="sg-btn-primary">主按钮</view>
+      <view class="sg-btn-outline">描边按钮</view>
+    </view>
+
+    <text class="sg-label">块级按钮</text>
+    <view class="sg-btn-block sg-btn-primary">块级主按钮</view>
+
+    <text class="sg-label">小按钮</text>
+    <view class="sg-row">
+      <view class="sg-btn-sm sg-btn-primary">小按钮</view>
+      <view class="sg-btn-sm sg-btn-outline">小描边</view>
+    </view>
+
+    <text class="sg-label">Ghost 按钮（标签用）</text>
+    <view class="sg-row">
+      <view class="sg-btn-ghost">Ghost 按钮</view>
+    </view>
+
+    <text class="sg-label">禁用态</text>
+    <view class="sg-row">
+      <view class="sg-btn-disabled">禁用按钮</view>
+    </view>
+  </view>
+
+  <!-- ===== 8. 卡片 ===== -->
+  <view class="sg-section">
+    <view class="sg-section-title"><view class="gold-bar"></view><text>8. 卡片 Cards</text></view>
+
+    <text class="sg-label">标准卡片（圆角 48rpx）</text>
+    <view class="sg-card">
+      <view class="sg-card-title">森系花园 · 草坪婚礼</view>
+      <view class="sg-card-desc">白绿配色 · 自然浪漫 · 户外草坪</view>
+      <view class="sg-card-tags">
+        <view class="sg-tag">森系</view>
+        <view class="sg-tag">户外</view>
+        <view class="sg-tag">草坪</view>
+      </view>
+    </view>
+
+    <text class="sg-label">高级卡片（card-premium）</text>
+    <view class="sg-card-premium">
+      <view class="sg-card-header">
+        <view class="sg-card-title">韩式轻奢 · 酒店宴会厅</view>
+        <view class="sg-tag sg-tag-gold">热门</view>
+      </view>
+      <view class="sg-card-desc">白粉配色 · 浪漫优雅 · 200人规模</view>
+    </view>
+
+    <text class="sg-label">紧凑卡片（card-compact）</text>
+    <view class="sg-card-compact">
+      <view class="sg-card-title">新中式 · 庭院婚礼</view>
+      <view class="sg-card-desc">红金配色 · 传统大气</view>
+    </view>
+  </view>
+
+  <!-- ===== 9. 标签 ===== -->
+  <view class="sg-section">
+    <view class="sg-section-title"><view class="gold-bar"></view><text>9. 标签 Tags</text></view>
+
+    <view class="sg-row">
+      <view class="sg-tag">默认标签</view>
+      <view class="sg-tag sg-tag-gold">金色标签</view>
+      <view class="sg-tag sg-tag-green">成功</view>
+      <view class="sg-tag sg-tag-yellow">警告</view>
+      <view class="sg-tag sg-tag-red">错误</view>
+    </view>
+    <view class="sg-row">
+      <view class="sg-tag sg-tag-progress">进行中</view>
+      <view class="sg-tag sg-tag-done">已完成</view>
+      <view class="sg-tag sg-tag-pending">待处理</view>
+      <view class="sg-tag sg-tag-cancel">已取消</view>
+    </view>
+  </view>
+
+  <!-- ===== 10. 输入框 ===== -->
+  <view class="sg-section">
+    <view class="sg-section-title"><view class="gold-bar"></view><text>10. 输入框 Input</text></view>
+
+    <text class="sg-label">标准输入框（圆角 20rpx）</text>
+    <input class="sg-input" placeholder="请输入婚礼日期" />
+
+    <text class="sg-label">搜索框（胶囊型）</text>
+    <view class="sg-search">
+      <view class="sg-search-icon"></view>
+      <input class="sg-search-input" placeholder="搜索订单、客户、道具..." />
+    </view>
+  </view>
+
+  <!-- ===== 11. 头像 ===== -->
+  <view class="sg-section">
+    <view class="sg-section-title"><view class="gold-bar"></view><text>11. 头像 Avatar</text></view>
+
+    <view class="sg-row" style="align-items:flex-end;">
+      <view class="sg-avatar-sm">小</view>
+      <view class="sg-avatar-md">中</view>
+      <view class="sg-avatar-lg">大</view>
+    </view>
+  </view>
+
+  <!-- ===== 12. Tab 标签页 ===== -->
+  <view class="sg-section">
+    <view class="sg-section-title"><view class="gold-bar"></view><text>12. Tab 标签页</text></view>
+
+    <view class="sg-tabs">
+      <view class="sg-tab sg-tab-active">全部</view>
+      <view class="sg-tab">新中式</view>
+      <view class="sg-tab">韩式</view>
+      <view class="sg-tab">森系</view>
+      <view class="sg-tab">法式</view>
+    </view>
+  </view>
+
+  <!-- ===== 13. 统计卡片 ===== -->
+  <view class="sg-section">
+    <view class="sg-section-title"><view class="gold-bar"></view><text>13. 统计卡片 Stat</text></view>
+
+    <view class="sg-stat-row">
+      <view class="sg-stat-card">
+        <text class="sg-stat-num">12</text>
+        <text class="sg-stat-label">本月接单</text>
+      </view>
+      <view class="sg-stat-card">
+        <text class="sg-stat-num">5</text>
+        <text class="sg-stat-label">进行中</text>
+      </view>
+      <view class="sg-stat-card">
+        <text class="sg-stat-num">¥8.6w</text>
+        <text class="sg-stat-label">本月收入</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- ===== 14. 聊天气泡 ===== -->
+  <view class="sg-section">
+    <view class="sg-section-title"><view class="gold-bar"></view><text>14. 聊天气泡 Chat Bubble</text></view>
+
+    <view class="sg-chat-row">
+      <view class="sg-chat-avatar">大</view>
+      <view class="sg-bubble-agent">
+        <text class="sg-bubble-text">您好！我是大喜的日子的婚礼设计助手，请问您的婚礼计划在什么季节？</text>
+      </view>
+    </view>
+    <view class="sg-chat-row sg-chat-row-user">
+      <view class="sg-bubble-user">
+        <text class="sg-bubble-text">春天3月，想要户外草坪婚礼</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- ===== 15. 表单弹窗 ===== -->
+  <view class="sg-section">
+    <view class="sg-section-title"><view class="gold-bar"></view><text>15. 表单 Form</text></view>
+
+    <view class="sg-form-card">
+      <view class="sg-form-title">新建订单</view>
+      <view class="sg-form-group">
+        <text class="sg-form-label">客户姓名</text>
+        <input class="sg-form-input" placeholder="请输入客户姓名" />
+      </view>
+      <view class="sg-form-group">
+        <text class="sg-form-label">婚礼日期</text>
+        <input class="sg-form-input" placeholder="请选择日期" />
+      </view>
+      <view class="sg-form-btns">
+        <view class="sg-btn-outline sg-btn-block">取消</view>
+        <view class="sg-btn-primary sg-btn-block">确认</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- ===== 16. 时间轴 ===== -->
+  <view class="sg-section">
+    <view class="sg-section-title"><view class="gold-bar"></view><text>16. 时间轴 Timeline</text></view>
+
+    <view class="sg-timeline">
+      <view class="sg-tlnode sg-tlnode-active">
+        <text class="sg-tlnode-label">方案确认</text>
+        <text class="sg-tlnode-date">2026-03-15</text>
+      </view>
+      <view class="sg-tlnode">
+        <text class="sg-tlnode-label">场地布置</text>
+        <text class="sg-tlnode-date">2026-03-20</text>
+      </view>
+      <view class="sg-tlnode">
+        <text class="sg-tlnode-label">彩排</text>
+        <text class="sg-tlnode-date">2026-03-28</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- ===== 17. 分割留白 ===== -->
+  <view class="sg-section">
+    <view class="sg-section-title"><view class="gold-bar"></view><text>17. 分割与留白</text></view>
+
+    <text class="sg-label">间距示意</text>
+    <view class="sg-gap-demo">
+      <view class="sg-gap-box"><text class="sg-gap-text">8rpx</text></view>
+    </view>
+    <view class="sg-gap-demo" style="margin-top:8rpx;">
+      <view class="sg-gap-box"><text class="sg-gap-text">16rpx</text></view>
+    </view>
+    <view class="sg-gap-demo" style="margin-top:16rpx;">
+      <view class="sg-gap-box"><text class="sg-gap-text">24rpx</text></view>
+    </view>
+    <view class="sg-gap-demo" style="margin-top:24rpx;">
+      <view class="sg-gap-box"><text class="sg-gap-text">32rpx</text></view>
+    </view>
+    <view class="sg-gap-demo" style="margin-top:32rpx;">
+      <view class="sg-gap-box"><text class="sg-gap-text">48rpx</text></view>
+    </view>
+  </view>
+
+  <!-- 底部安全区 -->
+  <view style="height:120rpx;"></view>
+</scroll-view>

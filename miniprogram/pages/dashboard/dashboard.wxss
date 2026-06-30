@@ -1,0 +1,385 @@
+/* ═══════════════════════════════════════════════
+   策划师工作台 — 轻复古·奶油风
+   暖白基底 + 香槟金点缀 · 24rpx 基准间距
+   ═══════════════════════════════════════════════ */
+
+/* Layer 1: 线索预警卡片 */
+.alert-card {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+  padding: 24rpx 28rpx;
+  margin-bottom: 20rpx;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, var(--bg-card), var(--gold-50));
+  border: 2rpx solid var(--gold-100);
+  box-shadow: var(--shadow-md);
+  transition: all 0.2s ease;
+  border-radius: 20rpx;
+}
+.alert-card::before { display: none; }
+.alert-card:active {
+  transform: translateY(-2rpx);
+  box-shadow: var(--shadow-lg);
+}
+.alert-bar {
+  width: 6rpx; height: 60rpx;
+  background: linear-gradient(180deg, var(--warning), var(--warning-light));
+  border-radius: 4rpx;
+  flex-shrink: 0;
+}
+.alert-body {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.alert-left {
+  display: flex;
+  align-items: center;
+  gap: 14rpx;
+}
+.alert-icon {
+  width: 40rpx; height: 40rpx;
+  border-radius: 50%;
+  background: var(--warning-light);
+  color: var(--warning);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24rpx;
+  font-weight: 700;
+  box-shadow: var(--shadow-sm);
+}
+.alert-title {
+  font-size: 26rpx;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+.alert-right {
+  text-align: right;
+}
+.alert-count {
+  display: block;
+  font-size: 24rpx;
+  color: var(--gold-700);
+  font-weight: 700;
+}
+.alert-overdue {
+  display: block;
+  font-size: 20rpx;
+  color: var(--warning);
+  margin-top: 4rpx;
+}
+.alert-arrow {
+  font-size: 28rpx;
+  color: var(--text-secondary);
+  flex-shrink: 0;
+}
+
+/* Layer 2: 洞察卡片行 */
+.insight-row {
+  display: flex;
+  gap: 20rpx;
+  margin-bottom: 20rpx;
+}
+.insight-card {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  padding: 24rpx 28rpx;
+  cursor: pointer;
+  border-radius: 20rpx;
+}
+.insight-card::before { display: none; }
+.insight-icon-wrap {
+  width: 64rpx; height: 64rpx;
+  border-radius: 18rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.insight-info {
+  flex: 1;
+}
+.insight-value {
+  display: block;
+  font-size: 32rpx;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.2;
+}
+.insight-label {
+  display: block;
+  font-size: 20rpx;
+  color: var(--text-muted);
+  margin-top: 4rpx;
+}
+
+/* Layer 3: 统计卡片 */
+.stat-row { display: flex; gap: 20rpx; margin-bottom: 20rpx; align-items: center; }
+.stat-item {
+  flex: 1;
+  background: var(--bg-card);
+  border-radius: 20rpx;
+  padding: 18rpx 14rpx;
+  text-align: center;
+  border: 2rpx solid var(--border);
+}
+.stat-num { display: block; font-size: 36rpx; font-weight: 700; color: var(--gold); letter-spacing: -1rpx; }
+.stat-label { display: block; font-size: 20rpx; color: var(--text-muted); margin-top: 6rpx; }
+.stat-icon { display: block; font-size: 32rpx; margin-bottom: 10rpx; }
+
+/* 快捷操作 */
+.quick-actions {
+  display: flex;
+  gap: 16rpx;
+  margin-bottom: 20rpx;
+}
+.action-btn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--bg-card), var(--gold-50));
+  border: 2rpx solid var(--gold-100);
+  border-radius: 20rpx;
+  padding: 24rpx 8rpx;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: var(--shadow-sm);
+}
+.action-btn:active {
+  transform: translateY(-2rpx) scale(0.98);
+  box-shadow: var(--shadow-md);
+}
+.action-icon-wrap {
+  width: 56rpx;
+  height: 56rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--gold-100), var(--gold-200));
+  border-radius: 16rpx;
+  margin-bottom: 12rpx;
+}
+.action-label {
+  display: block;
+  font-size: 22rpx;
+  color: var(--gold-700);
+  font-weight: 500;
+}
+
+/* 搜索栏 */
+.search-bar {
+  display: flex;
+  align-items: center;
+  background: var(--bg-card);
+  border-radius: 9999rpx;
+  padding: 18rpx 28rpx;
+  margin-bottom: 20rpx;
+  border: 2rpx solid var(--border);
+  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+}
+.search-icon { margin-right: 14rpx; font-size: 28rpx; }
+.search-placeholder { font-size: 26rpx; color: var(--text-muted); }
+
+/* 订单卡片 */
+.order-card { cursor: pointer; }
+.order-card:active { opacity: 0.8; }
+.order-header { display: flex; align-items: center; gap: 16rpx; }
+.order-avatar { width: 64rpx; height: 64rpx; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 26rpx; font-weight: 600; color: var(--text-inverse); flex-shrink: 0; }
+.order-info { flex: 1; min-width: 0; }
+.order-name { display: block; font-size: 26rpx; font-weight: 600; color: var(--text); }
+.order-date { display: block; font-size: 22rpx; color: var(--text-secondary); margin-top: 4rpx; }
+.order-tag { flex-shrink: 0; }
+.order-tags { display: flex; gap: 10rpx; margin-top: 14rpx; }
+.order-tag-item { display: inline-block; padding: 4rpx 14rpx; background: var(--gold-100); border-radius: 20rpx; font-size: 18rpx; color: var(--gold-600); }
+.order-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 14rpx; padding-top: 14rpx; border-top: 2rpx solid var(--border); }
+.order-amount { font-size: 26rpx; font-weight: 700; color: var(--gold-600); }
+
+/* 待办事项 */
+.todo-item { display: flex; align-items: center; gap: 16rpx; padding: 18rpx 0; border-bottom: 2rpx solid rgba(0,0,0,0.04); cursor: pointer; }
+.todo-item:last-child { border-bottom: none; }
+.todo-check { width: 36rpx; height: 36rpx; border-radius: 50%; border: 4rpx solid var(--border-default); display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 20rpx; color: var(--text-inverse); transition: all .2s; }
+.todo-check.checked { background: var(--grey-blue); border-color: var(--grey-blue); }
+.todo-content { flex: 1; }
+.todo-text { display: block; font-size: 26rpx; color: var(--text); }
+.todo-done .todo-text { text-decoration: line-through; color: var(--text-muted); }
+.todo-time { display: block; font-size: 20rpx; color: var(--text-muted); margin-top: 4rpx; }
+
+/* ═══ 增强样式 ═══ */
+.alert-card {
+  background: linear-gradient(135deg, var(--bg-card), var(--gold-50));
+  border: 2rpx solid var(--gold-100);
+  box-shadow: var(--shadow-md);
+}
+.alert-bar {
+  background: linear-gradient(180deg, var(--warning), var(--warning-light));
+}
+.alert-icon {
+  background: linear-gradient(135deg, var(--warning-light), var(--warning-light));
+  color: var(--warning);
+  box-shadow: var(--shadow-sm);
+}
+.insight-card {
+  background: linear-gradient(135deg, var(--bg-card), var(--gold-50));
+  border: 2rpx solid var(--gold-100);
+  box-shadow: var(--shadow-md);
+}
+.insight-icon-wrap {
+  background: linear-gradient(135deg, var(--gold-100), var(--gold-200));
+  box-shadow: var(--shadow-sm);
+}
+.stat-item {
+  background: linear-gradient(135deg, var(--bg-card), var(--gold-50));
+  border: 2rpx solid var(--gold-100);
+  box-shadow: var(--shadow-md);
+}
+.action-btn {
+  background: linear-gradient(135deg, var(--bg-card), var(--gold-50));
+  border: 2rpx solid var(--gold-100);
+  box-shadow: var(--shadow-md);
+}
+.action-btn:active {
+  transform: translateY(-4rpx) scale(0.98);
+  box-shadow: var(--shadow-lg);
+}
+.action-icon {
+  color: var(--gold-500);
+}
+.search-bar {
+  background: linear-gradient(135deg, var(--gold-50), var(--bg-card));
+  border: 3rpx solid var(--gold-200);
+  box-shadow: var(--shadow-sm);
+}
+.search-icon {
+  color: var(--gold-400);
+}
+.order-card {
+  background: linear-gradient(135deg, var(--bg-card), var(--gold-50));
+  border: 2rpx solid var(--gold-100);
+  box-shadow: var(--shadow-md);
+}
+.order-avatar {
+  background: linear-gradient(135deg, var(--gold-400), var(--gold-500));
+  box-shadow: var(--shadow-gold);
+}
+.order-name {
+  color: var(--gold-800);
+}
+.order-amount {
+  color: var(--gold-600);
+}
+.todo-item {
+  transition: all 0.2s ease;
+}
+.todo-item:active {
+  background: var(--gold-50);
+  transform: translateX(8rpx);
+}
+.todo-check.checked {
+  background: linear-gradient(135deg, var(--gold-400), var(--gold-500));
+  border-color: var(--gold-400);
+  box-shadow: var(--shadow-gold);
+}
+
+/* ═══ 空状态插画 ═══ */
+.empty-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 80rpx 40rpx;
+}
+
+.empty-illustration-gift {
+  width: 160rpx;
+  height: 160rpx;
+  position: relative;
+  margin-bottom: 40rpx;
+}
+
+.gift-box {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120rpx;
+  height: 80rpx;
+  background: linear-gradient(135deg, var(--gold-200), var(--gold-400));
+  border-radius: 16rpx;
+  box-shadow: var(--shadow-gold);
+}
+
+.gift-lid {
+  position: absolute;
+  bottom: 72rpx;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 132rpx;
+  height: 28rpx;
+  background: linear-gradient(135deg, var(--gold-400), var(--gold-500));
+  border-radius: 12rpx;
+  box-shadow: var(--shadow-gold);
+}
+
+.gift-ribbon {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 20rpx;
+  height: 100rpx;
+  background: var(--gold-500);
+  border-radius: 4rpx;
+}
+
+.gift-bow {
+  position: absolute;
+  top: 20rpx;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 48rpx;
+  height: 32rpx;
+  background: var(--gold-500);
+  border-radius: 50%;
+  box-shadow: var(--shadow-gold);
+}
+
+.empty-title {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: var(--gold-700);
+  display: block;
+  margin-bottom: 12rpx;
+}
+
+.empty-desc {
+  font-size: 24rpx;
+  color: var(--gold-500);
+  display: block;
+  text-align: center;
+  margin-bottom: 32rpx;
+}
+
+.empty-cta {
+  background: linear-gradient(135deg, var(--gold-400), var(--gold-500));
+  color: var(--text-inverse);
+  font-size: 26rpx;
+  font-weight: 600;
+  padding: 20rpx 48rpx;
+  border-radius: 999rpx;
+  border: none;
+  box-shadow: var(--shadow-gold);
+  cursor: pointer;
+}
+
+.empty-cta:active {
+  transform: scale(0.97);
+}

@@ -1,0 +1,59 @@
+/* 排期日历 — 轻复古·奶油风 · 24rpx 基准 */
+
+/* 日历导航 */
+.cal-nav { margin-bottom:24rpx; padding:0 8rpx; }
+.cal-nav-btn { font-size:56rpx; color:var(--gold); padding:8rpx 24rpx; cursor:pointer; font-weight:300; }
+.cal-nav-title { font-size:34rpx; font-weight:600; display:flex; align-items:center; gap:16rpx; }
+.cal-today-btn { font-size:24rpx; color:var(--gold); font-weight:500; padding:4rpx 20rpx; border:2rpx solid var(--gold-light); border-radius:9999rpx; cursor:pointer; }
+
+/* 日历 */
+.cal-grid { padding:24rpx; }
+.cal-weekdays { justify-content:space-around; margin-bottom:16rpx; }
+.cal-weekday { font-size:24rpx; color:var(--text-muted); width:calc(100%/7); text-align:center; }
+.cal-days { display:flex; flex-wrap:wrap; }
+.cal-cell { width:calc(100%/7); aspect-ratio:1; display:flex; flex-direction:column; align-items:center; justify-content:center; font-size:26rpx; cursor:pointer; border-radius:16rpx; position:relative; }
+.cal-cell.today { background:var(--gold-bg-12); font-weight:700; color:var(--gold); }
+.cal-cell.has-event .cal-day-num { font-weight:600; color:var(--gold-dark); }
+.cal-cell.empty { cursor:default; }
+.cal-dot { width:8rpx; height:8rpx; background:var(--gold); border-radius:50%; margin-top:4rpx; }
+.cal-day-num { line-height:1; }
+
+/* ═══ 增强样式 ═══ */
+.cal-nav {
+  background: var(--bg-card);
+  border-radius: 32rpx;
+  padding: 32rpx 40rpx;
+  margin-bottom: 40rpx;
+  box-shadow: var(--shadow-sm);
+}
+.cal-nav-btn { color: var(--gold-500); }
+.cal-nav-btn:active { color: var(--gold-700); transform: scale(0.9); }
+.cal-nav-title { color: var(--text-primary); font-weight: 700; }
+.cal-today-btn {
+  background: var(--gold-100);
+  border-color: var(--gold-200);
+  color: var(--gold-700);
+}
+.cal-today-btn:active { transform: scale(0.95); }
+
+.cal-grid {
+  background: var(--bg-card);
+  border-radius: 32rpx;
+  padding: 48rpx;
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 56rpx;
+}
+.cal-weekday { color: var(--gold-500); font-weight: 600; padding: 16rpx 0; }
+.cal-cell { transition: all 0.2s ease; padding: 8rpx; }
+.cal-cell:active { background: var(--gold-100); transform: scale(0.95); }
+.cal-cell.today {
+  background: linear-gradient(135deg, var(--gold-100), var(--gold-200));
+  color: var(--gold-700);
+  box-shadow: var(--shadow-sm);
+}
+.cal-cell.has-event .cal-day-num { color: var(--gold-700); font-weight: 700; }
+.cal-dot {
+  background: linear-gradient(135deg, var(--gold-400), var(--gold-500));
+  box-shadow: 0 2rpx 6rpx rgba(193, 154, 80, 0.3);
+}
+.cal-day-num { color: var(--gold-800); }

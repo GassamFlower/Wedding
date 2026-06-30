@@ -1,0 +1,449 @@
+/* ==============================================
+   pages/contact/contact.wxss — 精选案例馆
+   轻复古·奶油风 Waterfall Layout
+   ============================================== */
+
+.cases-page {
+  min-height: 100vh;
+  padding-bottom: calc(120rpx + env(safe-area-inset-bottom, 0rpx));
+  background: var(--bg);
+}
+
+/* ═══ 顶部视觉区 ═══ */
+.cases-hero {
+  background: linear-gradient(135deg, var(--gold-100), var(--gold-200));
+  padding: 48rpx 48rpx 56rpx;
+  position: relative;
+  overflow: hidden;
+}
+
+.cases-hero::before {
+  content: '';
+  position: absolute;
+  top: -80rpx;
+  right: -60rpx;
+  width: 240rpx;
+  height: 240rpx;
+  background: radial-gradient(circle, rgba(193, 154, 80, 0.15) 0%, transparent 70%);
+  border-radius: 50%;
+}
+
+.hero-text {
+  position: relative;
+  z-index: 1;
+}
+
+.hero-title {
+  display: block;
+  font-family: var(--font-serif);
+  font-size: 56rpx;
+  font-weight: 700;
+  color: var(--gold-700);
+  letter-spacing: 4rpx;
+}
+
+.hero-sub {
+  display: block;
+  font-size: 26rpx;
+  color: var(--gold-600);
+  margin-top: 12rpx;
+  opacity: 0.8;
+}
+
+.hero-stats {
+  display: flex;
+  align-items: center;
+  gap: 40rpx;
+  margin-top: 40rpx;
+  padding: 24rpx 32rpx;
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(16rpx);
+  border-radius: var(--radius-full);
+  width: fit-content;
+}
+
+.hero-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4rpx;
+}
+
+.hero-stat-num {
+  font-family: var(--font-en-display);
+  font-size: 40rpx;
+  font-weight: 700;
+  color: var(--gold-600);
+}
+
+.hero-stat-label {
+  font-size: 22rpx;
+  color: var(--gold-500);
+}
+
+.hero-stat-divider {
+  width: 2rpx;
+  height: 48rpx;
+  background: var(--gold-200);
+}
+
+/* ═══ 风格筛选 ═══ */
+.style-filter {
+  padding: 32rpx 48rpx;
+  white-space: nowrap;
+  background: var(--bg-card);
+  border-bottom: 2rpx solid var(--gold-100);
+}
+
+.filter-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8rpx;
+  padding: 16rpx 32rpx;
+  margin-right: 20rpx;
+  background: var(--gold-50);
+  border-radius: var(--radius-full);
+  font-size: 26rpx;
+  color: var(--gold-600);
+  transition: all 0.2s;
+}
+
+.filter-tag.active {
+  background: linear-gradient(135deg, var(--gold-400), var(--gold-500));
+  color: #fff;
+  box-shadow: var(--shadow-gold);
+}
+
+.filter-count {
+  font-size: 22rpx;
+  opacity: 0.7;
+}
+
+/* ═══ 瀑布流 ═══ */
+.waterfall {
+  display: flex;
+  gap: 24rpx;
+  padding: 32rpx 32rpx 48rpx;
+}
+
+.waterfall-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 24rpx;
+}
+
+.case-card {
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.2s;
+}
+
+.case-card:active {
+  transform: scale(0.98);
+  box-shadow: var(--shadow-md);
+}
+
+.case-cover {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.case-cover-icon {
+  opacity: 0.5;
+}
+
+.case-style-badge {
+  position: absolute;
+  top: 20rpx;
+  left: 20rpx;
+  padding: 8rpx 20rpx;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(8rpx);
+  border-radius: var(--radius-full);
+  font-size: 22rpx;
+  font-weight: 500;
+  color: var(--gold-700);
+}
+
+.case-body {
+  padding: 24rpx 28rpx 28rpx;
+}
+
+.case-title {
+  display: block;
+  font-size: 28rpx;
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.case-meta {
+  display: block;
+  font-size: 24rpx;
+  color: var(--gold-500);
+  margin-top: 8rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.case-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8rpx;
+  margin-top: 16rpx;
+}
+
+.case-tag {
+  padding: 4rpx 16rpx;
+  background: var(--gold-50);
+  border-radius: var(--radius-sm);
+  font-size: 20rpx;
+  color: var(--gold-600);
+}
+
+/* ═══ 底部 CTA ═══ */
+.cases-cta {
+  margin: 0 32rpx 48rpx;
+  padding: 40rpx;
+  background: linear-gradient(135deg, var(--gold-100), var(--gold-200));
+  border-radius: var(--radius-lg);
+  text-align: center;
+}
+
+.cta-text {
+  display: block;
+  font-size: 30rpx;
+  font-weight: 600;
+  color: var(--gold-700);
+  margin-bottom: 24rpx;
+}
+
+.cta-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24rpx 56rpx;
+  background: linear-gradient(135deg, var(--gold-400), var(--gold-500));
+  border-radius: var(--radius-full);
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #fff;
+  border: none;
+  box-shadow: var(--shadow-gold);
+}
+
+.cta-btn:active {
+  transform: scale(0.97);
+}
+
+/* ═══ 骨架屏 ═══ */
+.skeleton-waterfall {
+  display: flex;
+  gap: 24rpx;
+  padding: 32rpx;
+}
+
+.skeleton-waterfall .skeleton-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 24rpx;
+}
+
+.skeleton-waterfall .skeleton-card {
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+.skeleton-waterfall .skeleton-cover {
+  background: var(--gold-200);
+}
+
+.skeleton-waterfall .skeleton-body {
+  padding: 24rpx 28rpx;
+}
+
+.skeleton-waterfall .skeleton-line {
+  height: 24rpx;
+  background: linear-gradient(90deg, var(--gold-200) 25%, var(--gold-100) 50%, var(--gold-200) 75%);
+  background-size: 200% 100%;
+  border-radius: 12rpx;
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  to { background-position: -200% 0; }
+}
+
+/* ═══ 空状态 ═══ */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 160rpx 0;
+  text-align: center;
+}
+
+.empty-title {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 16rpx;
+}
+
+.empty-desc {
+  font-size: 26rpx;
+  color: var(--gold-500);
+}
+
+/* ═══════════════════════════════════════════════
+   ENHANCED CONTACT — Design Canvas Migration
+   从设计画布迁移的精选案例馆增强样式
+   ═══════════════════════════════════════════════ */
+
+/* ---------- Hero 增强 ---------- */
+.cases-hero {
+  box-shadow: var(--shadow-sm);
+}
+
+.hero-title {
+  text-shadow: 0 2rpx 4rpx rgba(58, 40, 15, 0.05);
+}
+
+.hero-stats {
+  border: 2rpx solid rgba(193, 154, 80, 0.1);
+  box-shadow: var(--shadow-sm);
+}
+
+/* ---------- 风格筛选增强 ---------- */
+.filter-tag {
+  transition: all 0.25s ease;
+}
+
+.filter-tag:active {
+  transform: scale(0.95);
+}
+
+.filter-tag.active {
+  position: relative;
+  overflow: hidden;
+}
+
+.filter-tag.active::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  animation: shimmerSlide 3s ease-in-out infinite;
+}
+
+@keyframes shimmerSlide {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+/* ---------- 案例卡片增强 ---------- */
+.case-card {
+  border: 2rpx solid rgba(193, 154, 80, 0.06);
+}
+
+.case-card:active {
+  border-color: rgba(193, 154, 80, 0.15);
+}
+
+.case-cover {
+  overflow: hidden;
+}
+
+.case-cover-icon {
+  transition: transform 0.4s ease;
+}
+
+.case-card:active .case-cover-icon {
+  transform: scale(1.15);
+}
+
+.case-style-badge {
+  box-shadow: 0 2rpx 8rpx rgba(58, 40, 15, 0.08);
+}
+
+.case-title {
+  line-height: 1.3;
+}
+
+.case-tag {
+  transition: all 0.2s ease;
+}
+
+/* ---------- 底部 CTA 增强 ---------- */
+.cases-cta {
+  border: 2rpx solid rgba(193, 154, 80, 0.1);
+  box-shadow: var(--shadow-sm);
+  position: relative;
+  overflow: hidden;
+}
+
+.cases-cta::before {
+  content: '';
+  position: absolute;
+  top: -60rpx;
+  right: -40rpx;
+  width: 160rpx;
+  height: 160rpx;
+  background: radial-gradient(circle, rgba(193, 154, 80, 0.12) 0%, transparent 70%);
+  border-radius: 50%;
+}
+
+.cta-btn {
+  position: relative;
+  overflow: hidden;
+}
+
+.cta-btn::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  animation: shimmerSlide 3s ease-in-out infinite;
+}
+
+.cta-btn:active {
+  box-shadow: var(--shadow-gold-lg, 0 16rpx 48rpx rgba(193, 154, 80, 0.3));
+}
+
+/* ---------- 骨架屏增强 ---------- */
+.skeleton-waterfall .skeleton-card {
+  border: 2rpx solid rgba(193, 154, 80, 0.06);
+}
+
+.skeleton-waterfall .skeleton-line {
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+/* ---------- 空状态增强 ---------- */
+.empty-state {
+  background: linear-gradient(135deg, var(--bg-card), var(--gold-50));
+  border-radius: var(--radius-lg);
+  margin: 80rpx 32rpx;
+  padding: 120rpx 40rpx;
+  border: 2rpx solid var(--gold-100);
+  box-shadow: var(--shadow-sm);
+}

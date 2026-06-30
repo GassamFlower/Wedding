@@ -1,0 +1,74 @@
+<nav-bar title="合同" show-back="{{false}}" />
+<view class="page">
+  <!-- 财务统计 -->
+  <view class="stat-row">
+    <view class="stat-card"><text class="stat-num" style="color:#2e7d32;">¥{{monthTotal}}</text><text class="stat-label">本月流水</text></view>
+    <view class="stat-card" style="background:rgba(198,40,40,0.06);"><text class="stat-num" style="color:#DC2626;">¥{{pendingTotal}}</text><text class="stat-label">待收款</text></view>
+    <view class="stat-card"><text class="stat-num">¥{{profitTotal}}</text><text class="stat-label">毛利估算</text></view>
+  </view>
+
+  <!-- 快捷提示 -->
+  <view wx:if="{{showPendingHint}}" class="card" style="background:rgba(202,138,4,0.08);padding:24rpx 32rpx;">
+    <view class="flex-row gap-8">
+      <view class='icon icon-lightbulb' style='width:32rpx;height:32rpx;'></view>
+      <text class="text-sm text-secondary">有 ¥{{pendingTotal}} 待收款，点击合同右侧「收款」按钮即可登记</text>
+    </view>
+  </view>
+
+  <!-- 搜索 -->
+  <view class="flex-row gap-8" style="margin-bottom:20rpx;">
+    <view class="search-box flex-row flex-1">
+      <view class='icon icon-search' style='width:32rpx;height:32rpx;'></view>
+      <input class="search-box-input" placeholder="搜索客户/服务..." value="{{keyword}}" bindinput="onSearchInput" />
+    </view>
+  </view>
+
+  <!-- Tab -->
+  <view class="tabs" style="margin-bottom:24rpx;">
+    <view wx:for="{{statusTabs}}" wx:key="key" class="tab {{status===item.key?'active':''}}" catchtap="switchTab" data-key="{{item.key}}"><view class="icon icon-{{item.icon}}" style="width:28rpx;height:28rpx;vertical-align:middle;"></view> {{item.label}}</view>
+  </view>
+
+  <!-- 合同列表 -->
+  <view wx:if="{{filtered.length===0 && !loading}}" class="empty-state">暂无合同</view>
+
+  <view wx:for="{{filtered}}" wx:key="id" class="card">
+    <view class="flex-between">
+      <text class="text-sm font-600">{{item.client}}</text>
+      <view class="tag {{item.paymentStatus==='已结清'?'tag--done':'tag--pending'}}">{{item.paymentStatus}}</view>
+    </view>
+    <text class="text-xs text-muted" style="display:block;margin-top:8rpx;">{{item.services}} · {{item.orderDate}}</text>
+    
+    <!-- 收款进度条 -->
+    <view class="flex-row gap-8" style="margin-top:20rpx;align-items:center;">
+      <view class="progress-bar flex-1" style="height:12rpx;">
+        <view class="progress-bar-fill" style="width:{{item.paidRatio||0}}%;background:{{item.paymentStatus==='已结清'?'#2e7d32':'var(--gold)'}};"></view>
+      </view>
+      <text class="text-xs text-muted">{{item.paidRatio||0}}%</text>
+    </view>
+
+    <view class="divider"></view>
+    <view class="flex-between">
+      <view>
+        <text class="text-sm font-600" style="color:var(--gold);">¥{{item.totalAmount}}</text>
+        <view class="flex-row gap-8" style="margin-top:8rpx;">
+          <text class="text-xs" style="color:#2e7d32;">已付 ¥{{item.paidAmount}}</text>
+          <text wx:if="{{item.balanceAmount !== '' && item.balanceAmount !== '0'}}" class="text-xs" style="color:#DC2626;">待收 ¥{{item.balanceAmount}}</text>
+        </view>
+      </view>
+      <button wx:if="{{item.paymentStatus!=='已结清'}}" class="btn-pay" catchtap="openPay" data-id="{{item.id}}">收款</button>
+    </view>
+  </view>
+
+  <!-- Loading -->
+  <view wx:if="{{loading}}" class="loading-center"><view class="loading-spinner"></view><text>加载中...</text></view>
+
+  <!-- 收款弹窗 -->
+  <view wx:if="{{showPay}}" class="form-overlay" catchtap="closePay">
+    <view class="form-modal" catchtap="">
+      <view class="form-title">收款登记</view>
+      <view class="form-group"><text class="form-label">客户</text><text class="text-sm font-600">{{payData.client}}</text></view>
+      <view class="form-group"><text class="form-label">收款金额 (¥)</text><input class="form-input" type="number" value="{{payData.amount}}" bindinput="onPayInput" /></view>
+      <view class="form-btns"><button class="btn-cancel" catchtap="closePay">取消</button><button class="btn-primary" catchtap="submitPay">确认收款</button></view>
+    </view>
+  </view>
+</view>

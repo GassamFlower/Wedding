@@ -1,0 +1,18 @@
+<view class="tab-bar-wrap">
+  <view class="tab-bar-inner">
+    <view
+      wx:for="{{role==='planner'?plannerList:newbieList}}"
+      wx:key="pagePath"
+      class="tab-item {{selected===index?'active':''}}"
+      data-index="{{index}}"
+      catchtap="onTabTap"
+    >
+      <view class="tab-icon-wrap">
+        <view class="tab-icon {{selected===index?'icon-'+item.activeIcon:'icon-'+item.icon}}"></view>
+      </view>
+      <text class="tab-label">{{item.text}}</text>
+      <view class="tab-indicator"></view>
+    </view>
+  </view>
+  <view class="tab-bar-safe"></view>
+</view>

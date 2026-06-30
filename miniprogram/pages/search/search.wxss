@@ -1,0 +1,272 @@
+/* 全局搜索 — 轻复古·奶油风 · 24rpx 基准 */
+
+.search-page {
+  padding: 24rpx 40rpx;
+  min-height: calc(100vh - 176rpx);
+}
+
+/* ═══ 搜索栏 ═══ */
+.search-bar-wrap {
+  display: flex;
+  gap: 20rpx;
+  align-items: center;
+  margin-bottom: 32rpx;
+}
+
+.search-input-box {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  background: var(--gold-light);
+  border-radius: 40rpx;
+  padding: 0 28rpx;
+  height: 80rpx;
+  border: 3rpx solid transparent;
+  transition: border-color 0.2s;
+}
+
+.search-input-box:focus-within {
+  border-color: var(--gold);
+  background: var(--white);
+}
+
+.search-input-icon {
+  width: 36rpx;
+  height: 36rpx;
+  margin-right: 16rpx;
+  flex-shrink: 0;
+  color: var(--gray-light);
+}
+
+.search-input {
+  flex: 1;
+  height: 100%;
+  font-size: 30rpx;
+  background: transparent;
+  color: var(--text-main);
+}
+
+.search-clear {
+  width: 40rpx;
+  height: 40rpx;
+  border-radius: 50%;
+  background: var(--border-line);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22rpx;
+  color: var(--gray);
+  flex-shrink: 0;
+  margin-left: 8rpx;
+}
+
+.search-btn {
+  font-size: 30rpx;
+  color: var(--gold);
+  font-weight: 600;
+  flex-shrink: 0;
+  padding: 16rpx 8rpx;
+}
+
+.search-btn:active {
+  opacity: 0.6;
+}
+
+/* ═══ 初始引导 ═══ */
+.search-hint {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 160rpx 40rpx;
+}
+
+.hint-icon {
+  width: 96rpx;
+  height: 96rpx;
+  border-radius: 50%;
+  background: var(--gold-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 32rpx;
+  color: var(--gray-light);
+}
+
+.hint-text {
+  font-size: 28rpx;
+  color: var(--gray-light);
+  text-align: center;
+}
+
+/* ═══ 搜索结果 ═══ */
+.search-results {
+  padding-bottom: 80rpx;
+}
+
+.result-group {
+  margin-bottom: 40rpx;
+}
+
+.group-header {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  margin-bottom: 20rpx;
+  padding-bottom: 12rpx;
+  border-bottom: 2rpx solid var(--border-line);
+}
+
+.group-icon {
+  width: 40rpx;
+  height: 40rpx;
+  display: flex;
+  align-items: center;
+}
+
+.group-label {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: var(--text-main);
+  flex: 1;
+}
+
+.group-count {
+  font-size: 22rpx;
+  color: var(--gray-light);
+}
+
+.result-item {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+  padding: 24rpx 28rpx;
+  background: var(--white);
+  border-radius: 24rpx;
+  margin-bottom: 12rpx;
+  box-shadow: var(--shadow-sm);
+}
+
+.result-item:active {
+  transform: scale(0.98);
+  opacity: 0.8;
+}
+
+.result-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.result-title {
+  font-size: 28rpx;
+  font-weight: 500;
+  color: var(--text-main);
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.result-subtitle {
+  font-size: 24rpx;
+  color: var(--gray-light);
+  display: block;
+  margin-top: 4rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.result-extra {
+  font-size: 22rpx;
+  color: var(--gold);
+  background: rgba(202,138,4,0.1);
+  padding: 4rpx 16rpx;
+  border-radius: 20rpx;
+  flex-shrink: 0;
+}
+
+.result-arrow {
+  width: 32rpx;
+  height: 32rpx;
+  color: var(--border-line);
+  flex-shrink: 0;
+}
+
+/* ═══ 无结果 ═══ */
+.search-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 160rpx 40rpx;
+}
+
+.empty-text {
+  font-size: 28rpx;
+  color: var(--gray-light);
+  text-align: center;
+}
+
+/* ═══ 增强样式 ═══ */
+.search-input-box {
+  background: linear-gradient(135deg, var(--gold-50), var(--bg-card));
+  border: 3rpx solid var(--gold-200);
+  box-shadow: var(--shadow-sm);
+  transition: all 0.2s ease;
+}
+
+.search-input-box:focus-within {
+  border-color: var(--gold-400);
+  background: var(--bg-card);
+  box-shadow: 0 0 0 6rpx rgba(193, 154, 80, 0.1);
+}
+
+.search-input-icon {
+  color: var(--gold-400);
+}
+
+.search-btn {
+  color: var(--gold-600);
+  font-weight: 700;
+}
+
+.search-btn:active {
+  transform: scale(0.95);
+}
+
+.hint-icon {
+  background: linear-gradient(135deg, var(--gold-100), var(--gold-200));
+  box-shadow: var(--shadow-gold);
+}
+
+.group-header {
+  border-bottom: 2rpx solid var(--gold-100);
+}
+
+.group-label {
+  color: var(--gold-800);
+  font-weight: 700;
+}
+
+.result-item {
+  background: linear-gradient(135deg, var(--bg-card), var(--gold-50));
+  border: 2rpx solid var(--gold-100);
+  box-shadow: var(--shadow-md);
+  transition: all 0.2s ease;
+}
+
+.result-item:active {
+  transform: translateY(-4rpx);
+  box-shadow: var(--shadow-lg);
+}
+
+.result-title {
+  color: var(--gold-800);
+  font-weight: 600;
+}
+
+.result-extra {
+  background: linear-gradient(135deg, var(--gold-100), var(--gold-200));
+  color: var(--gold-700);
+  border: 2rpx solid var(--gold-200);
+}

@@ -1,0 +1,180 @@
+<nav-bar title="案例详情" transparent="{{true}}" glass="{{true}}" />
+<view class="case-detail-page" wx:if="{{caseData}}">
+  <view class="case-hero" style="background:linear-gradient(135deg, var(--gold-100), var(--gold-200));">
+    <view class="case-hero-img">
+      <view class="case-hero-img-placeholder">
+        <view class="icon icon-star" style="width:64rpx;height:64rpx;display:block;margin-bottom:16rpx;opacity:0.5;"></view>
+        <text>案例展示</text>
+      </view>
+    </view>
+    <view class="case-hero-overlay"></view>
+    <view class="case-hero-content">
+      <text class="case-hero-badge">精选案例</text>
+      <text class="case-hero-style-tag">{{caseData.style}}</text>
+      <text class="case-hero-text">{{caseData.venueShort||caseData.venue}}</text>
+    </view>
+  </view>
+  <view class="case-content">
+  <view class="case-actions">
+    <view class="case-stats">
+      <view class="case-stat-item">
+        <view class="icon icon-heart" style="width:28rpx;height:28rpx;display:inline-block;vertical-align:middle;margin-right:8rpx;"></view>
+        <text class="case-stat-text">{{favCount}}人收藏</text>
+      </view>
+      <view class="case-stat-item">
+        <view class="icon icon-clients" style="width:28rpx;height:28rpx;display:inline-block;vertical-align:middle;margin-right:8rpx;"></view>
+        <text class="case-stat-text">{{caseData.viewCount||256}}次浏览</text>
+      </view>
+    </view>
+    <view class="share-btn" catchtap="generatePoster">
+      <view class="icon icon-share" style="width:32rpx;height:32rpx;"></view>
+      <text class="text-sm font-600" style="margin-left:8rpx;">分享</text>
+    </view>
+    <view class="fav-btn {{isFav?'fav-active':''}}" catchtap="toggleFav">
+      <view wx:if="{{isFav}}" class="icon icon-heart" style="width:36rpx;height:36rpx;"></view>
+      <view wx:else class="icon icon-heart-o" style="width:36rpx;height:36rpx;"></view>
+      <text class="text-sm font-600" style="margin-left:8rpx;">{{isFav?'已收藏':'收藏'}}</text>
+    </view>
+  </view>
+  <view class="case-info-card">
+    <text class="case-detail-title">{{caseData.coupleName}}</text>
+    <text class="case-detail-sub" wx:if="{{caseData.title}}">{{caseData.title}}</text>
+    <view class="flex-row gap-8" style="margin-top:20rpx;flex-wrap:wrap;">
+      <text wx:for="{{caseData.tags}}" wx:key="this" class="case-tag">{{item}}</text>
+    </view>
+    <view class="divider"></view>
+    <view class="case-info-grid">
+      <view class="case-info-item"><view class="icon icon-art" style="width:28rpx;height:28rpx;display:inline-block;vertical-align:middle;margin-right:8rpx;"></view><text class="case-info-label">风格</text><text class="case-info-value">{{caseData.style}}</text></view>
+      <view class="case-info-item"><view class="icon icon-location" style="width:28rpx;height:28rpx;display:inline-block;vertical-align:middle;margin-right:8rpx;"></view><text class="case-info-label">场地</text><text class="case-info-value">{{caseData.venue}}</text></view>
+      <view class="case-info-item"><view class="icon icon-budget" style="width:28rpx;height:28rpx;display:inline-block;vertical-align:middle;margin-right:8rpx;"></view><text class="case-info-label">预算参考</text><text class="case-info-value" style="color:var(--warm-brown);font-weight:700;">{{caseData.budgetRange}}</text></view>
+    </view>
+  </view>
+  <view class="space-12"></view>
+  <view class="detail-card">
+    <view class="case-section-title"><view class="gold-bar"></view><view class="icon icon-art" style="width:32rpx;height:32rpx;display:inline-block;vertical-align:middle;margin-right:8rpx;"></view><text>设计思路</text></view>
+    <text class="detail-body-text">{{caseData.description}}</text>
+  </view>
+  <view class="space-12"></view>
+  <!-- ★ 场地洞察（垂直化：展示对该酒店的深度了解） -->
+  <view wx:if="{{caseData.venueInsight}}" class="detail-card" style="border-left:6rpx solid var(--gold);">
+    <view class="case-section-title"><view class="gold-bar"></view><view class="icon icon-building" style="width:32rpx;height:32rpx;display:inline-block;vertical-align:middle;margin-right:8rpx;"></view><text>场地洞察</text></view>
+    <text class="detail-body-text">{{caseData.venueInsight.highlights}}</text>
+    <view wx:if="{{caseData.venueInsight.tips}}" class="checklist-tip" style="margin-top:20rpx;">
+      <view class="icon icon-lightbulb" style="width:24rpx;height:24rpx;color:var(--gold);flex-shrink:0;margin-right:12rpx;margin-top:4rpx;"></view>
+      <text class="text-xs" style="color:var(--warm-brown);font-weight:500;">策划师经验：{{caseData.venueInsight.tips}}</text>
+    </view>
+  </view>
+  <view wx:if="{{caseData.venueInsight}}" class="space-12"></view>
+  <!-- ★ 策划过程时间线（垂直化：展示从沟通到落地的完整过程） -->
+  <view wx:if="{{caseData.processStory && caseData.processStory.length > 0}}" class="detail-card">
+    <view class="case-section-title"><view class="gold-bar"></view><view class="icon icon-schedule" style="width:32rpx;height:32rpx;display:inline-block;vertical-align:middle;margin-right:8rpx;"></view><text>策划过程</text></view>
+    <view class="timeline">
+      <view wx:for="{{caseData.processStory}}" wx:key="label" class="tlnode active">
+        <view class="tlnode-label" style="font-weight:600;color:var(--warm-brown);">{{item.label}}</view>
+        <view class="tlnode-note" style="color:var(--text-secondary);">{{item.content}}</view>
+      </view>
+    </view>
+  </view>
+  <view wx:if="{{caseData.processStory && caseData.processStory.length > 0}}" class="space-12"></view>
+  <view wx:if="{{caseData.designNotes}}" class="detail-card">
+    <view class="case-section-title"><view class="gold-bar"></view><view class="icon icon-chat" style="width:32rpx;height:32rpx;display:inline-block;vertical-align:middle;margin-right:8rpx;"></view><text>策划师笔记</text></view>
+    <view class="blockquote">
+      <text class="blockquote-text">"{{caseData.designNotes}}"</text>
+      <text class="blockquote-attribution">—— 策划师的灵感手记</text>
+    </view>
+  </view>
+  <view wx:if="{{caseData.designNotes}}" class="space-12"></view>
+  <!-- ★ 挑战与解决（垂直化：展示非标问题处理能力） -->
+  <view wx:if="{{caseData.challengeAndSolve}}" class="detail-card card-warm">
+    <view class="case-section-title"><view class="gold-bar"></view><view class="icon icon-target" style="width:32rpx;height:32rpx;display:inline-block;vertical-align:middle;margin-right:8rpx;"></view><text>挑战与解决</text></view>
+    <view style="margin-bottom:16rpx;">
+      <text class="text-sm font-600" style="color:var(--red-warn);">遇到的难题</text>
+      <text class="text-body" style="display:block;margin-top:8rpx;color:var(--text);">{{caseData.challengeAndSolve.challenge}}</text>
+    </view>
+    <view>
+      <text class="text-sm font-600" style="color:#059669;">我们的方案</text>
+      <text class="text-body" style="display:block;margin-top:8rpx;color:var(--text);">{{caseData.challengeAndSolve.solve}}</text>
+    </view>
+  </view>
+  <view wx:if="{{caseData.challengeAndSolve}}" class="space-12"></view>
+  <!-- ★ 物料亮点看板（垂直化：展示道具匹配能力） -->
+  <view wx:if="{{caseData.materialHighlights && caseData.materialHighlights.length > 0}}" class="detail-card">
+    <view class="case-section-title"><view class="gold-bar"></view><view class="icon icon-gift" style="width:32rpx;height:32rpx;display:inline-block;vertical-align:middle;margin-right:8rpx;"></view><text>物料亮点</text></view>
+    <view class="mat-grid">
+      <view wx:for="{{caseData.materialHighlights}}" wx:key="name" class="mat-item">
+        <view class="mat-color" style="background:{{item.color}};"></view>
+        <view class="mat-name" style="font-weight:500;">{{item.name}}</view>
+        <view class="mat-status">{{item.notes}}</view>
+      </view>
+    </view>
+  </view>
+  <view wx:if="{{caseData.materialHighlights && caseData.materialHighlights.length > 0}}" class="space-12"></view>
+  <view wx:if="{{caseData.clientReview}}" class="detail-card">
+    <view class="case-section-title"><view class="gold-bar"></view><view class="icon icon-star" style="width:32rpx;height:32rpx;display:inline-block;vertical-align:middle;margin-right:8rpx;"></view><text>客户评价</text></view>
+    <view class="flex-row gap-4" style="margin-bottom:16rpx;align-items:center;">
+      <view class="flex-row gap-2" style="display:inline-flex;align-items:center;color:var(--gold);">
+        <view class="icon icon-star" style="width:28rpx;height:28rpx;"></view>
+        <view class="icon icon-star" style="width:28rpx;height:28rpx;"></view>
+        <view class="icon icon-star" style="width:28rpx;height:28rpx;"></view>
+        <view class="icon icon-star" style="width:28rpx;height:28rpx;"></view>
+        <view class="icon icon-star" style="width:28rpx;height:28rpx;"></view>
+      </view>
+      <text class="text-sm" style="margin-left:8rpx;color:var(--warm-brown);font-weight:600;">{{caseData.clientRating || "--"}} / 5</text>
+    </view>
+    <text class="detail-body-text">{{caseData.clientReview}}</text>
+  </view>
+  <view wx:if="{{caseData.clientReview}}" class="space-12"></view>
+  <view class="space-16"></view>
+  <view class="detail-card">
+    <view class="case-section-title"><view class="gold-bar"></view><view class="icon icon-image" style="width:32rpx;height:32rpx;display:inline-block;vertical-align:middle;margin-right:8rpx;"></view><text>风格细节</text></view>
+    <view class="case-gallery">
+      <view class="case-gallery-img">
+        <view class="case-gallery-img-placeholder">
+          <view class="icon icon-star" style="width:56rpx;height:56rpx;display:block;margin-bottom:12rpx;opacity:0.6;"></view>
+          <text>布置细节展示</text>
+          <text style="font-size:20rpx;margin-top:8rpx;opacity:0.6;">上传播放您的实拍图</text>
+        </view>
+      </view>
+      <view class="case-gallery-img">
+        <view class="case-gallery-img-placeholder">
+          <view class="icon icon-image" style="width:56rpx;height:56rpx;display:block;margin-bottom:12rpx;opacity:0.6;"></view>
+          <text>更多照片</text>
+        </view>
+      </view>
+    </view>
+  </view>
+  <view class="space-16"></view>
+  <view class="detail-card">
+    <view class="case-section-title"><view class="gold-bar"></view><view class="icon icon-image" style="width:32rpx;height:32rpx;display:inline-block;vertical-align:middle;margin-right:8rpx;"></view><text>现场实拍</text></view>
+    <view class="case-gallery">
+      <view class="case-gallery-img">
+        <view class="case-gallery-img-placeholder">
+          <view class="icon icon-star" style="width:56rpx;height:56rpx;display:block;margin-bottom:12rpx;opacity:0.6;"></view>
+          <text>实景照片展示区</text>
+          <text style="font-size:20rpx;margin-top:8rpx;opacity:0.6;">左右滑动查看更多</text>
+        </view>
+      </view>
+      <view class="case-gallery-img">
+        <view class="case-gallery-img-placeholder">
+          <view class="icon icon-image" style="width:56rpx;height:56rpx;display:block;margin-bottom:12rpx;opacity:0.6;"></view>
+          <text>更多现场照片</text>
+        </view>
+      </view>
+    </view>
+  </view>
+  <view class="case-footer-cta">
+    <view class="case-footer-cta-bg"></view>
+    <view class="case-footer-cta-content">
+      <view class="icon icon-heart" style="width:56rpx;height:56rpx;display:block;margin:0 auto 20rpx;opacity:0.7;"></view>
+      <text class="case-footer-cta-title">喜欢这个风格？</text>
+      <text class="case-footer-cta-sub">立即预约策划师，定制属于你的婚礼场景</text>
+      <button class="hero-cta" catchtap="goContact" style="margin-top:32rpx;">AI 设计同款方案 →</button>
+    </view>
+  </view>
+</view>
+<view wx:if="{{loading}}" class="case-loading">
+  <view class="loading-spinner"></view>
+  <text class="loading-text">加载中...</text>
+  <canvas canvas-id="shareCanvas" style="width:1280rpx;height:1920rpx;position:fixed;left:-9999rpx;top:0;z-index:-1;"></canvas>
+</view>
+</view>

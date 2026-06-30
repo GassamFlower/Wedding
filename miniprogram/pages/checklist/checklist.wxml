@@ -1,0 +1,75 @@
+<nav-bar title="筹备清单" show-back="{{true}}" />
+<view class="page">
+  <!-- 总进度卡片 -->
+  <view class="card-premium" style="margin-top:0;">
+    <view class="flex-row gap-12">
+      <view style="position:relative;width:128rpx;height:128rpx;flex-shrink:0;">
+        <view class="ring-wrap" style="width:128rpx;height:128rpx;">
+          <view class="ring-bg" style="--pct:{{overallPct}}%;width:128rpx;height:128rpx;"></view>
+          <view class="ring-center" style="font-size:32rpx;line-height:128rpx;width:128rpx;height:128rpx;">{{overallPct}}%</view>
+        </view>
+      </view>
+      <view class="flex-1">
+        <text class="text-h3">婚礼筹备进度</text>
+        <text class="text-caption" style="display:block;margin-top:8rpx;">已完成 {{checkedCount}} / {{totalItems}} 项</text>
+        <view style="margin-top:12rpx;height:8rpx;background:var(--border);border-radius:4rpx;overflow:hidden;">
+          <view style="height:100%;background:linear-gradient(90deg,var(--gold),var(--gold-dark));border-radius:4rpx;width:{{overallPct}}%;transition:width .4s ease;"></view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 提示 -->
+  <view class="card-compact" style="margin-top:24rpx;background:rgba(196,168,130,0.06);border-left:6rpx solid var(--gold);">
+    <view class="flex-row gap-8">
+      <view class="icon icon-lightbulb" style="width:32rpx;height:32rpx;color:var(--gold-dark);flex-shrink:0;"></view>
+      <text class="text-sm" style="color:var(--gold-dark);">每一项都可以勾选，进度会自动保存。跟着清单走，筹备不遗漏。</text>
+    </view>
+  </view>
+
+  <!-- 阶段列表 -->
+  <view wx:for="{{stages}}" wx:key="key" class="card-premium" style="margin-top:28rpx;">
+    <!-- 阶段头部 -->
+    <view class="flex-row gap-10" style="margin-bottom:20rpx;">
+      <view class="checklist-stage-icon {{item.stageChecked?'stage-done':''}}">
+        <view wx:if="{{item.stageChecked}}" class="icon icon-check" style="width:32rpx;height:32rpx;color:#fff;"></view>
+        <view wx:else class="icon icon-{{item.icon}}" style="width:32rpx;height:32rpx;"></view>
+      </view>
+      <view class="flex-1">
+        <view class="flex-row gap-8">
+          <text class="text-sm font-500" style="color:var(--warm-brown);">{{item.phase}}</text>
+          <text class="tag tag-gold">{{item.stagePct}}%</text>
+        </view>
+        <text class="text-h3">{{item.title}}</text>
+      </view>
+    </view>
+
+    <!-- 进度条 -->
+    <view style="height:6rpx;background:var(--border);border-radius:4rpx;margin-bottom:24rpx;overflow:hidden;">
+      <view style="height:100%;background:linear-gradient(90deg,var(--gold),var(--gold-dark));border-radius:4rpx;width:{{item.stagePct}}%;transition:width .3s ease;"></view>
+    </view>
+
+    <!-- 清单项 -->
+    <view wx:for="{{item.items}}" wx:for-item="task" wx:for-index="ti" wx:key="id" class="checklist-item {{task.checked?'checked':''}}" catchtap="toggleItem" data-id="{{task.id}}" data-stage-idx="{{index}}">
+      <view class="checklist-check">
+        <view wx:if="{{task.checked}}" class="icon icon-check" style="width:28rpx;height:28rpx;color:#fff;"></view>
+      </view>
+      <text class="text-sm checklist-text">{{task.text}}</text>
+    </view>
+
+    <!-- 小贴士 -->
+    <view wx:if="{{item.tips}}" class="checklist-tip" style="margin-top:20rpx;">
+      <view class="icon icon-lightbulb" style="width:24rpx;height:24rpx;color:var(--gold);flex-shrink:0;margin-right:12rpx;margin-top:4rpx;"></view>
+      <text class="text-xs" style="color:var(--text-muted);">小贴士：{{item.tips}}</text>
+    </view>
+  </view>
+
+  <!-- 底部操作 -->
+  <view class="flex-row gap-10" style="margin-top:32rpx;padding-bottom:32rpx;">
+    <button class="btn-outline" style="flex:1;text-align:center;" catchtap="resetAll">重置进度</button>
+    <button class="btn-gold" style="flex:1;text-align:center;" catchtap="goContact">AI 设计婚礼方案</button>
+  </view>
+
+  <!-- 底部留白 -->
+  <view style="height:80rpx;"></view>
+</view>

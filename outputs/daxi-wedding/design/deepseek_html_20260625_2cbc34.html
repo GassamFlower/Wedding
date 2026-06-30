@@ -1,0 +1,1453 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>大喜的日子 · 小程序端画布预览</title>
+    <style>
+        :root {
+            --bg-primary: #FFF9F2;
+            --bg-card: #FFFFFF;
+            --gold: #D4AF37;
+            --gold-light: #F5E6C8;
+            --gold-50: #FDF8EF;
+            --gold-100: #FBF0D9;
+            --gold-200: #F5E6C8;
+            --gold-300: #E8D5A3;
+            --gold-400: #D4AF37;
+            --gold-500: #C09A2E;
+            --gold-600: #A07D22;
+            --gold-700: #7D6019;
+            --gold-800: #5C4512;
+            --gold-900: #3D2C0A;
+            --text-primary: #2C2C2C;
+            --text-secondary: #8C8C8C;
+            --text-hint: #BFBFBF;
+            --gradient-gold: linear-gradient(135deg, #D4AF37 0%, #E8C86A 100%);
+            --gradient-warm: linear-gradient(180deg, #FFF9F2 0%, #FFFFFF 100%);
+            --shadow-card: 0 2px 12px rgba(0, 0, 0, 0.06);
+            --shadow-hover: 0 4px 16px rgba(0, 0, 0, 0.10);
+            --shadow-btn: 0 2px 4px rgba(212, 175, 55, 0.2);
+            --radius-sm: 6px;
+            --radius-md: 10px;
+            --radius-lg: 16px;
+            --radius-xl: 24px;
+            --spacing-sm: 8px;
+            --spacing-md: 12px;
+            --spacing-lg: 16px;
+            --spacing-xl: 20px;
+            --font-display: 'Georgia', 'Playfair Display', 'Noto Serif SC', 'STSong', 'SimSun', serif;
+            --font-body: 'PingFang SC', 'Noto Sans SC', 'Microsoft YaHei', -apple-system, sans-serif;
+            --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+            --ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #f0ebe0;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 20px;
+            font-family: var(--font-body);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ── 画布容器（模拟手机） ── */
+        .canvas-wrapper {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: flex-start;
+            max-width: 1400px;
+        }
+
+        .phone-frame {
+            width: 390px;
+            height: 844px;
+            background: var(--bg-primary);
+            border-radius: 40px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.18), 0 0 0 8px #1a1a1a, 0 0 0 10px #333;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+        }
+        .phone-frame.wide {
+            width: 420px;
+        }
+        .phone-label {
+            text-align: center;
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 10px;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+        .phone-col {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* ── 状态栏 ── */
+        .status-bar {
+            height: 48px;
+            background: transparent;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-primary);
+            flex-shrink: 0;
+        }
+        .status-bar.light {
+            color: #fff;
+        }
+        .status-icons {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+            font-size: 11px;
+        }
+
+        /* ── 导航栏 ── */
+        .nav-bar {
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 16px;
+            flex-shrink: 0;
+            position: relative;
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+            background: rgba(255, 249, 242, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid transparent;
+        }
+        .nav-bar .back-btn {
+            position: absolute;
+            left: 12px;
+            font-size: 18px;
+            color: var(--gold-600);
+            cursor: pointer;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: background 0.2s;
+        }
+        .nav-bar .back-btn:hover {
+            background: var(--gold-100);
+        }
+        .nav-bar .action-btn {
+            position: absolute;
+            right: 16px;
+            font-size: 13px;
+            color: var(--gold-600);
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        /* ── 滚动内容区 ── */
+        .scroll-area {
+            flex: 1;
+            overflow-y: auto;
+            padding: 12px 16px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            -webkit-overflow-scrolling: touch;
+        }
+        .scroll-area::-webkit-scrollbar {
+            width: 3px;
+        }
+        .scroll-area::-webkit-scrollbar-thumb {
+            background: var(--gold-200);
+            border-radius: 10px;
+        }
+
+        /* ── Tab Bar ── */
+        .tab-bar {
+            height: 60px;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            border-top: 1px solid var(--gold-200);
+            flex-shrink: 0;
+            padding-bottom: 4px;
+        }
+        .tab-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3px;
+            cursor: pointer;
+            font-size: 10px;
+            color: var(--text-secondary);
+            transition: all 0.2s;
+            padding: 4px 10px;
+            border-radius: 8px;
+        }
+        .tab-item.active {
+            color: var(--gold-600);
+            font-weight: 600;
+        }
+        .tab-icon {
+            font-size: 20px;
+            line-height: 1;
+        }
+
+        /* ── 卡片 ── */
+        .card {
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-lg);
+            box-shadow: var(--shadow-card);
+            border: 1px solid var(--gold-200);
+            transition: all 0.2s var(--ease-smooth);
+            cursor: pointer;
+        }
+        .card:active {
+            transform: scale(0.98);
+            box-shadow: var(--shadow-hover);
+        }
+
+        /* ── 按钮 ── */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            border: none;
+            cursor: pointer;
+            font-family: var(--font-body);
+            font-weight: 500;
+            transition: all 0.2s var(--ease-smooth);
+            border-radius: var(--radius-md);
+            white-space: nowrap;
+            user-select: none;
+        }
+        .btn:active {
+            transform: scale(0.96);
+        }
+        .btn-primary {
+            background: var(--gradient-gold);
+            color: #fff;
+            box-shadow: var(--shadow-btn);
+            padding: 10px 20px;
+            font-size: 14px;
+        }
+        .btn-secondary {
+            background: var(--gold-100);
+            color: var(--gold-700);
+            padding: 10px 20px;
+            font-size: 14px;
+        }
+        .btn-outline {
+            background: transparent;
+            border: 1.5px solid var(--gold-400);
+            color: var(--gold-600);
+            padding: 9px 19px;
+            font-size: 13px;
+        }
+        .btn-sm {
+            padding: 6px 14px;
+            font-size: 12px;
+            border-radius: var(--radius-sm);
+        }
+        .btn-lg {
+            padding: 14px 28px;
+            font-size: 16px;
+            border-radius: var(--radius-md);
+        }
+        .btn-full {
+            width: 100%;
+            justify-content: center;
+        }
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        /* ── 标签 ── */
+        .tag {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 500;
+            background: var(--gold-100);
+            color: var(--gold-600);
+            white-space: nowrap;
+        }
+        .tag.active {
+            background: var(--gold-400);
+            color: #fff;
+        }
+        .tag-pill {
+            border-radius: 20px;
+            padding: 5px 14px;
+            font-size: 12px;
+        }
+
+        /* ── 输入框 ── */
+        .input-wrap {
+            display: flex;
+            align-items: center;
+            background: var(--bg-card);
+            border: 1px solid var(--gold-200);
+            border-radius: var(--radius-xl);
+            padding: 8px 14px;
+            gap: 8px;
+            transition: border-color 0.2s;
+        }
+        .input-wrap:focus-within {
+            border-color: var(--gold-400);
+            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.08);
+        }
+        .input-wrap input {
+            flex: 1;
+            border: none;
+            outline: none;
+            font-size: 14px;
+            color: var(--text-primary);
+            background: transparent;
+            font-family: var(--font-body);
+        }
+        .input-wrap input::placeholder {
+            color: var(--text-hint);
+        }
+        .send-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--gradient-gold);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 16px;
+            flex-shrink: 0;
+            transition: all 0.15s;
+        }
+        .send-btn:active {
+            transform: scale(0.9);
+        }
+
+        /* ── 对话气泡 ── */
+        .chat-bubble {
+            max-width: 82%;
+            padding: 10px 14px;
+            border-radius: 18px;
+            font-size: 13px;
+            line-height: 1.55;
+            word-break: break-word;
+            animation: bubbleIn 0.3s var(--ease-smooth);
+        }
+        @keyframes bubbleIn {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .bubble-ai {
+            background: #FDF8EF;
+            color: var(--text-primary);
+            align-self: flex-start;
+            border-bottom-left-radius: 6px;
+            border: 1px solid var(--gold-100);
+        }
+        .bubble-user {
+            background: var(--gradient-gold);
+            color: #fff;
+            align-self: flex-end;
+            border-bottom-right-radius: 6px;
+        }
+
+        /* ── 案例网格 ── */
+        .case-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        .case-card {
+            background: var(--bg-card);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            box-shadow: var(--shadow-card);
+            border: 1px solid var(--gold-100);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .case-card:active {
+            transform: scale(0.97);
+        }
+        .case-cover {
+            height: 140px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            font-size: 36px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+        .case-cover .badge {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(4px);
+            padding: 3px 8px;
+            border-radius: 20px;
+            font-size: 10px;
+            color: var(--gold-700);
+            font-weight: 500;
+        }
+        .case-info {
+            padding: 10px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+        .case-info .title {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-primary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .case-info .meta {
+            font-size: 11px;
+            color: var(--gold-500);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .case-info .tags-row {
+            display: flex;
+            gap: 4px;
+            flex-wrap: wrap;
+        }
+        .case-info .mini-tag {
+            font-size: 9px;
+            padding: 2px 6px;
+            border-radius: 10px;
+            background: var(--gold-50);
+            color: var(--gold-600);
+        }
+
+        /* ── 筛选标签行 ── */
+        .filter-row {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding: 4px 0;
+            flex-shrink: 0;
+            -webkit-overflow-scrolling: touch;
+        }
+        .filter-row::-webkit-scrollbar {
+            display: none;
+        }
+        .filter-chip {
+            flex-shrink: 0;
+            padding: 7px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            background: var(--gold-50);
+            color: var(--gold-600);
+            border: 1px solid transparent;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+        .filter-chip.active {
+            background: var(--gradient-gold);
+            color: #fff;
+            box-shadow: var(--shadow-btn);
+            border-color: transparent;
+        }
+
+        /* ── Hero 区 ── */
+        .hero-section {
+            background: linear-gradient(135deg, #FDF8EF 0%, #FBF0D9 40%, #FDF8EF 100%);
+            border-radius: var(--radius-lg);
+            padding: 20px 16px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-section::after {
+            content: '';
+            position: absolute;
+            top: -30px;
+            right: -30px;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.2) 0%, transparent 70%);
+        }
+        .hero-title {
+            font-family: var(--font-display);
+            font-size: 22px;
+            color: var(--gold-800);
+            font-weight: 700;
+            position: relative;
+            z-index: 1;
+        }
+        .hero-sub {
+            font-size: 12px;
+            color: var(--gold-500);
+            margin-top: 4px;
+            position: relative;
+            z-index: 1;
+        }
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-top: 12px;
+            position: relative;
+            z-index: 1;
+        }
+        .hero-stat {
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(6px);
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-size: 11px;
+            color: var(--gold-600);
+        }
+        .hero-stat strong {
+            font-family: var(--font-display);
+            font-size: 18px;
+            color: var(--gold-700);
+        }
+
+        /* ── 数据卡片 ── */
+        .stat-cards {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        .stat-card {
+            background: var(--bg-card);
+            border-radius: var(--radius-md);
+            padding: 14px;
+            box-shadow: var(--shadow-card);
+            border: 1px solid var(--gold-100);
+            text-align: center;
+        }
+        .stat-card .num {
+            font-family: var(--font-display);
+            font-size: 26px;
+            color: var(--gold-600);
+            font-weight: 700;
+        }
+        .stat-card .lbl {
+            font-size: 11px;
+            color: var(--text-secondary);
+            margin-top: 2px;
+        }
+
+        /* ── 列表项 ── */
+        .list-item {
+            display: flex;
+            align-items: center;
+            padding: 14px 16px;
+            background: var(--bg-card);
+            border-radius: var(--radius-md);
+            gap: 12px;
+            cursor: pointer;
+            transition: all 0.15s;
+            border: 1px solid transparent;
+        }
+        .list-item:active {
+            background: var(--gold-50);
+            border-color: var(--gold-100);
+        }
+        .list-item .li-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+            background: var(--gold-100);
+        }
+        .list-item .li-content {
+            flex: 1;
+            min-width: 0;
+        }
+        .list-item .li-title {
+            font-size: 14px;
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+        .list-item .li-sub {
+            font-size: 11px;
+            color: var(--text-secondary);
+        }
+        .list-item .li-arrow {
+            color: var(--gold-400);
+            font-size: 14px;
+        }
+
+        /* ── 进度条 ── */
+        .progress-bar {
+            height: 6px;
+            background: var(--gold-100);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: var(--gradient-gold);
+            border-radius: 3px;
+            transition: width 0.5s var(--ease-smooth);
+        }
+
+        /* ── 日历 ── */
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px;
+            text-align: center;
+        }
+        .cal-cell {
+            aspect-ratio: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            font-size: 12px;
+            cursor: pointer;
+            color: var(--text-primary);
+            transition: all 0.15s;
+        }
+        .cal-cell.has-event::after {
+            content: '';
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: var(--gold-400);
+            margin-top: 1px;
+        }
+        .cal-cell.today {
+            background: var(--gold-400);
+            color: #fff;
+            font-weight: 700;
+        }
+        .cal-cell.today::after {
+            background: #fff;
+        }
+        .cal-header {
+            font-size: 10px;
+            color: var(--text-secondary);
+            font-weight: 500;
+            padding: 4px 0;
+        }
+
+        /* ── 用户头像区 ── */
+        .user-header {
+            background: linear-gradient(135deg, #D4AF37 0%, #E8C86A 50%, #D4AF37 100%);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            color: #fff;
+        }
+        .avatar-circle {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            flex-shrink: 0;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+        }
+
+        /* ── 骨架屏 ── */
+        .skeleton {
+            background: linear-gradient(90deg, #f5f0e8 25%, #fdf8ef 50%, #f5f0e8 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+            border-radius: 6px;
+        }
+        @keyframes shimmer {
+            0% {
+                background-position: 200% 0;
+            }
+            100% {
+                background-position: -200% 0;
+            }
+        }
+
+        /* ── Toast ── */
+        .toast {
+            position: absolute;
+            top: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(44, 44, 44, 0.85);
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 13px;
+            z-index: 100;
+            pointer-events: none;
+            animation: toastIn 0.3s var(--ease-smooth);
+        }
+        @keyframes toastIn {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+
+        /* ── 页脚提示 ── */
+        .footer-hint {
+            text-align: center;
+            font-size: 11px;
+            color: var(--text-hint);
+            padding: 8px;
+        }
+
+        /* ── 倒计时大数字 ── */
+        .countdown-big {
+            font-family: var(--font-display);
+            font-size: 64px;
+            color: var(--gold-600);
+            font-weight: 700;
+            text-align: center;
+            line-height: 1;
+        }
+
+        /* ── 响应式 ── */
+        @media (max-width: 900px) {
+            .canvas-wrapper {
+                flex-direction: column;
+                align-items: center;
+                gap: 40px;
+            }
+            .phone-frame {
+                width: 360px;
+                height: 780px;
+                border-radius: 30px;
+            }
+        }
+
+        /* 页面切换按钮 */
+        .page-switcher {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 4px;
+        }
+        .page-switcher button {
+            padding: 5px 10px;
+            border-radius: 14px;
+            border: 1px solid #ccc;
+            background: #fff;
+            cursor: pointer;
+            font-size: 10px;
+            transition: all 0.2s;
+            font-family: var(--font-body);
+        }
+        .page-switcher button.active-switch {
+            background: var(--gold-400);
+            color: #fff;
+            border-color: var(--gold-400);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="canvas-wrapper" id="app">
+
+        <!-- ═══════════════ 手机1：新人端 ═══════════════ -->
+        <div class="phone-col">
+            <div class="page-switcher" id="newcomerSwitcher">
+                <button class="active-switch" data-page="chat">AI对话</button>
+                <button data-page="cases">案例馆</button>
+                <button data-page="profile">我的</button>
+                <button data-page="detail">案例详情</button>
+                <button data-page="budget">预算计算器</button>
+                <button data-page="checklist">筹备清单</button>
+                <button data-page="countdown">倒计时</button>
+            </div>
+            <div class="phone-label">👰 新人端</div>
+            <div class="phone-frame" id="newcomerPhone">
+                <div class="status-bar">
+                    <span>9:41</span>
+                    <span class="status-icons">📶 🔋</span>
+                </div>
+                <div id="newcomerContent"></div>
+            </div>
+        </div>
+
+        <!-- ═══════════════ 手机2：策划师端 ═══════════════ -->
+        <div class="phone-col">
+            <div class="page-switcher" id="plannerSwitcher">
+                <button class="active-switch" data-page="dashboard">工作台</button>
+                <button data-page="orders">订单看板</button>
+                <button data-page="calendar">排期日历</button>
+                <button data-page="contracts">合同管理</button>
+                <button data-page="props">道具管理</button>
+                <button data-page="clients">客户管理</button>
+                <button data-page="leads">线索列表</button>
+            </div>
+            <div class="phone-label">💼 策划师端</div>
+            <div class="phone-frame wide" id="plannerPhone">
+                <div class="status-bar">
+                    <span>9:41</span>
+                    <span class="status-icons">📶 🔋</span>
+                </div>
+                <div id="plannerContent"></div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // ═══════════════ 渲染引擎 ═══════════════
+        const newcomerPhone = document.getElementById('newcomerContent');
+        const plannerPhone = document.getElementById('plannerContent');
+
+        // ── 通用组件 ──
+        function NavBar(title, showBack = false, actionLabel = '', actionFn = null) {
+            return `
+            <div class="nav-bar">
+              ${showBack ? '<span class="back-btn" onclick="this.closest(\'.phone-frame\').querySelector(\'.scroll-area\').scrollTop=0">←</span>' : ''}
+              <span>${title}</span>
+              ${actionLabel ? `<span class="action-btn">${actionLabel}</span>` : ''}
+            </div>`;
+        }
+
+        function TabBar(items, activeIndex = 0) {
+            return `
+            <div class="tab-bar">
+              ${items.map((item, i) => `
+                <div class="tab-item ${i === activeIndex ? 'active' : ''}">
+                  <span class="tab-icon">${item.icon}</span>
+                  <span>${item.label}</span>
+                </div>`).join('')}
+            </div>`;
+        }
+
+        function FilterRow(labels, activeIndex = 0) {
+            return `
+            <div class="filter-row">
+              ${labels.map((l, i) => `
+                <span class="filter-chip ${i === activeIndex ? 'active' : ''}">${l}</span>
+              `).join('')}
+            </div>`;
+        }
+
+        function ChatBubble(text, type = 'ai') {
+            return `<div class="chat-bubble bubble-${type}">${text}</div>`;
+        }
+
+        function CaseCard(c, h = 150) {
+            return `
+            <div class="case-card">
+              <div class="case-cover" style="background:${c.bg || 'linear-gradient(135deg,#e8d5a3,#f5e6c8)'};height:${h}px;">
+                <span>💐</span>
+                <span class="badge">${c.style || '自然'}</span>
+              </div>
+              <div class="case-info">
+                <span class="title">${c.title || '婚礼案例'}</span>
+                <span class="meta">${c.venue || '场地'} · ${c.budget || '预算待定'}</span>
+                <div class="tags-row">${(c.tags || ['浪漫', '户外']).map(t => `<span class="mini-tag">${t}</span>`).join('')}</div>
+              </div>
+            </div>`;
+        }
+
+        function Card(inner, extraClass = '') {
+            return `<div class="card ${extraClass}">${inner}</div>`;
+        }
+
+        function StatCard(num, label) {
+            return `<div class="stat-card"><div class="num">${num}</div><div class="lbl">${label}</div></div>`;
+        }
+
+        function ListItem(icon, title, sub = '') {
+            return `
+            <div class="list-item">
+              <div class="li-icon">${icon}</div>
+              <div class="li-content">
+                <div class="li-title">${title}</div>
+                ${sub ? `<div class="li-sub">${sub}</div>` : ''}
+              </div>
+              <span class="li-arrow">›</span>
+            </div>`;
+        }
+
+        // ═══════════════ 新人端页面 ═══════════════
+        const newcomerPages = {
+            chat: () => `
+            ${NavBar('AI 设计助手', false, '💬')}
+            <div class="scroll-area" style="gap:10px;">
+              ${ChatBubble('您好！我是大喜的日子婚礼设计助手 🌸<br>请问您的婚礼计划在什么季节？')}
+              ${ChatBubble('春天 3 月', 'user')}
+              ${ChatBubble('春天很浪漫呢！为您推荐以下案例参考 👇<br><br><div style="display:flex;gap:8px;flex-wrap:wrap;">' + 
+                ['新中式庭院','韩式简约','森系花园'].map(s => 
+                  `<span style="background:rgba(255,255,255,0.7);padding:6px 10px;border-radius:12px;font-size:11px;color:#5c4512;">🌸 ${s}</span>`
+                ).join('') + '</div>')}
+              ${ChatBubble('我喜欢森系花园风格', 'user')}
+              ${ChatBubble('好的！森系花园风格非常适合春天～<br>请问您的宾客人数大概是多少呢？')}
+              <div style="height:20px;"></div>
+              <div class="hero-section" style="padding:12px;">
+                <span style="font-size:13px;color:var(--gold-600);">✨ 找灵感</span>
+                <span style="float:right;color:var(--gold-400);">查看案例馆 ›</span>
+              </div>
+            </div>
+            <div style="padding:8px 12px;background:var(--bg-primary);">
+              <div class="input-wrap">
+                <input type="text" placeholder="输入您的需求...">
+                <button class="send-btn">↑</button>
+              </div>
+            </div>
+            ${TabBar([
+              {icon:'💬',label:'AI设计'},
+              {icon:'🎨',label:'案例馆'},
+              {icon:'👤',label:'我的'}
+            ], 0)}
+          `,
+
+            cases: () => `
+            ${NavBar('精选案例馆', true)}
+            <div class="scroll-area">
+              <div class="hero-section">
+                <div class="hero-title">灵感画廊</div>
+                <div class="hero-sub">每一场婚礼，都是独一无二的故事</div>
+                <div class="hero-stats">
+                  <div class="hero-stat"><strong>200+</strong> 精选案例</div>
+                  <div class="hero-stat"><strong>8</strong> 风格类型</div>
+                </div>
+              </div>
+              ${FilterRow(['全部','新中式','韩式','森系','法式','现代','户外'], 2)}
+              <div class="case-grid">
+                ${[
+                  {title:'春日花园',style:'森系',venue:'东湖宾馆',budget:'8-10万',tags:['户外','草坪','20桌'],bg:'linear-gradient(135deg,#c8d6a0,#e8f0d0)'},
+                  {title:'韩式简约',style:'韩式',venue:'光谷凯悦',budget:'5-7万',tags:['简约','室内','15桌'],bg:'linear-gradient(135deg,#d5c8b8,#f0e8d8)'},
+                  {title:'中式传统',style:'新中式',venue:'万达酒店',budget:'12-15万',tags:['中式','金色','30桌'],bg:'linear-gradient(135deg,#c4a882,#e0d0c0)'},
+                  {title:'法式浪漫',style:'法式',venue:'东湖花园',budget:'10-12万',tags:['法式','鲜花','18桌'],bg:'linear-gradient(135deg,#d8c0d0,#f0dce8)'},
+                  {title:'现代极简',style:'现代',venue:'创意园',budget:'6-8万',tags:['极简','白绿','12桌'],bg:'linear-gradient(135deg,#c8d0d8,#e8edf0)'},
+                  {title:'户外草坪',style:'户外',venue:'高尔夫球场',budget:'9-11万',tags:['户外','草坪','25桌'],bg:'linear-gradient(135deg,#b8d4a8,#d8f0c8)'},
+                ].map(c => CaseCard(c, 150 + Math.floor(Math.random()*50))).join('')}
+              </div>
+              <div class="card" style="text-align:center;background:var(--gradient-warm);">
+                <span style="font-size:14px;color:var(--gold-700);">找到喜欢的风格？</span>
+                <br>
+                <button class="btn btn-primary btn-sm" style="margin-top:8px;">✨ AI 设计同款方案</button>
+              </div>
+            </div>
+            ${TabBar([
+              {icon:'💬',label:'AI设计'},
+              {icon:'🎨',label:'案例馆'},
+              {icon:'👤',label:'我的'}
+            ], 1)}
+          `,
+
+            profile: () => `
+            ${NavBar('我的')}
+            <div class="scroll-area">
+              <div class="user-header">
+                <div class="avatar-circle">👰</div>
+                <div>
+                  <div style="font-size:16px;font-weight:600;">小林</div>
+                  <div style="font-size:12px;opacity:0.85;">婚礼倒计时：87 天</div>
+                </div>
+              </div>
+              <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;">
+                ${['📋 筹备清单','💰 预算计算','⏰ 倒计时'].map(t => `
+                  <div class="card" style="text-align:center;padding:16px 10px;">
+                    <div style="font-size:28px;">${t.split(' ')[0]}</div>
+                    <div style="font-size:11px;color:var(--text-secondary);margin-top:4px;">${t.split(' ')[1]}</div>
+                  </div>`).join('')}
+              </div>
+              <div style="display:flex;flex-direction:column;gap:1px;background:var(--gold-100);border-radius:var(--radius-md);overflow:hidden;">
+                ${[
+                  {icon:'❤️',title:'我的收藏',sub:'12 个案例'},
+                  {icon:'💬',title:'咨询记录',sub:'最近：春季花园婚礼'},
+                  {icon:'👨‍💼',title:'策划师工作台',sub:'切换至策划师模式'},
+                ].map(l => ListItem(l.icon,l.title,l.sub)).join('')}
+              </div>
+            </div>
+            ${TabBar([
+              {icon:'💬',label:'AI设计'},
+              {icon:'🎨',label:'案例馆'},
+              {icon:'👤',label:'我的'}
+            ], 2)}
+          `,
+
+            detail: () => `
+            ${NavBar('案例详情', true, '❤️')}
+            <div class="scroll-area">
+              <div class="case-cover" style="height:180px;background:linear-gradient(135deg,#c8d6a0,#e8f0d0);font-size:48px;">💐</div>
+              <div class="card">
+                <div style="font-size:16px;font-weight:700;color:var(--gold-800);">春日花园 · 户外草坪婚礼</div>
+                <div style="display:flex;gap:6px;margin-top:8px;flex-wrap:wrap;">
+                  <span class="tag">自然浪漫</span>
+                  <span class="tag">户外草坪</span>
+                  <span class="tag">8-10万</span>
+                </div>
+                <p style="font-size:13px;color:var(--text-secondary);margin-top:10px;line-height:1.7;">
+                  以春日花园为主题，运用大量鲜花与绿植打造浪漫自然的户外婚礼场景。清新色调搭配木质元素，营造温馨治愈的氛围。
+                </p>
+              </div>
+              <div class="card">
+                <div style="font-weight:600;color:var(--gold-800);margin-bottom:8px;">参考报价</div>
+                ${[
+                  ['场地布置','¥35,000'],
+                  ['花艺设计','¥28,000'],
+                  ['灯光音响','¥15,000'],
+                  ['人员服务','¥12,000'],
+                ].map(([k,v]) => `
+                  <div style="display:flex;justify-content:space-between;padding:6px 0;font-size:13px;border-bottom:1px solid var(--gold-100);">
+                    <span style="color:var(--text-secondary);">${k}</span>
+                    <span style="color:var(--text-primary);font-weight:500;">${v}</span>
+                  </div>`).join('')}
+                <div style="display:flex;justify-content:space-between;padding:8px 0;font-size:15px;font-weight:700;color:var(--gold-700);border-top:2px solid var(--gold-200);margin-top:4px;">
+                  <span>合计参考</span><span>¥90,000</span>
+                </div>
+              </div>
+              <div style="display:flex;gap:10px;">
+                <button class="btn btn-secondary btn-full">❤️ 收藏案例</button>
+                <button class="btn btn-primary btn-full">✨ AI 生成方案</button>
+              </div>
+            </div>
+          `,
+
+            budget: () => `
+            ${NavBar('预算计算器', true)}
+            <div class="scroll-area">
+              <div class="card" style="background:linear-gradient(135deg,#D4AF37,#E8C86A);color:#fff;text-align:center;">
+                <div style="font-size:13px;opacity:0.9;">预估总预算</div>
+                <div class="countdown-big" style="color:#fff;font-size:42px;">¥85,000</div>
+                <div style="font-size:11px;opacity:0.8;">参考范围：¥75,000 - ¥95,000</div>
+              </div>
+              <div class="card">
+                <div style="font-weight:600;color:var(--gold-800);margin-bottom:10px;">输入参数</div>
+                ${[
+                  ['宾客桌数','20 桌'],
+                  ['婚礼风格','自然浪漫'],
+                  ['场地类型','户外草坪'],
+                ].map(([k,v]) => `
+                  <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--gold-100);">
+                    <span style="font-size:13px;color:var(--text-secondary);">${k}</span>
+                    <span style="font-size:14px;color:var(--text-primary);font-weight:500;">${v}</span>
+                  </div>`).join('')}
+              </div>
+              <div class="card">
+                <div style="font-weight:600;color:var(--gold-800);margin-bottom:8px;">预算分配</div>
+                ${[
+                  ['场地布置','¥35,000','#e8d5a3',40],
+                  ['花艺设计','¥22,000','#c8d6a0',26],
+                  ['灯光音响','¥15,000','#d5c8b8',18],
+                  ['人员服务','¥13,000','#c4a882',16],
+                ].map(([k,v,color,pct]) => `
+                  <div style="margin-bottom:8px;">
+                    <div style="display:flex;justify-content:space-between;font-size:12px;">
+                      <span style="display:flex;align-items:center;gap:6px;"><span style="width:8px;height:8px;border-radius:50%;background:${color};display:inline-block;"></span>${k}</span>
+                      <span style="font-weight:600;">${v}</span>
+                    </div>
+                    <div class="progress-bar" style="margin-top:3px;"><div class="progress-fill" style="width:${pct}%;background:${color};"></div></div>
+                  </div>`).join('')}
+              </div>
+            </div>
+          `,
+
+            checklist: () => `
+            ${NavBar('筹备清单', true)}
+            <div class="scroll-area">
+              <div class="card" style="text-align:center;">
+                <div style="font-family:var(--font-display);font-size:28px;color:var(--gold-600);">65%</div>
+                <div style="font-size:12px;color:var(--text-secondary);">已完成 13 / 20 项</div>
+                <div class="progress-bar" style="margin-top:8px;"><div class="progress-fill" style="width:65%;"></div></div>
+              </div>
+              ${[
+                {phase:'婚前 3 个月',items:[
+                  {text:'确定婚礼日期',done:true},
+                  {text:'选定婚礼场地',done:true},
+                  {text:'确定婚礼风格',done:true},
+                  {text:'选定婚纱礼服',done:false},
+                ]},
+                {phase:'婚前 1 个月',items:[
+                  {text:'发送请柬',done:true},
+                  {text:'确认宾客名单',done:true},
+                  {text:'试妆定妆',done:false},
+                  {text:'确认花艺方案',done:false},
+                ]},
+                {phase:'婚前 1 周',items:[
+                  {text:'最终确认流程',done:false},
+                  {text:'彩排婚礼仪式',done:false},
+                ]},
+              ].map(phase => `
+                <div class="card">
+                  <div style="font-size:12px;font-weight:600;color:var(--gold-500);margin-bottom:8px;display:flex;align-items:center;gap:6px;">
+                    <span style="width:6px;height:6px;border-radius:50%;background:var(--gold-400);"></span>${phase.phase}
+                  </div>
+                  ${phase.items.map(item => `
+                    <div style="display:flex;align-items:center;gap:10px;padding:8px 0;font-size:13px;color:${item.done?'var(--gold-400)':'var(--text-primary)'};${item.done?'text-decoration:line-through;':''}">
+                      <span style="width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;border:2px solid ${item.done?'var(--gold-400)':'var(--gold-300)'};background:${item.done?'var(--gold-400)':'transparent'};color:#fff;flex-shrink:0;">${item.done?'✓':''}</span>
+                      ${item.text}
+                    </div>`).join('')}
+                </div>
+              `).join('')}
+            </div>
+          `,
+
+            countdown: () => `
+            ${NavBar('婚礼倒计时', true)}
+            <div class="scroll-area">
+              <div class="card" style="text-align:center;background:linear-gradient(135deg,#FDF8EF,#FBF0D9);padding:30px;">
+                <div class="countdown-big">87</div>
+                <div style="font-size:14px;color:var(--gold-500);">天</div>
+                <div style="font-size:13px;color:var(--gold-600);margin-top:6px;">2026年9月18日 · 星期五</div>
+              </div>
+              ${[
+                {icon:'✅',title:'确定婚期',date:'2026-03-15',status:'已完成',color:'#a0c8a0'},
+                {icon:'✅',title:'选定场地',date:'2026-04-02',status:'已完成',color:'#a0c8a0'},
+                {icon:'🔄',title:'确认方案',date:'2026-07-01',status:'进行中',color:'var(--gold-400)'},
+                {icon:'⏳',title:'婚礼当天',date:'2026-09-18',status:'待完成',color:'var(--gold-300)'},
+              ].map(m => `
+                <div class="card" style="display:flex;align-items:center;gap:12px;">
+                  <div style="width:36px;height:36px;border-radius:50%;background:${m.color}22;display:flex;align-items:center;justify-content:center;font-size:18px;">${m.icon}</div>
+                  <div style="flex:1;">
+                    <div style="font-size:14px;font-weight:500;color:var(--text-primary);">${m.title}</div>
+                    <div style="font-size:11px;color:var(--text-secondary);">${m.date}</div>
+                  </div>
+                  <span style="font-size:11px;color:${m.color};">${m.status}</span>
+                </div>
+              `).join('')}
+            </div>
+          `,
+        };
+
+        // ═══════════════ 策划师端页面 ═══════════════
+        const plannerPages = {
+            dashboard: () => `
+            ${NavBar('工作台', false, '🔍')}
+            <div class="scroll-area">
+              <div class="stat-cards">
+                ${StatCard('12','接单数')}
+                ${StatCard('8','进行中')}
+                ${StatCard('¥45,600','本月收入')}
+                ${StatCard('15','待跟进')}
+              </div>
+              <div style="font-weight:600;font-size:14px;color:var(--gold-800);">待跟进线索</div>
+              ${[
+                {name:'小林 & 小张',desc:'春季花园婚礼 · 预算8-10万',time:'2小时前'},
+                {name:'小李 & 小王',desc:'中式传统婚礼 · 预算5-7万',time:'昨天'},
+              ].map(l => `
+                <div class="card" style="padding:12px 14px;">
+                  <div style="display:flex;justify-content:space-between;align-items:center;">
+                    <div>
+                      <div style="font-size:14px;font-weight:600;color:var(--text-primary);">${l.name}</div>
+                      <div style="font-size:11px;color:var(--text-secondary);">${l.desc}</div>
+                    </div>
+                    <span style="font-size:10px;color:var(--gold-400);">${l.time}</span>
+                  </div>
+                </div>
+              `).join('')}
+              <span style="font-size:12px;color:var(--gold-500);text-align:center;display:block;">查看全部 ›</span>
+              <div style="font-weight:600;font-size:14px;color:var(--gold-800);">近期婚礼</div>
+              ${[
+                {date:'06-28',name:'小林婚礼',status:'待确认方案'},
+                {date:'07-05',name:'小李婚礼',status:'已签约'},
+              ].map(w => `
+                <div class="card" style="display:flex;align-items:center;gap:12px;padding:12px 14px;">
+                  <div style="font-size:13px;font-weight:600;color:var(--gold-600);">${w.date}</div>
+                  <div style="flex:1;font-size:13px;">${w.name}</div>
+                  <span class="tag">${w.status}</span>
+                </div>
+              `).join('')}
+            </div>
+            ${TabBar([
+              {icon:'📊',label:'工作台'},
+              {icon:'📋',label:'订单'},
+              {icon:'📅',label:'排期'},
+              {icon:'📄',label:'合同'},
+            ], 0)}
+          `,
+
+            orders: () => `
+            ${NavBar('订单看板', false, '+ 新建')}
+            <div class="scroll-area">
+              ${FilterRow(['进行中','待确认','已完成'], 0)}
+              ${[
+                {name:'小林 & 小张',desc:'春季花园婚礼 · 8-10万',progress:60,status:'方案确认中',date:'06-28'},
+                {name:'小李 & 小王',desc:'中式传统婚礼 · 5-7万',progress:40,status:'待签约',date:'07-05'},
+                {name:'小张 & 小刘',desc:'韩式简约 · 6-8万',progress:85,status:'筹备中',date:'08-12'},
+              ].map(o => `
+                <div class="card">
+                  <div style="font-size:14px;font-weight:600;color:var(--text-primary);">${o.name}</div>
+                  <div style="font-size:11px;color:var(--text-secondary);margin-top:2px;">${o.desc}</div>
+                  <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;">
+                    <span style="font-size:11px;color:var(--gold-500);">${o.status} · ${o.date}</span>
+                    <span style="font-size:12px;font-weight:600;color:var(--gold-600);">${o.progress}%</span>
+                  </div>
+                  <div class="progress-bar" style="margin-top:4px;"><div class="progress-fill" style="width:${o.progress}%;"></div></div>
+                </div>
+              `).join('')}
+            </div>
+            ${TabBar([
+              {icon:'📊',label:'工作台'},
+              {icon:'📋',label:'订单'},
+              {icon:'📅',label:'排期'},
+              {icon:'📄',label:'合同'},
+            ], 1)}
+          `,
+
+            calendar: () => `
+            ${NavBar('排期日历', false, '今日')}
+            <div class="scroll-area">
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:4px 0;">
+                <span style="cursor:pointer;color:var(--gold-500);">‹</span>
+                <span style="font-weight:600;color:var(--text-primary);">2026年6月</span>
+                <span style="cursor:pointer;color:var(--gold-500);">›</span>
+              </div>
+              <div class="calendar-grid">
+                ${['日','一','二','三','四','五','六'].map(d => `<div class="cal-header">${d}</div>`).join('')}
+                ${Array.from({length:30},(_,i) => {
+                  const day = i+1;
+                  const hasEvent = [4,13,23,28].includes(day);
+                  const isToday = day === 25;
+                  return `<div class="cal-cell ${hasEvent?'has-event':''} ${isToday?'today':''}">${day}</div>`;
+                }).join('')}
+              </div>
+              <div style="display:flex;gap:12px;font-size:10px;color:var(--text-secondary);justify-content:center;">
+                <span>● 有婚礼安排</span><span style="color:var(--gold-400);">● 今天</span>
+              </div>
+              <div class="card" style="background:var(--gold-50);">
+                <div style="font-size:12px;color:var(--gold-600);font-weight:600;">06-28 当日详情</div>
+                <div style="font-size:13px;color:var(--text-primary);margin-top:4px;">小林婚礼 · 春季花园婚礼</div>
+                <div style="font-size:11px;color:var(--text-secondary);">武汉东湖花园</div>
+              </div>
+            </div>
+            ${TabBar([
+              {icon:'📊',label:'工作台'},
+              {icon:'📋',label:'订单'},
+              {icon:'📅',label:'排期'},
+              {icon:'📄',label:'合同'},
+            ], 2)}
+          `,
+
+            contracts: () => `
+            ${NavBar('合同管理', false, '+ 新建')}
+            <div class="scroll-area">
+              <div class="card" style="background:var(--gold-50);display:flex;text-align:center;">
+                ${[
+                  {num:'¥68,000',lbl:'本月应收'},
+                  {num:'¥45,600',lbl:'本月已收'},
+                  {num:'¥22,400',lbl:'待收款'},
+                ].map(s => `
+                  <div style="flex:1;padding:8px;">
+                    <div style="font-family:var(--font-display);font-size:18px;color:var(--gold-600);font-weight:700;">${s.num}</div>
+                    <div style="font-size:10px;color:var(--text-secondary);">${s.lbl}</div>
+                  </div>`).join('')}
+              </div>
+              ${[
+                {name:'小林 & 小张',wedding:'春季花园婚礼',total:'¥88,000',received:'¥44,000',remain:'¥44,000',status:'进行中'},
+                {name:'小李 & 小王',wedding:'中式传统婚礼',total:'¥56,000',received:'¥28,000',remain:'¥28,000',status:'待签约'},
+              ].map(c => `
+                <div class="card">
+                  <div style="font-size:14px;font-weight:600;">${c.name}</div>
+                  <div style="font-size:11px;color:var(--text-secondary);">${c.wedding}</div>
+                  <div style="display:flex;justify-content:space-between;margin-top:6px;font-size:12px;">
+                    <span>合同金额：<strong style="color:var(--gold-700);">${c.total}</strong></span>
+                    <span class="tag">${c.status}</span>
+                  </div>
+                  <div class="progress-bar" style="margin-top:6px;"><div class="progress-fill" style="width:50%;"></div></div>
+                  <div style="font-size:10px;color:var(--text-secondary);margin-top:3px;">已收 ${c.received} · 待收 ${c.remain}</div>
+                </div>
+              `).join('')}
+            </div>
+            ${TabBar([
+              {icon:'📊',label:'工作台'},
+              {icon:'📋',label:'订单'},
+              {icon:'📅',label:'排期'},
+              {icon:'📄',label:'合同'},
+            ], 3)}
+          `,
+
+            props: () => `
+            ${NavBar('道具管理', false, '+ 入库')}
+            <div class="scroll-area">
+              <div class="stat-cards">
+                ${StatCard('156','总道具数')}
+                ${StatCard('12','低库存')}
+              </div>
+              ${FilterRow(['全部','花艺','布置','灯光','其他'], 0)}
+              ${[
+                {name:'铁艺拱门',stock:5,price:'¥800',status:'正常',warn:false},
+                {name:'桌花',stock:3,price:'¥60',status:'低库存',warn:true},
+                {name:'LED串灯',stock:20,price:'¥45',status:'正常',warn:false},
+                {name:'透明椅',stock:80,price:'¥15',status:'正常',warn:false},
+              ].map(p => `
+                <div class="card" style="display:flex;align-items:center;gap:12px;${p.warn?'border-color:#f56c6c;':''}">
+                  <div style="width:48px;height:48px;border-radius:8px;background:var(--gold-100);display:flex;align-items:center;justify-content:center;font-size:22px;">📦</div>
+                  <div style="flex:1;">
+                    <div style="font-size:13px;font-weight:500;">${p.name}</div>
+                    <div style="font-size:11px;color:var(--text-secondary);">库存：${p.stock} 个 · 单价：${p.price}</div>
+                  </div>
+                  <span style="font-size:11px;color:${p.warn?'#f56c6c':'#67c23a'};">${p.warn?'⚠️ ':''}${p.status}</span>
+                </div>
+              `).join('')}
+            </div>
+          `,
+
+            clients: () => `
+            ${NavBar('客户管理', false, '+ 添加')}
+            <div class="scroll-area">
+              ${FilterRow(['全部(36)','意向(12)','已签约(18)','已完成(6)'], 1)}
+              ${[
+                {name:'小林 & 小张',desc:'春季花园 · 预算8-10万',status:'已签约',color:'#67c23a'},
+                {name:'小李 & 小王',desc:'中式传统 · 预算5-7万',status:'意向',color:'var(--gold-400)'},
+                {name:'小张 & 小刘',desc:'韩式简约 · 预算6-8万',status:'已完成',color:'#909399'},
+              ].map(c => `
+                <div class="card" style="display:flex;align-items:center;gap:12px;">
+                  <div style="width:40px;height:40px;border-radius:50%;background:var(--gold-100);display:flex;align-items:center;justify-content:center;font-size:18px;">👤</div>
+                  <div style="flex:1;">
+                    <div style="font-size:13px;font-weight:500;">${c.name}</div>
+                    <div style="font-size:11px;color:var(--text-secondary);">${c.desc}</div>
+                  </div>
+                  <span class="tag" style="background:${c.color}22;color:${c.color};">${c.status}</span>
+                </div>
+              `).join('')}
+            </div>
+          `,
+
+            leads: () => `
+            ${NavBar('线索列表', false, '筛选')}
+            <div class="scroll-area">
+              ${FilterRow(['待跟进(5)','跟进中','已转化','流失'], 0)}
+              <div class="card">
+                <div style="font-size:14px;font-weight:600;">小林 & 小张</div>
+                <div style="font-size:11px;color:var(--text-secondary);">春季花园婚礼 · 小程序咨询 · 预算8-10万</div>
+                <div style="margin-top:10px;border-left:2px solid var(--gold-200);padding-left:12px;">
+                  ${[
+                    {text:'AI方案已生成，等待客户确认',time:'今天 14:30',latest:true},
+                    {text:'电话沟通需求，客户偏好自然风格',time:'昨天 10:15',latest:false},
+                    {text:'客户通过小程序发起咨询',time:'2天前',latest:false},
+                  ].map(f => `
+                    <div style="margin-bottom:8px;position:relative;">
+                      <div style="font-size:12px;color:var(--text-primary);">${f.text}</div>
+                      <div style="font-size:10px;color:var(--text-hint);">${f.time}</div>
+                      ${f.latest ? '<div style="position:absolute;left:-18px;top:4px;width:10px;height:10px;border-radius:50%;background:var(--gold-400);"></div>' : '<div style="position:absolute;left:-17px;top:4px;width:8px;height:8px;border-radius:50%;background:var(--gold-200);"></div>'}
+                    </div>
+                  `).join('')}
+                </div>
+              </div>
+            </div>
+          `,
+        };
+
+        // ═══════════════ 页面切换逻辑 ═══════════════
+        function renderNewcomerPage(pageName) {
+            if (newcomerPages[pageName]) {
+                newcomerPhone.innerHTML = newcomerPages[pageName]();
+            }
+        }
+
+        function renderPlannerPage(pageName) {
+            if (plannerPages[pageName]) {
+                plannerPhone.innerHTML = plannerPages[pageName]();
+            }
+        }
+
+        // 初始渲染
+        renderNewcomerPage('chat');
+        renderPlannerPage('dashboard');
+
+        // 新人端切换
+        document.getElementById('newcomerSwitcher').addEventListener('click', (e) => {
+            if (e.target.tagName === 'BUTTON') {
+                const page = e.target.dataset.page;
+                document.querySelectorAll('#newcomerSwitcher button').forEach(b => b.classList.remove(
+                    'active-switch'));
+                e.target.classList.add('active-switch');
+                renderNewcomerPage(page);
+            }
+        });
+
+        // 策划师端切换
+        document.getElementById('plannerSwitcher').addEventListener('click', (e) => {
+            if (e.target.tagName === 'BUTTON') {
+                const page = e.target.dataset.page;
+                document.querySelectorAll('#plannerSwitcher button').forEach(b => b.classList.remove(
+                    'active-switch'));
+                e.target.classList.add('active-switch');
+                renderPlannerPage(page);
+            }
+        });
+
+        // 点击反馈动画
+        document.addEventListener('click', function(e) {
+            const card = e.target.closest('.card');
+            const btn = e.target.closest('.btn');
+            const chip = e.target.closest('.filter-chip');
+            if (card || btn) {
+                const el = card || btn;
+                el.style.transform = 'scale(0.97)';
+                setTimeout(() => { el.style.transform = ''; }, 150);
+            }
+            if (chip && !chip.classList.contains('active')) {
+                const row = chip.parentElement;
+                row.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+                chip.classList.add('active');
+            }
+        });
+
+        console.log('🌸 大喜的日子 · 小程序端画布已就绪');
+        console.log('📱 新人端：AI对话 | 案例馆 | 我的 | 案例详情 | 预算计算器 | 筹备清单 | 倒计时');
+        console.log('💼 策划师端：工作台 | 订单看板 | 排期日历 | 合同管理 | 道具管理 | 客户管理 | 线索列表');
+        console.log('🎨 设计语言：轻复古·奶油风 | 暖白基底 + 香槟金点缀');
+    </script>
+
+</body>
+</html>

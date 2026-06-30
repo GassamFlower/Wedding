@@ -1,0 +1,130 @@
+<nav-bar title="酒店管理" back-url="/pages/schedule/schedule" />
+
+<view class="page-wrap">
+
+  <!-- 加载 -->
+  <view wx:if="{{loading}}" class="loading-state">
+    <view class="loading-spinner"></view>
+    <view class="loading-text">加载中...</view>
+  </view>
+
+  <!-- 错误 -->
+  <view wx:elif="{{error}}" class="empty">
+    <view class="icon icon-warning" style="width:80rpx;height:80rpx;margin-bottom:16rpx;display:inline-block;color:#b8860b;"></view>
+    <view>{{errorMsg}}</view>
+    <view class="btn-primary" style="margin-top:32rpx;width:auto;display:inline-block;padding:16rpx 48rpx;" bindtap="loadData">重试</view>
+  </view>
+
+  <view wx:else>
+    <view class="prop-stats">
+      <view class="ps"><view class="ps-num" style="color:var(--gold);">{{totalHotels}}</view><view class="ps-lbl">合作酒店</view></view>
+      <view class="ps"><view class="ps-num" style="color:#c67a00;">{{inUse}}</view><view class="ps-lbl">本月使用</view></view>
+      <view class="ps"><view class="ps-num" style="color:#c67a00;">{{activeDeposits}}</view><view class="ps-lbl">押金在押</view></view>
+      <view class="ps"><view class="ps-num" style="color:var(--gold);">{{depositTotal}}</view><view class="ps-lbl">押金总额</view></view>
+    </view>
+
+    <view class="section-title"><text>合作酒店</text><text class="more" bindtap="addHotel">+ 新增</text></view>
+
+    <view wx:if="{{hotels.length === 0}}" class="empty" style="padding:40rpx;">暂无合作酒店，点击右上角新增</view>
+
+    <view wx:else>
+      <view class="client-rich-card" wx:for="{{hotels}}" wx:key="id" catchtap="showDetail" data-id="{{item.id}}">
+        <view class="accent-bar {{item.statusClass}}"></view>
+        <view class="card-body">
+          <view class="card-avatar ca{{item.avatarClass}}">{{item.short}}</view>
+          <view class="card-info">
+            <view class="ci-name">{{item.name}}</view>
+            <view class="ci-date">{{item.address}} · {{item.capacity}}</view>
+            <view class="ci-tags">
+              <text class="ci-tag">押金 ¥{{item.deposit}}</text>
+              <text class="ci-tag">{{item.loadIn}}入场</text>
+              <text class="ci-tag">{{item.contact}}</text>
+            </view>
+          </view>
+          <view class="card-right">
+            <text class="ci-status {{item.statusBadge}}">{{item.statusText}}</text>
+            <text class="ci-tag" style="margin-top:8rpx;color:#b71c1c;" catchtap="confirmDelete" data-id="{{item.id}}" data-name="{{item.name}}">删除</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 押金池 -->
+    <view class="section-title" style="margin-top:32rpx;"><text>押金池</text></view>
+    <view class="card">
+      <view class="flex-between"><text style="font-size:28rpx;font-weight:600;">当前在押</text><text style="font-size:36rpx;font-weight:700;color:var(--gold);">¥{{depositPoolUsed}}</text></view>
+      <view class="flex-between" style="margin-top:16rpx;"><text style="font-size:22rpx;color:var(--text-muted);">押金池预算 ¥{{depositPoolTotal}}</text><text style="font-size:22rpx;color:var(--text-muted);">剩余 ¥{{depositPoolRemain}}</text></view>
+    </view>
+
+    <view wx:if="{{todos.length > 0}}">
+      <view class="section-title" style="margin-top:32rpx;"><text>待处理</text></view>
+      <view class="todo-item" wx:for="{{todos}}" wx:key="id" catchtap="toggleTodo" data-id="{{item.id}}">
+        <view class="todo-check {{item.done?'checked':''}}"><view class="svg-icon icon-12 icon-check-white"></view></view>
+        <view class="todo-content"><text class="todo-text {{item.done?'todo-done':''}}">{{item.text}}</text><text class="todo-time">{{item.time}}</text></view>
+      </view>
+    </view>
+  </view>
+
+  <!-- ===== 新增弹窗 ===== -->
+  <view wx:if="{{showForm}}" class="form-overlay" catchtap="closeForm">
+    <view class="form-modal" catchtap="">
+      <view class="form-title">{{formMode === 'edit' ? '编辑酒店' : '新增酒店'}}</view>
+
+      <view class="form-group">
+        <text class="form-label">酒店名称 *</text>
+        <input class="form-input" placeholder="如：万达酒店·宴会厅" value="{{formData.name}}" bindinput="onFormInput" data-field="name" />
+      </view>
+      <view class="form-row">
+        <view class="form-group" style="flex:2;">
+          <text class="form-label">宴会厅</text>
+          <input class="form-input" placeholder="如：宴会厅/草坪区" value="{{formData.hall}}" bindinput="onFormInput" data-field="hall" />
+        </view>
+        <view class="form-group" style="flex:1;">
+          <text class="form-label">容量</text>
+          <input class="form-input" placeholder="如：30桌" value="{{formData.capacity}}" bindinput="onFormInput" data-field="capacity" />
+        </view>
+      </view>
+      <view class="form-group">
+        <text class="form-label">地址</text>
+        <input class="form-input" placeholder="酒店地址" value="{{formData.address}}" bindinput="onFormInput" data-field="address" />
+      </view>
+      <view class="form-row">
+        <view class="form-group" style="flex:1;">
+          <text class="form-label">联系人</text>
+          <input class="form-input" placeholder="姓名" value="{{formData.contact}}" bindinput="onFormInput" data-field="contact" />
+        </view>
+        <view class="form-group" style="flex:2;">
+          <text class="form-label">联系电话</text>
+          <input class="form-input" placeholder="手机号" type="number" maxlength="11" value="{{formData.contactPhone}}" bindinput="onFormInput" data-field="contactPhone" />
+        </view>
+      </view>
+      <view class="form-row">
+        <view class="form-group" style="flex:1;">
+          <text class="form-label">押金标准(¥)</text>
+          <input class="form-input" placeholder="0" type="number" value="{{formData.depositStandard}}" bindinput="onFormInput" data-field="depositStandard" />
+        </view>
+        <view class="form-group" style="flex:1;">
+          <text class="form-label">入场时间</text>
+          <input class="form-input" placeholder="07:00" value="{{formData.loadInTime}}" bindinput="onFormInput" data-field="loadInTime" />
+        </view>
+        <view class="form-group" style="flex:1;">
+          <text class="form-label">撤场时间</text>
+          <input class="form-input" placeholder="23:00" value="{{formData.loadOutTime}}" bindinput="onFormInput" data-field="loadOutTime" />
+        </view>
+      </view>
+      <view class="form-group">
+        <text class="form-label">配备设备</text>
+        <input class="form-input" placeholder="如：LED屏+音响" value="{{formData.equipment}}" bindinput="onFormInput" data-field="equipment" />
+      </view>
+      <view class="form-group">
+        <text class="form-label">备注</text>
+        <input class="form-input" placeholder="可选备注" value="{{formData.notes}}" bindinput="onFormInput" data-field="notes" />
+      </view>
+
+      <view class="form-btns">
+        <button class="btn-cancel" bindtap="closeForm">取消</button>
+        <button class="btn-primary" bindtap="submitForm">添加</button>
+      </view>
+    </view>
+  </view>
+</view>

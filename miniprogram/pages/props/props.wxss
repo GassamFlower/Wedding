@@ -1,0 +1,134 @@
+/* 道具管理 — 轻复古·奶油风 · 24rpx 基准 */
+
+/* ═══ 快捷操作卡片 - 道具管理专用覆盖 ═══ */
+.quick-actions {
+  gap: 20rpx;
+  margin-bottom: 32rpx;
+}
+
+.action-btn {
+  padding: 24rpx 16rpx;
+  border-radius: 20rpx;
+}
+
+.action-icon-wrap {
+  width: 56rpx;
+  height: 56rpx;
+  margin: 0 auto 12rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--gold-100), var(--gold-200));
+  border-radius: 16rpx;
+}
+
+.action-label {
+  font-size: 24rpx;
+  color: var(--gold-700);
+  font-weight: 600;
+}
+
+/* ═══ 道具分类网格 - 3列布局 ═══ */
+.prop-cat-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20rpx;
+  margin-bottom: 32rpx;
+}
+
+.prop-cat {
+  background: linear-gradient(135deg, var(--bg-card), var(--gold-50));
+  border: 2rpx solid var(--gold-100);
+  border-radius: 20rpx;
+  padding: 24rpx 16rpx;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: var(--shadow-sm);
+}
+
+.prop-cat:active {
+  transform: scale(0.95);
+  box-shadow: var(--shadow-md);
+}
+
+.prop-cat-active {
+  border-color: var(--gold);
+  background: linear-gradient(135deg, var(--gold-100), var(--gold-200));
+  box-shadow: var(--shadow-gold);
+}
+
+.pc-icon {
+  width: 48rpx;
+  height: 48rpx;
+  margin: 0 auto 12rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--gold-100), var(--gold-200));
+  border-radius: 12rpx;
+}
+
+.pc-name {
+  display: block;
+  font-size: 24rpx;
+  font-weight: 600;
+  color: var(--gold-700);
+  margin-bottom: 6rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pc-count {
+  display: block;
+  font-size: 20rpx;
+  color: var(--gold-500);
+}
+
+/* ═══ 道具列表项 ═══ */
+.prop-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(135deg, var(--bg-card), var(--gold-50));
+  border: 2rpx solid var(--gold-100);
+  border-radius: 24rpx;
+  padding: 24rpx 28rpx;
+  margin-bottom: 16rpx;
+  box-shadow: var(--shadow-md);
+  transition: all 0.2s ease;
+}
+
+.prop-item:active {
+  transform: translateY(-4rpx);
+  box-shadow: var(--shadow-lg);
+}
+
+.pi-info { flex: 1; min-width: 0; }
+.pi-name { font-size: 28rpx; font-weight: 700; color: var(--gold-800); margin-bottom: 4rpx; }
+.pi-meta { font-size: 24rpx; color: var(--gold-500); }
+.pi-actions { display: flex; gap: 16rpx; flex-shrink: 0; margin-left: 16rpx; }
+
+.pi-actions button {
+  background: linear-gradient(135deg, var(--gold-100), var(--gold-200));
+  border: 2rpx solid var(--gold-200);
+  color: var(--gold-700);
+  padding: 12rpx 24rpx;
+  border-radius: 24rpx;
+  font-size: 24rpx;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.pi-actions button:active {
+  transform: scale(0.95);
+  box-shadow: var(--shadow-sm);
+}
+
+.pi-actions button.primary {
+  background: linear-gradient(135deg, var(--gold-400), var(--gold-500));
+  border-color: var(--gold-400);
+  color: var(--text-inverse);
+  box-shadow: var(--shadow-gold);
+}

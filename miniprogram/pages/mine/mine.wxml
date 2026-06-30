@@ -1,0 +1,91 @@
+<nav-bar title="我的" show-back="{{false}}" glass="{{true}}" />
+
+<view class="mine-page">
+  <!-- 用户信息区 -->
+  <view class="mine-header">
+    <view class="avatar-wrap">
+      <image wx:if="{{avatarUrl}}" class="avatar" src="{{avatarUrl}}" mode="aspectFill" />
+      <text wx:else class="avatar-text">{{nickName[0]}}</text>
+    </view>
+    <view class="user-info">
+      <text class="user-name">{{nickName}}</text>
+      <view class="countdown-wrap">
+        <view class="svg-icon icon-12 icon-countdown-white"></view>
+        <text class="countdown-text">婚礼倒计时：87 天</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 婚礼工具箱 -->
+  <view class="tools-card">
+    <view class="tool-item" catchtap="goChecklist">
+      <view class="tool-icon-wrap">
+        <view class="svg-icon icon-24 icon-checklist-gold"></view>
+      </view>
+      <text class="tool-label">筹备清单</text>
+    </view>
+    <view class="tool-item" catchtap="goBudget">
+      <view class="tool-icon-wrap">
+        <view class="svg-icon icon-24 icon-money-gold"></view>
+      </view>
+      <text class="tool-label">预算计算</text>
+    </view>
+    <view class="tool-item" catchtap="goCountdown">
+      <view class="tool-icon-wrap">
+        <view class="svg-icon icon-24 icon-clock-gold"></view>
+      </view>
+      <text class="tool-label">倒计时</text>
+    </view>
+  </view>
+
+  <!-- 我的菜单 -->
+  <view class="menu-card">
+    <view class="menu-item" catchtap="goFavorites">
+      <view class="menu-left">
+        <view class="svg-icon icon-18 icon-heart-gold"></view>
+        <text class="menu-text">我的收藏</text>
+      </view>
+      <view class="menu-right">
+        <text wx:if="{{collectionCount > 0}}" class="menu-badge">{{collectionCount}}个</text>
+        <text class="menu-arrow">›</text>
+      </view>
+    </view>
+    <view class="menu-divider"></view>
+    <view class="menu-item" catchtap="goConsultations">
+      <view class="menu-left">
+        <view class="svg-icon icon-18 icon-chat-gold"></view>
+        <text class="menu-text">咨询记录</text>
+      </view>
+      <text class="menu-arrow">›</text>
+    </view>
+    <view class="menu-divider"></view>
+    <view class="menu-item" catchtap="togglePlannerEntry">
+      <view class="menu-left">
+        <view class="svg-icon icon-18 icon-user-gold"></view>
+        <text class="menu-text">策划师工作台</text>
+      </view>
+      <text class="menu-arrow">›</text>
+    </view>
+  </view>
+
+  <!-- 策划师验证入口 -->
+  <view wx:if="{{plannerEntryShow}}" class="verify-card">
+    <text class="verify-hint">请输入邀请码以进入策划师工作台</text>
+    <view class="verify-row">
+      <input class="verify-input" placeholder="请输入邀请码" value="{{verifyCode}}" bindinput="onVerifyInput" maxlength="20" />
+      <view class="verify-btn" catchtap="doVerify">验证</view>
+    </view>
+    <text wx:if="{{verifyError}}" class="verify-error">{{verifyError}}</text>
+  </view>
+
+  <!-- 当前为策划师模式 -->
+  <view wx:if="{{isPlanner}}" class="planner-tip">
+    <text class="planner-tip-text">当前为策划师模式</text>
+    <view class="switch-btn" catchtap="switchToNewbie">切换到新人</view>
+  </view>
+
+  <view class="mine-footer">
+    <text>大喜的日子 · 婚礼场景策划工作室</text>
+    <text style="margin-top:8rpx;">武汉 · 湖北</text>
+  </view>
+</view>

@@ -1,0 +1,210 @@
+.nb-wrap {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 500;
+  width: 100%;
+}
+
+.nb-transparent {
+  background: transparent !important;
+}
+
+.nb-status {
+  width: 100%;
+}
+
+.nb-bar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding-left: 12px;
+  box-sizing: border-box;
+}
+
+.nb-back {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 32px;
+  padding: 0 10px 0 6px;
+  border-radius: 16px;
+  font-size: 13px;
+  z-index: 2;
+  position: relative;
+}
+
+.nb-back-hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.nb-back-icon {
+  width: 9px;
+  height: 9px;
+  border-left: 2rpx solid;
+  border-bottom: 2rpx solid;
+  border-left-width: 2px;
+  border-bottom-width: 2px;
+  border-left-style: solid;
+  border-bottom-style: solid;
+  transform: rotate(45deg);
+  margin-right: 6px;
+  margin-left: 4px;
+  flex-shrink: 0;
+}
+
+.nb-back-text {
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1;
+}
+
+.nb-title {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 600;
+  pointer-events: none;
+  padding: 0 100px;
+  box-sizing: border-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.nb-placeholder {
+  width: 100%;
+}
+
+/* ---------- 毛玻璃沉浸式效果 ---------- */
+.nb-glass { backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); border-bottom:0.5px solid var(--border-line); }
+
+/* ═══════════════════════════════════════════════
+   ENHANCED NAV BAR — Design Canvas Migration
+   从设计画布迁移的导航栏增强样式
+   ═══════════════════════════════════════════════ */
+
+/* ---------- 渐变背景导航栏 ---------- */
+.nb-gradient {
+  background: linear-gradient(135deg, var(--gold-50), var(--bg-card));
+  border-bottom: 1px solid var(--gold-100);
+}
+
+.nb-gradient::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold-200), transparent);
+}
+
+/* ---------- 白色背景导航栏 ---------- */
+.nb-white {
+  background: var(--bg-card);
+  border-bottom: 1px solid var(--gold-100);
+}
+
+/* ---------- 导航栏标题装饰 ---------- */
+.nb-title-deco {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nb-title-deco::before {
+  content: '';
+  width: 4px;
+  height: 16px;
+  background: linear-gradient(180deg, var(--gold-300), var(--gold-500));
+  border-radius: 2px;
+}
+
+/* ---------- 返回按钮增强 ---------- */
+.nb-back-enhanced {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--gold-50);
+  transition: all 0.2s ease;
+}
+
+.nb-back-enhanced:active {
+  background: var(--gold-100);
+  transform: scale(0.95);
+}
+
+.nb-back-enhanced .nb-back-icon {
+  width: 10px;
+  height: 10px;
+  border-width: 2px;
+  margin: 0;
+}
+
+/* ---------- 右侧操作区 ---------- */
+.nb-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-right: 16px;
+}
+
+.nb-action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  color: var(--gold-600);
+  transition: all 0.2s ease;
+}
+
+.nb-action-btn:active {
+  background: var(--gold-100);
+  transform: scale(0.95);
+}
+
+/* ---------- 搜索框导航栏 ---------- */
+.nb-search {
+  flex: 1;
+  height: 36px;
+  background: var(--gold-50);
+  border: 1px solid var(--gold-200);
+  border-radius: 18px;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 12px;
+}
+
+.nb-search-icon {
+  width: 16px;
+  height: 16px;
+  color: var(--gold-400);
+}
+
+.nb-search-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  font-size: 14px;
+  color: var(--text-primary);
+}
+
+.nb-search-input::placeholder {
+  color: var(--gold-400);
+}

@@ -1,0 +1,85 @@
+<nav-bar title="线索详情" show-back="{{true}}" />
+<view class="page">
+  <!-- 加载中 -->
+  <view wx:if="{{loading}}" class="skeleton-card">
+    <view class="skeleton-line w-70 skeleton-shimmer"></view>
+    <view class="skeleton-line w-40 skeleton-shimmer" style="margin-top:16rpx;"></view>
+    <view class="skeleton-line w-60 skeleton-shimmer" style="margin-top:16rpx;"></view>
+  </view>
+
+  <view wx:if="{{!loading && lead}}">
+    <!-- 联系人头部 -->
+    <view class="card-premium detail-section">
+      <view class="detail-header">
+        <view class="detail-avatar">{{lead.name ? lead.name[0] : '?'}}</view>
+        <view>
+          <text class="detail-name">{{lead.name}}</text>
+          <text class="detail-phone">{{lead.phone}}</text>
+        </view>
+        <button class="call-btn" catchtap="makePhoneCall">拨打电话</button>
+      </view>
+
+      <!-- 基本信息 -->
+      <view class="info-row">
+        <text class="info-label">婚期</text>
+        <text class="info-value">{{lead.weddingDate || '未填写'}}</text>
+      </view>
+      <view class="info-row">
+        <text class="info-label">预算</text>
+        <text class="info-value">{{lead.budget ? '¥' + lead.budget : '未填写'}}</text>
+      </view>
+      <view class="info-row">
+        <text class="info-label">风格偏好</text>
+        <text class="info-value">{{lead.stylePreference || '未选择'}}</text>
+      </view>
+      <view class="info-row">
+        <text class="info-label">来源</text>
+        <text class="info-value">{{lead.source || '小程序'}}</text>
+      </view>
+      <view class="info-row">
+        <text class="info-label">需求</text>
+        <text class="info-value">{{lead.requirement || '无'}}</text>
+      </view>
+
+      <!-- 状态下拉 -->
+      <view class="status-picker-row">
+        <text class="status-picker-label">状态</text>
+        <picker class="status-picker" mode="selector" range="{{statusOptions}}" value="{{statusIndex}}" bindchange="onStatusChange">
+          <view class="info-value">{{statusOptions[statusIndex]}} ▾</view>
+        </picker>
+      </view>
+    </view>
+
+    <!-- 跟进备注时间线 -->
+    <view class="card-premium detail-section">
+      <view style="font-size:30rpx; font-weight:600; margin-bottom:24rpx;">跟进时间线</view>
+      <view wx:if="{{!lead.followUpNotes || lead.followUpNotes.length===0}}" style="font-size:26rpx; color:var(--text-muted); padding:40rpx 0; text-align:center;">
+        暂无跟进记录
+      </view>
+      <view wx:else class="timeline-list">
+        <view wx:for="{{lead.followUpNotes}}" wx:key="createdAt" class="timeline-item" wx:for-item="note">
+          <view class="timeline-dot"></view>
+          <view class="timeline-body">
+            <text class="timeline-text">{{note.text}}</text>
+            <text class="timeline-time">{{note.createdAt}}</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 添加备注 -->
+      <view class="note-input-area">
+        <textarea class="note-input" value="{{noteText}}" placeholder="添加跟进备注..." bindinput="onNoteInput" maxlength="500" />
+        <button class="note-btn btn-outline" catchtap="addNote">添加备注</button>
+      </view>
+    </view>
+
+    <!-- 一键转订单 -->
+    <view class="card-premium detail-section" wx:if="{{lead.status !== '已转化'}}">
+      <view style="font-size:28rpx; font-weight:600; margin-bottom:16rpx;">转为订单</view>
+      <view style="font-size:24rpx; color:var(--text-muted); margin-bottom:24rpx;">
+        确认线索后将自动创建订单，客户姓名、婚期和预算将自动填入。
+      </view>
+      <button class="btn-gold" catchtap="convertToOrder">一键转订单</button>
+    </view>
+  </view>
+</view>

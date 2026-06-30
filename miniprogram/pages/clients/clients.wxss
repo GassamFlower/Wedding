@@ -1,0 +1,49 @@
+/* 客户管理 — 轻复古·奶油风 · 24rpx 基准 */
+
+.search-bar-inline { margin-bottom: 24rpx; }
+.search-input { width:100%; padding:16rpx 24rpx; background:var(--bg-card); border-radius:9999rpx; font-size:26rpx; border:2rpx solid var(--border-light); }
+.tabs { display:flex; gap:12rpx; margin-bottom:24rpx; }
+.tab { flex:1; padding:14rpx; text-align:center; font-size:24rpx; font-weight:500; color:var(--text-secondary); background:var(--bg-card); border-radius:16rpx; border:2rpx solid var(--border-light); cursor:pointer; }
+.tab.active { color:var(--gold); border-color:var(--gold); background:rgba(202,138,4,0.08); }
+.client-card { cursor:pointer; }
+.client-header { margin-bottom:0; }
+.client-name { display:block; font-size:28rpx; font-weight:600; color:var(--text-main); }
+.client-info { display:block; font-size:22rpx; color:rgba(0,0,0,0.55); margin-top:4rpx; }
+.client-footer { padding-top:12rpx; border-top:2rpx solid rgba(0,0,0,0.04); }
+
+/* ═══ 增强样式 ═══ */
+.search-bar-inline {
+  background: linear-gradient(135deg, var(--gold-50), var(--bg-card));
+  border: 2rpx solid var(--gold-200);
+  box-shadow: var(--shadow-sm);
+  border-radius: 28rpx;
+  padding: 6rpx;
+}
+.search-bar-inline:active {
+  border-color: var(--gold-400);
+  background: var(--bg-card);
+}
+.search-input { background: transparent; border: none; color: var(--gold-800); }
+.search-input::placeholder { color: var(--gold-400); }
+
+.tab {
+  background: linear-gradient(135deg, var(--bg-card), var(--gold-50));
+  border: 2rpx solid var(--gold-200);
+  box-shadow: var(--shadow-sm);
+}
+.tab:active { transform: scale(0.95); }
+.tab.active {
+  background: linear-gradient(135deg, var(--gold-400), var(--gold-500));
+  border-color: var(--gold-400);
+  box-shadow: var(--shadow-gold);
+  color: var(--text-inverse);
+}
+
+.client-card {
+  background: linear-gradient(135deg, var(--bg-card), var(--gold-50));
+  border: 2rpx solid var(--gold-100);
+  box-shadow: var(--shadow-md);
+}
+.client-card:active { transform: translateY(-2rpx); box-shadow: var(--shadow-lg); }
+.client-name { color: var(--gold-800); font-weight: 700; }
+.client-info { color: var(--gold-500); }

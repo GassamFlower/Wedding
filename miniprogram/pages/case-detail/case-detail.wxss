@@ -1,0 +1,641 @@
+/* 案例详情 — 轻复古·奶油风 · 24rpx 基准 */
+
+/* 案例头部 */
+.case-header {
+  background: linear-gradient(135deg, var(--bg-card), var(--gold-50));
+  border: 2rpx solid var(--gold-100);
+  box-shadow: var(--shadow-md);
+  border-radius: 32rpx;
+  padding: 32rpx;
+  margin-bottom: 32rpx;
+}
+
+.case-title {
+  font-size: 36rpx;
+  font-weight: 700;
+  color: var(--gold-800);
+  margin-bottom: 16rpx;
+  line-height: 1.4;
+}
+
+.case-meta {
+  display: flex;
+  gap: 24rpx;
+  flex-wrap: wrap;
+  margin-bottom: 20rpx;
+}
+
+.meta-item {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  font-size: 24rpx;
+  color: var(--gold-500);
+}
+
+.meta-icon {
+  font-size: 28rpx;
+  color: var(--gold-400);
+}
+
+.case-tags {
+  display: flex;
+  gap: 12rpx;
+  flex-wrap: wrap;
+}
+
+.case-tag {
+  padding: 8rpx 20rpx;
+  border-radius: 999rpx;
+  font-size: 22rpx;
+  background: linear-gradient(135deg, var(--gold-100), var(--gold-200));
+  color: var(--gold-700);
+  border: 2rpx solid var(--gold-200);
+}
+
+/* 案例图片 */
+.case-gallery {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16rpx;
+  margin-bottom: 32rpx;
+}
+
+.case-gallery-img {
+  width: 100%;
+  aspect-ratio: 4/3;
+  border-radius: 24rpx;
+  overflow: hidden;
+}
+
+.case-gallery-img-placeholder {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, var(--gold-100), var(--gold-200));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--gold-500);
+  font-size: 24rpx;
+  border-radius: 24rpx;
+}
+
+.gallery-title {
+  font-size: 30rpx;
+  font-weight: 700;
+  color: var(--gold-800);
+  margin-bottom: 20rpx;
+  padding-bottom: 16rpx;
+  border-bottom: 2rpx solid var(--gold-100);
+}
+
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16rpx;
+}
+
+.gallery-item {
+  width: 100%;
+  height: 240rpx;
+  border-radius: 24rpx;
+  background: linear-gradient(135deg, var(--gold-100), var(--gold-200));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 60rpx;
+  color: var(--gold-500);
+}
+
+/* 案例内容 */
+.content-section {
+  margin-bottom: 32rpx;
+}
+
+.content-section:last-child {
+  margin-bottom: 0;
+}
+
+.section-title {
+  font-size: 28rpx;
+  font-weight: 700;
+  color: var(--gold-800);
+  margin-bottom: 16rpx;
+}
+
+.section-text {
+  font-size: 26rpx;
+  color: var(--gold-700);
+  line-height: 1.8;
+}
+
+/* 操作按钮 */
+.action-bar {
+  display: flex;
+  gap: 20rpx;
+  margin-top: 32rpx;
+}
+
+.btn-gold {
+  flex: 1;
+  background: linear-gradient(135deg, var(--gold-400), var(--gold-500));
+  color: var(--text-inverse);
+  font-size: 28rpx;
+  font-weight: 600;
+  padding: 24rpx;
+  border-radius: 999rpx;
+  text-align: center;
+  border: none;
+  cursor: pointer;
+  box-shadow: var(--shadow-gold);
+}
+
+.btn-gold:active {
+  transform: scale(0.97);
+}
+
+.btn-outline {
+  flex: 1;
+  background: linear-gradient(135deg, var(--bg-card), var(--gold-50));
+  color: var(--gold-700);
+  font-size: 26rpx;
+  font-weight: 600;
+  padding: 24rpx;
+  border-radius: 999rpx;
+  text-align: center;
+  border: 2rpx solid var(--gold-200);
+  cursor: pointer;
+}
+
+.btn-outline:active {
+  background: var(--gold-50);
+  transform: scale(0.97);
+}
+
+/* ═══ 案例详情页完整样式 ═══ */
+
+/* 页面容器 */
+.case-detail-page {
+  min-height: 100vh;
+  background: var(--bg-primary);
+}
+
+/* 案例英雄区 */
+.case-hero {
+  position: relative;
+  height: 480rpx;
+  overflow: hidden;
+}
+
+.case-hero-img {
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+}
+
+.case-hero-img-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--gold-500);
+  font-size: 28rpx;
+}
+
+.case-hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.4) 100%);
+}
+
+.case-hero-content {
+  position: absolute;
+  bottom: 40rpx;
+  left: 32rpx;
+  right: 32rpx;
+  z-index: 1;
+}
+
+.case-hero-badge {
+  display: inline-block;
+  padding: 8rpx 20rpx;
+  background: rgba(255,255,255,0.9);
+  color: var(--gold-600);
+  font-size: 22rpx;
+  font-weight: 600;
+  border-radius: 999rpx;
+  margin-bottom: 16rpx;
+}
+
+.case-hero-style-tag {
+  display: inline-block;
+  padding: 8rpx 20rpx;
+  background: var(--gold-400);
+  color: var(--text-inverse);
+  font-size: 22rpx;
+  font-weight: 600;
+  border-radius: 999rpx;
+  margin-left: 12rpx;
+}
+
+.case-hero-text {
+  display: block;
+  font-size: 36rpx;
+  font-weight: 700;
+  color: var(--text-inverse);
+  margin-top: 16rpx;
+  text-shadow: 0 2rpx 8rpx rgba(0,0,0,0.3);
+}
+
+/* 案例内容区 */
+.case-content {
+  padding: 32rpx;
+}
+
+/* 操作栏 */
+.case-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 32rpx;
+}
+
+.case-stats {
+  display: flex;
+  gap: 32rpx;
+}
+
+.case-stat-item {
+  display: flex;
+  align-items: center;
+  color: var(--gold-500);
+  font-size: 24rpx;
+}
+
+.case-stat-text {
+  color: var(--gold-500);
+}
+
+.share-btn,
+.fav-btn {
+  display: flex;
+  align-items: center;
+  padding: 12rpx 24rpx;
+  background: var(--bg-card);
+  border: 2rpx solid var(--gold-200);
+  border-radius: 999rpx;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.share-btn:active,
+.fav-btn:active {
+  transform: scale(0.95);
+  background: var(--gold-50);
+}
+
+.fav-btn.fav-active {
+  background: var(--gold-100);
+  border-color: var(--gold-400);
+  color: var(--gold-600);
+}
+
+.fav-active {
+  color: var(--gold-600);
+}
+
+/* 案例信息卡 */
+.case-info-card {
+  background: var(--bg-card);
+  border: 2rpx solid var(--gold-100);
+  border-radius: 32rpx;
+  padding: 32rpx;
+  box-shadow: var(--shadow-md);
+  margin-bottom: 32rpx;
+}
+
+.case-detail-title {
+  display: block;
+  font-size: 32rpx;
+  font-weight: 700;
+  color: var(--gold-800);
+  margin-bottom: 12rpx;
+}
+
+.case-detail-sub {
+  display: block;
+  font-size: 26rpx;
+  color: var(--gold-600);
+  margin-bottom: 16rpx;
+}
+
+.case-tag {
+  display: inline-block;
+  padding: 8rpx 20rpx;
+  background: var(--gold-100);
+  color: var(--gold-700);
+  font-size: 22rpx;
+  border-radius: 999rpx;
+  margin-right: 12rpx;
+  margin-bottom: 12rpx;
+}
+
+.divider {
+  height: 2rpx;
+  background: var(--gold-100);
+  margin: 24rpx 0;
+}
+
+.case-info-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24rpx;
+}
+
+.case-info-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.case-info-label {
+  display: block;
+  font-size: 22rpx;
+  color: var(--gold-500);
+  margin-top: 8rpx;
+}
+
+.case-info-value {
+  display: block;
+  font-size: 26rpx;
+  color: var(--gold-800);
+  font-weight: 600;
+  margin-top: 4rpx;
+}
+
+/* 详情卡片 */
+.detail-card {
+  background: var(--bg-card);
+  border: 2rpx solid var(--gold-100);
+  border-radius: 32rpx;
+  padding: 32rpx;
+  box-shadow: var(--shadow-md);
+  margin-bottom: 32rpx;
+}
+
+.card-warm {
+  background: linear-gradient(135deg, var(--gold-50), var(--bg-card));
+  border-left: 6rpx solid var(--gold-400);
+}
+
+.case-section-title {
+  display: flex;
+  align-items: center;
+  font-size: 28rpx;
+  font-weight: 700;
+  color: var(--gold-800);
+  margin-bottom: 24rpx;
+}
+
+.gold-bar {
+  width: 8rpx;
+  height: 32rpx;
+  background: var(--gold-400);
+  border-radius: 4rpx;
+  margin-right: 16rpx;
+}
+
+.detail-body-text {
+  font-size: 26rpx;
+  color: var(--gold-700);
+  line-height: 1.8;
+}
+
+/* 引用块 */
+.blockquote {
+  background: var(--gold-50);
+  border-left: 6rpx solid var(--gold-400);
+  padding: 24rpx 32rpx;
+  border-radius: 16rpx;
+  margin: 24rpx 0;
+}
+
+.blockquote-text {
+  display: block;
+  font-size: 26rpx;
+  color: var(--gold-700);
+  line-height: 1.8;
+  font-style: italic;
+}
+
+.blockquote-attribution {
+  display: block;
+  font-size: 22rpx;
+  color: var(--gold-500);
+  margin-top: 16rpx;
+  text-align: right;
+}
+
+/* 时间线 */
+.timeline {
+  position: relative;
+  padding-left: 32rpx;
+}
+
+.tlnode {
+  position: relative;
+  padding-bottom: 32rpx;
+}
+
+.tlnode::before {
+  content: '';
+  position: absolute;
+  left: -28rpx;
+  top: 12rpx;
+  width: 16rpx;
+  height: 16rpx;
+  border-radius: 50%;
+  background: var(--gold-400);
+  box-shadow: 0 0 0 4rpx var(--gold-100);
+}
+
+.tlnode::after {
+  content: '';
+  position: absolute;
+  left: -24rpx;
+  top: 32rpx;
+  bottom: 0;
+  width: 2rpx;
+  background: var(--gold-200);
+}
+
+.tlnode:last-child::after {
+  display: none;
+}
+
+.tlnode-label {
+  display: block;
+  font-size: 26rpx;
+  font-weight: 600;
+  color: var(--gold-800);
+  margin-bottom: 8rpx;
+}
+
+.tlnode-note {
+  display: block;
+  font-size: 24rpx;
+  color: var(--gold-600);
+  line-height: 1.6;
+}
+
+/* 物料网格 */
+.mat-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20rpx;
+}
+
+.mat-item {
+  background: var(--gold-50);
+  border: 2rpx solid var(--gold-100);
+  border-radius: 16rpx;
+  padding: 20rpx;
+}
+
+.mat-color {
+  width: 48rpx;
+  height: 48rpx;
+  border-radius: 8rpx;
+  margin-bottom: 12rpx;
+}
+
+.mat-name {
+  display: block;
+  font-size: 24rpx;
+  color: var(--gold-800);
+  margin-bottom: 4rpx;
+}
+
+.mat-status {
+  display: block;
+  font-size: 22rpx;
+  color: var(--gold-500);
+}
+
+/* 底部CTA */
+.case-footer-cta {
+  position: relative;
+  margin-top: 48rpx;
+  padding: 48rpx 32rpx;
+  text-align: center;
+  overflow: hidden;
+}
+
+.case-footer-cta-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, var(--gold-100), var(--gold-200));
+  opacity: 0.3;
+  z-index: 0;
+}
+
+.case-footer-cta-content {
+  position: relative;
+  z-index: 1;
+}
+
+.case-footer-cta-title {
+  display: block;
+  font-size: 32rpx;
+  font-weight: 700;
+  color: var(--gold-800);
+  margin-bottom: 12rpx;
+}
+
+.case-footer-cta-sub {
+  display: block;
+  font-size: 24rpx;
+  color: var(--gold-600);
+  margin-bottom: 24rpx;
+}
+
+.hero-cta {
+  display: inline-block;
+  padding: 20rpx 48rpx;
+  background: linear-gradient(135deg, var(--gold-400), var(--gold-500));
+  color: var(--text-inverse);
+  font-size: 28rpx;
+  font-weight: 600;
+  border-radius: 999rpx;
+  border: none;
+  box-shadow: var(--shadow-gold);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.hero-cta:active {
+  transform: scale(0.97);
+}
+
+/* 加载状态 */
+.case-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80rpx 32rpx;
+}
+
+.loading-spinner {
+  width: 64rpx;
+  height: 64rpx;
+  border: 4rpx solid var(--gold-200);
+  border-top-color: var(--gold-400);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.loading-text {
+  font-size: 26rpx;
+  color: var(--gold-500);
+  margin-top: 24rpx;
+}
+
+/* 辅助类 */
+.space-12 {
+  height: 24rpx;
+}
+
+.space-16 {
+  height: 32rpx;
+}
+
+.checklist-tip {
+  display: flex;
+  align-items: flex-start;
+  background: var(--gold-50);
+  border: 2rpx solid var(--gold-200);
+  border-radius: 16rpx;
+  padding: 20rpx;
+}
+
+.text-body {
+  font-size: 26rpx;
+  color: var(--gold-700);
+  line-height: 1.8;
+}
