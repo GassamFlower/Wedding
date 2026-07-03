@@ -1,0 +1,70 @@
+# ═══════════════════════════════════════════════
+# 大喜的日子 — Git 忽略文件
+# ═══════════════════════════════════════════════
+
+# ─── 依赖目录 ───
+node_modules/
+admin/node_modules/
+cloudfunctions/*/node_modules/
+miniprogram/node_modules/
+
+# ─── 环境变量 & 密钥 ───
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+credentials.json
+admin/.env
+
+# ─── 构建产物 ───
+admin/dist/
+dist/
+
+# ─── 微信小程序 ───
+miniprogram_npm/
+project.private.config.json
+
+# ─── 云函数本地调试 ───
+cloudfunctions/*/node_modules/
+
+# ─── 日志 ───
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+logs/
+
+# ─── 操作系统 ───
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# ─── IDE & 编辑器 ───
+.vscode/
+.idea/
+*.sublime-*
+.cursor/
+
+# ─── Python ───
+__pycache__/
+*.py[cod]
+*.pyo
+*.egg-info/
+.Python
+
+# ─── 临时文件 ───
+*.tmp
+*.temp
+.cache/
+tmp/
+
+# ─── 测试覆盖 ───
+coverage/
+.nyc_output/
+
+# ─── 锁文件（按需保留/忽略） ───
+# package-lock.json  # 建议保留，确保依赖一致
+# yarn.lock

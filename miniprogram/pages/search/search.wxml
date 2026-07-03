@@ -44,3 +44,6 @@
     <text class="empty-text">未找到与"{{keyword}}"相关的内容</text>
   </view>
 </view>
+
+<!-- 登录弹窗 -->
+<login-modal visible="{{showLoginModal}}" bind:success="onLoginSuccess" bind:close="onLoginClose" />

@@ -24,10 +24,34 @@ Page({
     budgetLevel: '舒适档',
     budgetLevelColor: 'rgba(201,169,110,0.25)',
     referenceBars: BUDGET_REFERENCE,
+    showLoginModal: false,
   },
 
   onLoad() {
     this._calcTotal();
+
+    // 注册登录弹窗到全局
+    const app = getApp();
+    this._loginModalShowFn = (show) => {
+      this.setData({ showLoginModal: show });
+    };
+    app.registerLoginModal(this._loginModalShowFn);
+  },
+
+  onUnload() {
+    // 页面卸载时注销登录弹窗
+    if (this._loginModalShowFn) {
+      const app = getApp();
+      app.unregisterLoginModal(this._loginModalShowFn);
+    }
+  },
+
+  onLoginSuccess() {
+    this.setData({ showLoginModal: false });
+  },
+
+  onLoginClose() {
+    this.setData({ showLoginModal: false });
   },
 
   onSliderChange(e) {
@@ -78,7 +102,17 @@ Page({
   },
 
   goContact() {
-    getApp().globalData.pendingBudget = { total: this.data.total, categories: this.data.categories };
+    // 检查登录状态
+    const app = getApp();
+    if (!app.globalData.isLoggedIn) {
+      api.requireLogin(() => {
+        // 登录成功后继续跳转
+        app.globalData.pendingBudget = { total: this.data.total, categories: this.data.categories };
+        wx.switchTab({ url: '/pages/home/home' });
+      });
+      return;
+    }
+    app.globalData.pendingBudget = { total: this.data.total, categories: this.data.categories };
     wx.switchTab({ url: '/pages/home/home' });
   },
 

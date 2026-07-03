@@ -1,4 +1,5 @@
 const api = require('../../services/api');
+const app = getApp();
 
 const STATUS_TABS = [
   { key: 'all', label: '全部' },
@@ -14,17 +15,40 @@ Page({
     activeTab: 'all',
     leads: [],
     loading: false,
+    error: false,
+    errorMsg: '',
     page: 1,
     total: 0,
     hasMore: true,
+    showLoginModal: false,
   },
 
   onLoad() {
+    this._loginModalShowFn = (show) => { this.setData({ showLoginModal: show }); };
+    app.registerLoginModal(this._loginModalShowFn);
+    
+    // 登录守卫
+    if (!app.globalData.isLoggedIn) {
+      api.requireLogin(() => { this.fetchLeads(); });
+    } else {
+      this.fetchLeads();
+    }
+  },
+  onUnload() {
+    if (this._loginModalShowFn) app.unregisterLoginModal(this._loginModalShowFn);
+  },
+
+  onLoginSuccess() {
+    this.setData({ showLoginModal: false });
     this.fetchLeads();
   },
 
+  onLoginClose() {
+    this.setData({ showLoginModal: false });
+  },
+
   onShow() {
-    this.fetchLeads();
+    if (app.globalData.isLoggedIn) this.fetchLeads();
   },
 
   onPullDownRefresh() {
@@ -46,7 +70,7 @@ Page({
   },
 
   fetchLeads(append) {
-    this.setData({ loading: true });
+    this.setData({ loading: true, error: false, errorMsg: '' });
     const { activeTab, page } = this.data;
     const params = { page, pageSize: 20 };
     if (activeTab !== 'all') params.status = activeTab;
@@ -66,8 +90,13 @@ Page({
         total,
         hasMore: (append ? this.data.leads.length + leads.length : leads.length) < total,
       });
-    }).catch(() => {
-      this.setData({ loading: false });
+    }).catch(err => {
+      console.error('线索加载失败:', err);
+      this.setData({
+        loading: false,
+        error: true,
+        errorMsg: '数据加载失败，请下拉刷新重试'
+      });
     });
   },
 

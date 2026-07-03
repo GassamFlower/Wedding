@@ -253,6 +253,137 @@
   opacity: 0.9;
 }
 
+/* 策划师身份卡片 */
+.planner-card {
+  margin-top: 32rpx;
+  padding: 40rpx;
+  background: linear-gradient(135deg, var(--gold-50), var(--bg-card));
+  border: 2rpx solid var(--gold-200);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+}
+
+.planner-card-header {
+  display: flex;
+  align-items: center;
+  gap: 24rpx;
+  margin-bottom: 32rpx;
+}
+
+.planner-card-icon {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--gold-200), var(--gold-300));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-sm);
+}
+
+.planner-card-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+}
+
+.planner-card-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.planner-card-desc {
+  font-size: 24rpx;
+  color: var(--text-secondary);
+}
+
+.planner-card-actions {
+  display: flex;
+  gap: 20rpx;
+}
+
+.planner-btn-primary {
+  flex: 1;
+  height: 72rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--gold-400), var(--gold-500));
+  border-radius: var(--radius);
+  font-size: 28rpx;
+  color: var(--text-inverse);
+  font-weight: 500;
+  box-shadow: var(--shadow-sm);
+}
+
+.planner-btn-primary:active {
+  opacity: 0.9;
+  transform: scale(0.98);
+}
+
+.planner-btn-secondary {
+  flex: 1;
+  height: 72rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-card);
+  border: 2rpx solid var(--gold-300);
+  border-radius: var(--radius);
+  font-size: 28rpx;
+  color: var(--gold-500);
+  font-weight: 500;
+}
+
+.planner-btn-secondary:active {
+  background: var(--gold-50);
+}
+
+/* 登录提示卡片 */
+.login-hint-card {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+  padding: 32rpx 40rpx;
+  margin-bottom: 32rpx;
+  background: linear-gradient(135deg, var(--gold-50), var(--bg-card));
+  border: 2rpx solid var(--gold-200);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.login-hint-icon {
+  flex-shrink: 0;
+}
+
+.login-hint-text {
+  flex: 1;
+  font-size: 28rpx;
+  color: var(--text-primary);
+}
+
+.login-hint-btn {
+  flex-shrink: 0;
+  padding: 12rpx 28rpx;
+  background: var(--gold-400);
+  border-radius: var(--radius);
+  font-size: 24rpx;
+  color: var(--text-inverse);
+  font-weight: 500;
+}
+
+.user-phone {
+  font-size: 24rpx;
+  color: var(--text-secondary);
+}
+
+.user-hint {
+  font-size: 24rpx;
+  color: var(--text-muted);
+}
+
 /* 页脚 */
 .mine-footer {
   display: flex;

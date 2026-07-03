@@ -1,5 +1,5 @@
 // 云函数：clients
-// 客户管理（客户列表数据来源于 orders 集合的聚合视图）
+// 客户管理（独立 clients 集合）
 // actions: list / summary / detail / create / update / remove
 
 const cloud = require('wx-server-sdk');
@@ -13,7 +13,6 @@ const {
   badgeOf, statusClassOf, takeShort, avatarClassOf,
 } = require('./utils');
 
-const ORDER_COL = 'orders';
 const CLIENT_COL = 'clients';
 
 exports.main = async (event) => {
@@ -38,18 +37,18 @@ exports.main = async (event) => {
 
 // ---------- 业务方法 ----------
 
-// 客户列表：直接以 orders 为视图（前端 customer_data 展示的就是订单卡片）
+// 客户列表：从 clients 集合读取
 async function listClients(openid, { tab = 'all', keyword = '', page = 1, pageSize = 50 } = {}) {
-  const col = db.collection(ORDER_COL);
+  const col = db.collection(CLIENT_COL);
   const notDel = notDeleted(_);
   const where = { _openid: openid, isDeleted: notDel };
 
-  if (tab === 'active') where.status = _.neq('已完成');
+  if (tab === 'active') where.status = _.neq('已完成').and(_.neq('lost'));
   else if (tab === 'done') where.status = '已完成';
 
-  if (keyword) where.clientName = db.RegExp({ regexp: keyword, options: 'i' });
+  if (keyword) where.name = db.RegExp({ regexp: keyword, options: 'i' });
 
-  const res = await col.where(where).orderBy('weddingDate', 'desc')
+  const res = await col.where(where).orderBy('updatedAt', 'desc')
     .skip((page - 1) * pageSize).limit(pageSize).get();
 
   return ok({
@@ -59,11 +58,11 @@ async function listClients(openid, { tab = 'all', keyword = '', page = 1, pageSi
 }
 
 async function summaryClients(openid) {
-  const col = db.collection(ORDER_COL);
+  const col = db.collection(CLIENT_COL);
   const baseScope = { _openid: openid, isDeleted: notDeleted(_) };
   const [totalRes, activeRes, doneRes] = await Promise.all([
     col.where(baseScope).count(),
-    col.where({ ...baseScope, status: _.neq('已完成') }).count(),
+    col.where({ ...baseScope, status: _.neq('已完成').and(_.neq('lost')) }).count(),
     col.where({ ...baseScope, status: '已完成' }).count(),
   ]);
   return ok({
@@ -87,6 +86,7 @@ async function createClient(openid, { data } = {}) {
   if (err) return fail(err);
   if (data.phone && !validatePhone(data.phone)) return fail('手机号格式不合法');
   const now = new Date();
+  // 写入 clients 集合
   const res = await db.collection(CLIENT_COL).add({
     data: {
       _openid: openid,
@@ -94,7 +94,11 @@ async function createClient(openid, { data } = {}) {
       phone: data.phone || '',
       wechat: data.wechat || '',
       remark: data.remark || '',
-      tags: data.tags || [],
+      source: data.source || '',
+      tags: Array.isArray(data.tags) ? data.tags : (data.tags ? String(data.tags).split(',').map(t => t.trim()).filter(Boolean) : []),
+      status: 'active',
+      orderCount: 0,
+      totalBudget: 0,
       isDeleted: NOT_DELETED,
       createdAt: now,
       updatedAt: now,
@@ -110,7 +114,7 @@ async function updateClient(openid, { id, data } = {}) {
   if (!doc.data) return fail('客户不存在');
   if (doc.data._openid && doc.data._openid !== openid) return fail('无权访问');
   const upd = {};
-  ['name', 'phone', 'wechat', 'remark', 'tags'].forEach(k => {
+  ['name', 'phone', 'wechat', 'remark', 'source', 'tags', 'status'].forEach(k => {
     if (data[k] !== undefined) upd[k] = data[k];
   });
   upd.updatedAt = new Date();
@@ -129,17 +133,21 @@ async function removeClient(openid, { id } = {}) {
 
 // ---------- helpers ----------
 
-function toClientCard(o) {
+function toClientCard(c) {
   return {
-    id: o._id,
-    name: o.clientName || '',
-    short: takeShort(o.clientName),
-    avatarClass: avatarClassOf(o.clientName),
-    date: formatMonthDay(o.weddingDate),
-    venue: o.venue || '',
-    tags: [o.style, o.venueType].filter(Boolean),
-    status: o.status || '筹备中',
-    badgeClass: badgeOf(o.status),
-    statusClass: statusClassOf(o.status),
+    id: c._id,
+    name: c.name || '',
+    short: takeShort(c.name),
+    avatarClass: avatarClassOf(c.name),
+    phone: c.phone || '',
+    wechat: c.wechat || '',
+    venue: c.venue || '',
+    date: c.latestOrderDate ? formatMonthDay(c.latestOrderDate) : '',
+    amount: c.totalBudget ? String(c.totalBudget) : '',
+    tags: Array.isArray(c.tags) ? c.tags : [],
+    status: c.status || 'active',
+    badgeClass: badgeOf(c.status),
+    statusClass: statusClassOf(c.status),
+    orderCount: c.orderCount || 0,
   };
 }

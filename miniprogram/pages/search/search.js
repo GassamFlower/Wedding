@@ -1,6 +1,7 @@
 // pages/search/search.js
 // 全局搜索：跨模块搜索订单/道具/酒店/合同/待办
 const api = require('../../services/api');
+const app = getApp();
 
 Page({
   data: {
@@ -9,6 +10,7 @@ Page({
     loading: false,
     showClear: false,
     hasSearched: false,
+    showLoginModal: false,
     // 类型元数据（用于前端展示）
     typeMeta: {
       order:    { icon: 'icon-ring',     label: '婚礼订单', color: '#c9a96e' },
@@ -17,6 +19,30 @@ Page({
       contract: { icon: 'icon-contract', label: '合同',     color: '#6bc4a0' },
       todo:     { icon: 'icon-check',    label: '待办',     color: '#b8956a' },
     },
+  },
+
+  onLoad() {
+    // 登录守卫
+    if (!app.globalData.isLoggedIn) {
+      api.requireLogin(() => {
+        // 登录成功后如果有关键词则自动搜索
+        if (this.data.keyword) this.onSearch();
+      });
+    }
+    this._loginModalShowFn = (show) => { this.setData({ showLoginModal: show }); };
+    app.registerLoginModal(this._loginModalShowFn);
+  },
+  onUnload() {
+    if (this._loginModalShowFn) app.unregisterLoginModal(this._loginModalShowFn);
+  },
+
+  onLoginSuccess() {
+    this.setData({ showLoginModal: false });
+    if (this.data.keyword) this.onSearch();
+  },
+
+  onLoginClose() {
+    this.setData({ showLoginModal: false });
   },
 
   onInput(e) {

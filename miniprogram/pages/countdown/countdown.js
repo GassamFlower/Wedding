@@ -1,4 +1,5 @@
 const db = wx.cloud.database();
+const api = require('../../services/api');
 
 Page({
   data: {
@@ -15,6 +16,7 @@ Page({
     friendCount: 0,
     loading: true,
     watcher: null,       // watch 实例
+    showLoginModal: false,
   },
 
   onLoad(options) {
@@ -26,13 +28,33 @@ Page({
       const pendingId = getApp().globalData.pendingOrderId;
       if (pendingId) { this.setData({ orderId: pendingId }); this.loadOrder(); }
     }
+
+    // 注册登录弹窗到全局
+    const app = getApp();
+    this._loginModalShowFn = (show) => {
+      this.setData({ showLoginModal: show });
+    };
+    app.registerLoginModal(this._loginModalShowFn);
   },
 
   onUnload() {
+    // 页面卸载时注销登录弹窗
+    if (this._loginModalShowFn) {
+      const app = getApp();
+      app.unregisterLoginModal(this._loginModalShowFn);
+    }
     if (this.data.watcher) {
       this.data.watcher.close();
       this.setData({ watcher: null });
     }
+  },
+
+  onLoginSuccess() {
+    this.setData({ showLoginModal: false });
+  },
+
+  onLoginClose() {
+    this.setData({ showLoginModal: false });
   },
 
   loadOrder() {
@@ -117,10 +139,30 @@ Page({
   },
 
   goGuestTasks() {
+    // 检查登录状态
+    const app = getApp();
+    if (!app.globalData.isLoggedIn) {
+      api.requireLogin(() => {
+        wx.navigateTo({ url: '/pages/guest-task/guest-task?orderId=' + this.data.orderId });
+      });
+      return;
+    }
     wx.navigateTo({ url: '/pages/guest-task/guest-task?orderId=' + this.data.orderId });
   },
 
   inviteFriend() {
+    // 检查登录状态
+    const app = getApp();
+    if (!app.globalData.isLoggedIn) {
+      api.requireLogin(() => {
+        this._doInviteFriend();
+      });
+      return;
+    }
+    this._doInviteFriend();
+  },
+
+  _doInviteFriend() {
     // 邀请亲友 — 调用分享功能
   },
 

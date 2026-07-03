@@ -27,5 +27,15 @@
       <view class="order-tag tag tag-{{item.statusClass||'progress'}}">{{item.status || '筹备中'}}</view>
     </view>
   </view>
-  <view wx:if="{{!loading && weddings.length===0}}" class="empty-state">本月暂无婚礼</view>
+  <!-- 错误状态 -->
+  <view wx:if="{{error && !loading}}" class="error-state">
+    <view class="error-icon">⚠</view>
+    <text class="error-text">{{errorMsg || '数据加载失败'}}</text>
+    <button class="retry-btn" catchtap="loadData">重新加载</button>
+  </view>
+
+  <view wx:elif="{{!loading && !error && weddings.length===0}}" class="empty-state">本月暂无婚礼</view>
 </view>
+
+<!-- 登录弹窗 -->
+<login-modal visible="{{showLoginModal}}" bind:success="onLoginSuccess" bind:close="onLoginClose" />

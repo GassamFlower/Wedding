@@ -76,3 +76,6 @@
     <text class="pm-tip-text">数据每周更新，点击查看详情</text>
   </view>
 </view>
+
+<!-- 登录弹窗 -->
+<login-modal visible="{{showLoginModal}}" bind:success="onLoginSuccess" bind:close="onLoginClose" />

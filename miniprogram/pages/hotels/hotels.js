@@ -1,5 +1,6 @@
 // pages/hotels/hotels.js
 const api = require('../../services/api');
+const app = getApp();
 
 Page({
   data: {
@@ -16,9 +17,32 @@ Page({
     loading: true,
     error: false,
     errorMsg: '',
+    showLoginModal: false,
   },
 
-  onLoad() { this.loadData(); },
+  onLoad() {
+    this._loginModalShowFn = (show) => { this.setData({ showLoginModal: show }); };
+    app.registerLoginModal(this._loginModalShowFn);
+    
+    // 登录守卫
+    if (!app.globalData.isLoggedIn) {
+      api.requireLogin(() => { this.loadData(); });
+    } else {
+      this.loadData();
+    }
+  },
+  onUnload() {
+    if (this._loginModalShowFn) app.unregisterLoginModal(this._loginModalShowFn);
+  },
+
+  onLoginSuccess() {
+    this.setData({ showLoginModal: false });
+    this.loadData();
+  },
+
+  onLoginClose() {
+    this.setData({ showLoginModal: false });
+  },
 
   loadData() {
     this.setData({ loading: true, error: false });
@@ -43,6 +67,8 @@ Page({
 
   // ===== 表单 =====
   openCreate() {
+    // 防止重复触发
+    if (this.data.showForm) return;
     this.setData({
       showForm: true, formMode: 'create', editingId: null,
       formData: { name: '', hall: '', address: '', contact: '', contactPhone: '', capacity: '', depositStandard: '', loadInTime: '08:00', loadOutTime: '22:00', equipment: '', parking: '', notes: '' },
@@ -60,6 +86,18 @@ Page({
     const { formData, formMode, editingId } = this.data;
     if (!formData.name.trim()) {
       wx.showToast({ title: '请输入酒店名称', icon: 'none' });
+      return;
+    }
+    if (formData.contactPhone && !/^1[3-9]\d{9}$/.test(formData.contactPhone)) {
+      wx.showToast({ title: '请输入正确的联系电话', icon: 'none' });
+      return;
+    }
+    if (formData.capacity && (isNaN(formData.capacity) || parseInt(formData.capacity) <= 0)) {
+      wx.showToast({ title: '请输入正确的容纳桌数', icon: 'none' });
+      return;
+    }
+    if (formData.depositStandard && (isNaN(formData.depositStandard) || parseFloat(formData.depositStandard) < 0)) {
+      wx.showToast({ title: '请输入正确的押金标准', icon: 'none' });
       return;
     }
     const data = { ...formData };

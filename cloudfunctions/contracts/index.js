@@ -112,10 +112,15 @@ async function create(openid, { data } = {}) {
   const err = requireFields(data, ['services']);
   if (err) return fail(err);
 
-  const total = validateAmount(data.totalAmount);
-  const paid = validateAmount(data.paidAmount);
-  if (data.totalAmount !== undefined && total === null) return fail('合同金额不合法');
-  if (data.paidAmount !== undefined && paid === null) return fail('已付金额不合法');
+  // 校验金额（仅当字段存在时校验）
+  if (data.totalAmount !== undefined && data.totalAmount !== null && data.totalAmount !== '') {
+    const total = validateAmount(data.totalAmount);
+    if (total === null) return fail('合同金额不合法');
+  }
+  if (data.paidAmount !== undefined && data.paidAmount !== null && data.paidAmount !== '') {
+    const paid = validateAmount(data.paidAmount);
+    if (paid === null) return fail('已付金额不合法');
+  }
 
   if (data.orderDate) {
     const d = validateDate(data.orderDate, 2024, 2030);
@@ -134,8 +139,8 @@ async function create(openid, { data } = {}) {
 async function update(openid, { id, data } = {}) {
   const owner = await assertOwnership(db, COL, id, openid);
   if (!owner.ok) return fail(owner.msg);
-  if (data.totalAmount !== undefined && validateAmount(data.totalAmount) === null) return fail('合同金额不合法');
-  if (data.paidAmount !== undefined && validateAmount(data.paidAmount) === null) return fail('已付金额不合法');
+  if (data.totalAmount !== undefined && data.totalAmount !== null && data.totalAmount !== '' && validateAmount(data.totalAmount) === null) return fail('合同金额不合法');
+  if (data.paidAmount !== undefined && data.paidAmount !== null && data.paidAmount !== '' && validateAmount(data.paidAmount) === null) return fail('已付金额不合法');
   const upd = normalize(data, true);
   upd.updatedAt = new Date();
   await db.collection(COL).doc(id).update({ data: upd });

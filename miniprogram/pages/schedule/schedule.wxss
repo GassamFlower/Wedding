@@ -57,3 +57,25 @@
   box-shadow: 0 2rpx 6rpx rgba(193, 154, 80, 0.3);
 }
 .cal-day-num { color: var(--gold-800); }
+
+/* 错误状态 */
+.error-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80rpx 32rpx;
+  text-align: center;
+}
+.error-icon { font-size: 80rpx; color: var(--gold-400); margin-bottom: 24rpx; }
+.error-text { font-size: 28rpx; color: var(--text-secondary); margin-bottom: 32rpx; }
+.retry-btn {
+  background: linear-gradient(135deg, var(--gold-400), var(--gold-500));
+  color: var(--text-inverse);
+  font-size: 28rpx; font-weight: 600;
+  padding: 20rpx 48rpx;
+  border-radius: 999rpx;
+  border: none;
+  box-shadow: var(--shadow-gold);
+}
+.retry-btn:active { transform: scale(0.97); }

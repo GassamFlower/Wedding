@@ -21,7 +21,8 @@
         "pages/countdown/countdown",
         "pages/guest-task/guest-task",
         "pages/checklist/checklist",
-        "pages/prop-market/prop-market"
+        "pages/prop-market/prop-market",
+        "pages/style-guide/style-guide"
     ],
     "window":  {
         "navigationStyle":  "custom",

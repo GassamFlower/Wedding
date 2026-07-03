@@ -17,17 +17,73 @@ Page({
     const isPlanner = app.isPlanner();
     this.setData({ isPlanner });
 
+    // 注册登录弹窗到全局
+    this._loginModalShowFn = (show) => {
+      this.setData({ showLoginModal: show });
+    };
+    app.registerLoginModal(this._loginModalShowFn);
+
     const id = options && options.id;
     const proposalId = options && options.proposalId;
 
     if (proposalId) {
       this.setData({ proposalId });
-      this.loadByProposal(proposalId);
     } else if (id) {
       this.setData({ orderId: id });
-      this.loadDetail(id);
-    } else {
+    }
+
+    // 登录守卫：策划师端页面需要登录
+    if (!app.globalData.isLoggedIn) {
+      api.requireLogin(() => {
+        // 登录成功后重新加载
+        if (proposalId) {
+          this.loadByProposal(proposalId);
+        } else if (id) {
+          this.loadDetail(id);
+        }
+      });
+      // 仍然显示页面，但数据加载会被 API 层拦截
       this.setData({ loading: false });
+    } else {
+      if (proposalId) {
+        this.loadByProposal(proposalId);
+      } else if (id) {
+        this.loadDetail(id);
+      } else {
+        this.setData({ loading: false });
+      }
+    }
+  },
+
+  onUnload() {
+    // 页面卸载时注销登录弹窗
+    if (this._loginModalShowFn) {
+      app.unregisterLoginModal(this._loginModalShowFn);
+    }
+  },
+
+  onLoginSuccess() {
+    this.setData({ showLoginModal: false });
+    const id = this.data.orderId;
+    const proposalId = this.data.proposalId;
+    if (proposalId) {
+      this.loadByProposal(proposalId);
+    } else if (id) {
+      this.loadDetail(id);
+    }
+  },
+
+  onLoginClose() {
+    this.setData({ showLoginModal: false });
+  },
+
+  _reloadAfterLogin(options) {
+    const id = options && options.id;
+    const proposalId = options && options.proposalId;
+    if (proposalId) {
+      this.loadByProposal(proposalId);
+    } else if (id) {
+      this.loadDetail(id);
     }
   },
 
@@ -158,6 +214,18 @@ Page({
   // ====================== 操作 ======================
 
   contactClient() {
+    // 检查登录状态
+    const app = getApp();
+    if (!app.globalData.isLoggedIn) {
+      api.requireLogin(() => {
+        this._doContactClient();
+      });
+      return;
+    }
+    this._doContactClient();
+  },
+
+  _doContactClient() {
     if (this.data.order && this.data.order.clientPhone) {
       wx.makePhoneCall({ phoneNumber: this.data.order.clientPhone });
     } else {
@@ -166,6 +234,14 @@ Page({
   },
 
   updateProgress() {
+    // 检查登录状态
+    const app = getApp();
+    if (!app.globalData.isLoggedIn) {
+      api.requireLogin(() => {
+        wx.showToast({ title: '进度更新功能开发中', icon: 'none' });
+      });
+      return;
+    }
     wx.showToast({ title: '进度更新功能开发中', icon: 'none' });
   },
 

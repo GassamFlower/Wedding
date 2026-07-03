@@ -1,5 +1,6 @@
 const api = require('../../services/api');
 const { updateTabBar } = require('../../utils/tabBar');
+const app = getApp();
 const DEMO_ORDERS = [
   { id: 'd1', client: '张先生 & 李女士', date: '6月15日', venue: '万达酒店·宴会厅', style: '新中式', budget: '12,000', paid: '7,200', balance: '4,800', status: '筹备中', statusClass: 'progress', short: '张', avatarClass: 1, phone: '138****1234', deposit: '3000', depositStatus: '已缴纳' },
   { id: 'd2', client: '王先生 & 赵女士', date: '6月28日', venue: '湖滨酒店·草坪', style: '韩式', budget: '8,500', paid: '4,000', balance: '4,500', status: '花艺筹备', statusClass: 'pending', short: '王', avatarClass: 2, phone: '139****5678', deposit: '2000', depositStatus: '待缴纳' },
@@ -12,7 +13,7 @@ const DEMO_ORDERS = [
 Page({
   data: {
     keyword: '', status: 'all', sortBy: 'date',
-    orders: [], filtered: [], loading: true,
+    orders: [], filtered: [], loading: true, error: false, errorMsg: '',
     statusConfig: [
       { key: 'all', label: '全部', icon: 'clipboard', count: 0 },
       { key: 'progress', label: '进行中', icon: 'refresh', count: 0, color: '#b8956a' },
@@ -24,27 +25,81 @@ Page({
     sortOptions: [{ key: 'date', label: '按日期' }, { key: 'budget', label: '按预算' }, { key: 'status', label: '按状态' }],
     showSortPicker: false,
     totalOrders: 0, totalRevenue: 0, pendingRevenue: 0,
+    showLoginModal: false,
+    _loadId: 0,
   },
 
   onLoad() {
+    // 注册登录弹窗到全局
+    this._loginModalShowFn = (show) => {
+      this.setData({ showLoginModal: show });
+    };
+    app.registerLoginModal(this._loginModalShowFn);
+
     const { action } = wx.getEnterOptionsSync().query || {};
     if (action === 'create') this.openCreate();
-    this.loadData();
+    
+    // 登录守卫：订单管理需要登录
+    if (!app.globalData.isLoggedIn) {
+      api.requireLogin(() => {
+        this.loadData();
+      });
+    } else {
+      this.loadData();
+    }
   },
   onShow() {
     updateTabBar(this, 1);
+    // 仅在非首次显示时刷新（避免与 onLoad 竞态）
+    if (this._hasLoaded && app.globalData.isLoggedIn) this.loadData();
+  },
+  onLoginSuccess() {
+    this.setData({ showLoginModal: false });
+    this.loadData();
+  },
+  onLoginClose() {
+    this.setData({ showLoginModal: false });
+  },
+  onUnload() {
+    // 页面卸载时注销登录弹窗
+    if (this._loginModalShowFn) {
+      app.unregisterLoginModal(this._loginModalShowFn);
+    }
   },
 
   loadData() {
-    this.setData({ loading: true });
+    const loadId = (this.data._loadId || 0) + 1;
+    this.setData({ loading: true, error: false, errorMsg: '', _loadId: loadId });
     api.orders.list({}, null).then(data => {
+      // 防止旧请求覆盖新数据
+      if (this.data._loadId !== loadId) return;
+      this._hasLoaded = true;
       this.setData({ loading: false });
-      const orders = (data && Array.isArray(data.list)) ? data.list : DEMO_ORDERS;
-      this.processOrders(orders);
-    }).catch(() => {
-      this.setData({ loading: false });
-      this.processOrders(DEMO_ORDERS);
+      if (data && Array.isArray(data.list) && data.list.length > 0) {
+        this.processOrders(data.list);
+      } else {
+        // 数据为空，显示空状态
+        this.setData({ orders: [], filtered: [], totalOrders: 0, totalRevenue: 0, pendingRevenue: 0 });
+        this.updateStatusConfig([]);
+      }
+    }).catch(err => {
+      if (this.data._loadId !== loadId) return;
+      this._hasLoaded = true;
+      console.error('订单加载失败:', err);
+      this.setData({
+        loading: false,
+        error: true,
+        errorMsg: '数据加载失败，请下拉刷新重试'
+      });
     });
+  },
+
+  updateStatusConfig(orders) {
+    const statusConfig = this.data.statusConfig.map(c => ({
+      ...c,
+      count: c.key === 'all' ? orders.length : orders.filter(o => o.statusClass === c.key).length,
+    }));
+    this.setData({ statusConfig });
   },
 
   processOrders(orders) {
@@ -53,18 +108,12 @@ Page({
     const totalRevenue = orders.reduce((s, o) => s + (parseFloat(String(o.budget).replace(/,/g,'')) || 0), 0);
     const pendingRevenue = orders.reduce((s, o) => s + (parseFloat(String(o.balance).replace(/,/g,'')) || 0), 0);
     
-    // 更新每个状态计数
-    // 格式化数字用于 WXML 展示（toLocaleString 在 WXML 中不可用）
+    // 格式化数字用于 WXML 展示
     const revenueStr = totalRevenue.toLocaleString();
     const pendingStr = pendingRevenue.toLocaleString();
-    const showAllCases = orders.length;
     
-    const statusConfig = this.data.statusConfig.map(c => ({
-      ...c,
-      count: c.key === 'all' ? orders.length : orders.filter(o => o.statusClass === c.key).length,
-    }));
-
-    this.setData({ orders, totalOrders, totalRevenue, pendingRevenue, statusConfig });
+    this.setData({ orders, totalOrders, totalRevenue, pendingRevenue, revenueStr, pendingStr });
+    this.updateStatusConfig(orders);
     this.filterOrders();
   },
 
@@ -105,19 +154,51 @@ Page({
     wx.navigateTo({ url: '/pages/order-detail/order-detail?id=' + id });
   },
 
-  openCreate() { this.setData({ showForm: true, formData: { clientName: '', weddingDate: '', venue: '', style: '', budget: '', phone: '' } }); },
+  openCreate() {
+    // 防止重复触发
+    if (this.data.showForm) return;
+    this.setData({ showForm: true, formData: { clientName: '', weddingDate: '', venue: '', style: '', budget: '', phone: '' } });
+  },
   closeForm() { this.setData({ showForm: false }); },
   onFormInput(e) { const f = e.currentTarget.dataset.field; this.setData({ ['formData.' + f]: e.detail.value }); },
 
   submitForm() {
     const { formData } = this.data;
-    if (!formData.clientName.trim()) { wx.showToast({ title: '请输入新人姓名', icon: 'none' }); return; }
-    api.orders.create({ data: formData }).then(() => {
+    console.log('[submitForm] formData:', JSON.stringify(formData));
+    
+    // 清理并验证必填字段
+    const clientName = (formData && formData.clientName || '').trim();
+    if (!clientName) {
+      wx.showToast({ title: '请输入新人姓名', icon: 'none' });
+      return;
+    }
+    if (formData.phone && !/^1[3-9]\d{9}$/.test(formData.phone)) {
+      wx.showToast({ title: '请输入正确的手机号', icon: 'none' });
+      return;
+    }
+    if (formData.budget && (isNaN(formData.budget) || parseFloat(formData.budget) < 0)) {
+      wx.showToast({ title: '请输入正确的预算金额', icon: 'none' });
+      return;
+    }
+    
+    // 构建提交数据，确保字段名正确
+    const submitData = {
+      clientName: clientName,
+      weddingDate: (formData.weddingDate || '').trim() || undefined,
+      venue: (formData.venue || '').trim() || undefined,
+      style: (formData.style || '').trim() || undefined,
+      budget: formData.budget ? parseFloat(formData.budget) : undefined,
+      phone: (formData.phone || '').trim() || undefined,
+    };
+    console.log('[submitForm] submitData:', JSON.stringify(submitData));
+    
+    api.orders.create(submitData).then(() => {
       wx.showToast({ title: '创建成功', icon: 'success' });
-      this.closeForm(); this.loadData();
-    }).catch(() => {
-      wx.showToast({ title: '创建成功（演示模式）', icon: 'success' });
-      this.closeForm();
+      this.closeForm(); 
+      this.loadData();
+    }).catch((err) => {
+      console.error('创建订单失败:', err);
+      wx.showToast({ title: '创建失败: ' + (err.message || '未知错误'), icon: 'none' });
     });
   },
 

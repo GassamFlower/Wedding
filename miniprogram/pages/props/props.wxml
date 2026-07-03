@@ -10,7 +10,7 @@
 
   <!-- 错误状态 -->
   <view wx:elif="{{error}}" class="empty">
-    <view class="icon icon-warning" style="width:80rpx;height:80rpx;margin-bottom:16rpx;display:inline-block;color:#b8860b;"></view>
+    <view class="icon icon-warning" style="width:80rpx;height:80rpx;margin-bottom:16rpx;display:inline-block;color:var(--gold);"></view>
     <view>{{errorMsg}}</view>
     <view class="btn-primary" style="margin-top:32rpx;width:auto;display:inline-block;padding:16rpx 48rpx;" bindtap="loadData">重试</view>
   </view>
@@ -19,19 +19,59 @@
   <view wx:else>
     <view class="prop-stats">
       <view class="ps"><view class="ps-num" style="color:var(--gold);">{{totalProps}}</view><view class="ps-lbl">总道具</view></view>
-      <view class="ps"><view class="ps-num" style="color:#c67a00;">{{inUse}}</view><view class="ps-lbl">使用中</view></view>
-      <view class="ps"><view class="ps-num" style="color:#2e7d32;">{{available}}</view><view class="ps-lbl">闲置</view></view>
-      <view class="ps"><view class="ps-num" style="color:#b71c1c;">{{needBuy}}</view><view class="ps-lbl">需采购</view></view>
+      <view class="ps"><view class="ps-num" style="color:var(--gold-600);">{{inUse}}</view><view class="ps-lbl">使用中</view></view>
+      <view class="ps"><view class="ps-num" style="color:var(--success);">{{available}}</view><view class="ps-lbl">闲置</view></view>
+      <view class="ps"><view class="ps-num" style="color:var(--error);">{{needBuy}}</view><view class="ps-lbl">需采购</view></view>
     </view>
 
     <view class="quick-actions">
-      <view class="action-btn" bindtap="addProp">
+      <view class="action-btn" catchtap="addProp">
         <view class="action-icon-wrap"><view class="svg-icon icon-18 icon-add-gold"></view></view>
         <view class="action-label">录入</view>
       </view>
-      <view class="action-btn" bindtap="goPropMarket">
+      <view class="action-btn action-btn-disabled" catchtap="showComingSoon">
         <view class="action-icon-wrap"><view class="svg-icon icon-18 icon-search-gold"></view></view>
         <view class="action-label">市场参考</view>
+        <view class="action-badge">待开发</view>
+      </view>
+    </view>
+
+    <!-- ===== 新增/编辑表单（内联，置顶显示） ===== -->
+    <view wx:if="{{showForm}}" class="form-inline">
+      <view class="form-title">{{formMode === 'edit' ? '编辑道具' : '新增道具'}}</view>
+      <view class="form-scroll-body">
+        <view class="form-group">
+          <text class="form-label">道具名称 *</text>
+          <input class="form-input" placeholder="输入道具名称" value="{{formData.name}}" bindinput="onFormInput" data-field="name" />
+        </view>
+        <view class="form-group">
+          <text class="form-label">分类</text>
+          <picker class="form-input" mode="selector" range="{{categoryOptions}}" range-key="name" value="{{catIndex}}" bindchange="onFormCategoryChange">
+            <view>选择分类</view>
+          </picker>
+        </view>
+        <view class="form-row">
+          <view class="form-group" style="flex:1;">
+            <text class="form-label">总数</text>
+            <input class="form-input" type="number" placeholder="0" value="{{formData.total}}" bindinput="onFormInput" data-field="total" />
+          </view>
+          <view class="form-group" style="flex:1;">
+            <text class="form-label">使用中</text>
+            <input class="form-input" type="number" placeholder="0" value="{{formData.inUse}}" bindinput="onFormInput" data-field="inUse" />
+          </view>
+          <view class="form-group" style="flex:1;">
+            <text class="form-label">单位</text>
+            <input class="form-input" placeholder="件" value="{{formData.unit}}" bindinput="onFormInput" data-field="unit" />
+          </view>
+        </view>
+        <view class="form-group">
+          <text class="form-label">备注</text>
+          <input class="form-input" placeholder="可选备注" value="{{formData.notes}}" bindinput="onFormInput" data-field="notes" />
+        </view>
+      </view>
+      <view class="form-btns">
+        <button class="btn-cancel" catchtap="closeForm">取消</button>
+        <button class="btn-primary" catchtap="submitForm">{{formMode === 'edit' ? '保存' : '添加'}}</button>
       </view>
     </view>
 
@@ -44,7 +84,7 @@
       </view>
     </view>
 
-    <view class="section-title" style="margin-top:32rpx;"><text>道具列表</text><text class="more" bindtap="addProp" style="font-size:26rpx;">+ 录入</text></view>
+    <view class="section-title" style="margin-top:32rpx;"><text>道具列表</text><text class="more" catchtap="addProp" style="font-size:26rpx;">+ 录入</text></view>
     <view wx:if="{{propList.length === 0}}" class="empty" style="padding:24rpx 0;">暂无道具</view>
     <view wx:else>
       <view class="prop-item" wx:for="{{propList}}" wx:key="id">
@@ -53,8 +93,8 @@
           <view class="pi-meta">{{item.categoryName}} · {{item.total}}件 · 使用中{{item.inUse}} · 闲置{{item.available}}</view>
         </view>
         <view class="pi-actions">
-          <text class="ci-tag" style="color:#c67a00;" catchtap="openEdit" data-id="{{item.id}}">编辑</text>
-          <text class="ci-tag" style="color:#b71c1c;" catchtap="confirmDelete" data-id="{{item.id}}" data-name="{{item.name}}">删除</text>
+          <text class="ci-tag" style="color:var(--gold-600);" catchtap="openEdit" data-id="{{item.id}}">编辑</text>
+          <text class="ci-tag" style="color:var(--error);" catchtap="confirmDelete" data-id="{{item.id}}" data-name="{{item.name}}">删除</text>
         </view>
       </view>
     </view>
@@ -68,47 +108,7 @@
       </view>
     </view>
   </view>
-
-  <!-- ===== 新增/编辑弹窗 ===== -->
-  <view wx:if="{{showForm}}" class="form-overlay" catchtap="closeForm">
-    <view class="form-modal" catchtap=""><view class="form-title">{{formMode === 'edit' ? '编辑道具' : '新增道具'}}</view>
-
-      <view class="form-group">
-        <text class="form-label">道具名称 *</text>
-        <input class="form-input" placeholder="输入道具名称" value="{{formData.name}}" bindinput="onFormInput" data-field="name" />
-      </view>
-
-      <view class="form-group">
-        <text class="form-label">分类</text>
-        <picker class="form-input" mode="selector" range="{{categoryOptions}}" range-key="name" value="{{catIndex}}" bindchange="onFormCategoryChange">
-          <view>选择分类</view>
-        </picker>
-      </view>
-
-      <view class="form-row">
-        <view class="form-group" style="flex:1;">
-          <text class="form-label">总数</text>
-          <input class="form-input" type="number" placeholder="0" value="{{formData.total}}" bindinput="onFormInput" data-field="total" />
-        </view>
-        <view class="form-group" style="flex:1;">
-          <text class="form-label">使用中</text>
-          <input class="form-input" type="number" placeholder="0" value="{{formData.inUse}}" bindinput="onFormInput" data-field="inUse" />
-        </view>
-        <view class="form-group" style="flex:1;">
-          <text class="form-label">单位</text>
-          <input class="form-input" placeholder="件" value="{{formData.unit}}" bindinput="onFormInput" data-field="unit" />
-        </view>
-      </view>
-
-      <view class="form-group">
-        <text class="form-label">备注</text>
-        <input class="form-input" placeholder="可选备注" value="{{formData.notes}}" bindinput="onFormInput" data-field="notes" />
-      </view>
-
-      <view class="form-btns">
-        <button class="btn-cancel" bindtap="closeForm">取消</button>
-        <button class="btn-primary" bindtap="submitForm">{{formMode === 'edit' ? '保存' : '添加'}}</button>
-      </view>
-    </view>
-  </view>
 </view>
+
+<!-- 登录弹窗 -->
+<login-modal visible="{{showLoginModal}}" bind:success="onLoginSuccess" bind:close="onLoginClose" />

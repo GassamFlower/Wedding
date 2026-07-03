@@ -1,5 +1,6 @@
 // 道具市场参考页 - 多平台价格对比
 const api = require('../../services/api');
+const app = getApp();
 
 Page({
   data: {
@@ -15,10 +16,28 @@ Page({
     ],
     allItems: [],
     filteredItems: [],
+    showLoginModal: false,
   },
 
   onLoad() {
+    this._loginModalShowFn = (show) => { this.setData({ showLoginModal: show }); };
+    app.registerLoginModal(this._loginModalShowFn);
+
+    if (!app.globalData.isLoggedIn) {
+      api.requireLogin(() => { this.loadData(); });
+    } else {
+      this.loadData();
+    }
+  },
+  onUnload() {
+    if (this._loginModalShowFn) app.unregisterLoginModal(this._loginModalShowFn);
+  },
+  onLoginSuccess() {
+    this.setData({ showLoginModal: false });
     this.loadData();
+  },
+  onLoginClose() {
+    this.setData({ showLoginModal: false });
   },
 
   loadData() {

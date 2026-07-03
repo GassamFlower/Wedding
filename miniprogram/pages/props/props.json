@@ -1,5 +1,8 @@
 {
-  "usingComponents": {},
+  "usingComponents": {
+    "nav-bar": "/components/nav-bar/nav-bar",
+    "login-modal": "/components/login-modal/login-modal"
+  },
   "navigationStyle": "custom",
   "enablePullDownRefresh": true
 }

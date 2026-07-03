@@ -1,0 +1,73 @@
+/* =============================================
+   管理后台 Design Tokens — 轻复古·奶油风
+   ============================================= */
+
+:root {
+  /* ═══ 核心色板 ═══ */
+  --primary: #2C2C2C;
+  --accent: #D4AF37;
+  --surface: #FFF9F2;
+  --primary-soft: #4A4A4A;
+  --accent-light: #F5E6C8;
+  --surface-dark: #FFF5E8;
+  --border-light: #F5E6C8;
+  --white: #FFFFFF;
+  --surface-alt: #FAF7F0;
+  --dark-brown: #2A1F1B;
+  --dark-brown-light: #3D2F2A;
+  
+  /* ═══ 金色色阶 ═══ */
+  --gold: #D4AF37;
+  --gold-light: #F5E6C8;
+  --gold-50: #FFF9F2;
+  --gold-100: #F5E6C8;
+  --gold-200: #E8D5A8;
+  --gold-300: #D4B87C;
+  --gold-400: #D4AF37;
+  --gold-500: #A67C3C;
+  --gold-600: #8B6528;
+  --gold-700: #6F4E1F;
+  --gold-800: #543A16;
+  --gold-900: #3A280F;
+  
+  /* ═══ 管理后台专用色 ═══ */
+  --admin-sidebar-bg: #1a1a2e;
+  --admin-sidebar-bg-dark: #2d2d44;
+  --admin-accent: #c19a50;
+  --admin-accent-dark: #a67c3c;
+  --admin-accent-light: rgba(201, 169, 110, 0.15);
+  --admin-accent-bg: rgba(193, 154, 80, 0.2);
+  --admin-border: rgba(193, 154, 80, 0.2);
+  --admin-text-light: rgba(255, 255, 255, 0.75);
+  --admin-text-muted: rgba(255, 255, 255, 0.5);
+  
+  /* ═══ 状态色 ═══ */
+  --success: #67C23A;
+  --warning: #E6A23C;
+  --error: #F56C6C;
+  --info: #909399;
+  
+  /* ═══ 阴影系统 ═══ */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+  --shadow-gold: 0 4px 12px rgba(212, 175, 55, 0.2);
+  --shadow-hover: 0 6px 16px rgba(0, 0, 0, 0.1);
+  --shadow-card: 0 4px 8px rgba(58, 40, 15, 0.08);
+  --shadow-card-hover: 0 8px 16px rgba(58, 40, 15, 0.12);
+  
+  /* ═══ 圆角系统 ═══ */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  
+  /* ═══ 渐变系统 ═══ */
+  --gradient-gold: linear-gradient(135deg, #D4AF37 0%, #E8C86A 100%);
+  --gradient-surface: linear-gradient(180deg, #FFF9F2 0%, #FFFFFF 100%);
+  --gradient-hero: linear-gradient(175deg, #FFF9F2 0%, #FFFFFF 100%);
+  --gradient-sidebar: linear-gradient(180deg, #1a1a2e 0%, #2d2d44 100%);
+  --gradient-card: linear-gradient(135deg, #ffffff 0%, #faf7f0 100%);
+  --gradient-button: linear-gradient(135deg, #c19a50 0%, #a67c3c 100%);
+  --gradient-input: linear-gradient(135deg, #faf7f0 0%, #f5ebd4 100%);
+}

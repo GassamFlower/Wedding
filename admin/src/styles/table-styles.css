@@ -1,0 +1,208 @@
+/* =============================================
+   管理后台表格共享样式 — 轻复古·奶油风
+   ============================================= */
+
+/* ═══ 页面标题 ═══ */
+h2 {
+  color: var(--gold-700);
+  font-weight: 700;
+}
+
+/* ═══ 主按钮增强 ═══ */
+:deep(.el-button--primary) {
+  background: var(--gradient-button);
+  border: none;
+  box-shadow: var(--shadow-gold);
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+:deep(.el-button--primary:hover) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(193, 154, 80, 0.4);
+}
+
+:deep(.el-button--primary:active) {
+  transform: scale(0.97);
+}
+
+/* ═══ 表格增强 ═══ */
+:deep(.el-table) {
+  background: var(--gradient-card);
+  border: 1px solid var(--gold-100);
+  box-shadow: var(--shadow-card);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+:deep(.el-table th) {
+  background: linear-gradient(135deg, var(--surface-alt) 0%, var(--gold-100) 100%);
+  color: var(--gold-700);
+  font-weight: 700;
+  border-bottom: 1px solid var(--gold-200);
+}
+
+:deep(.el-table tr) {
+  transition: all 0.2s ease;
+}
+
+:deep(.el-table tr:hover > td) {
+  background: var(--surface-alt) !important;
+}
+
+/* ═══ 标签增强 ═══ */
+:deep(.el-tag) {
+  border-radius: 20px;
+  font-weight: 600;
+}
+
+:deep(.el-tag--success) {
+  background: linear-gradient(135deg, #e5ede8 0%, #c5d5cc 100%);
+  border: 1px solid #a5bdb0;
+  color: #6b8b7a;
+}
+
+:deep(.el-tag--warning) {
+  background: linear-gradient(135deg, var(--gold-100) 0%, var(--gold-200) 100%);
+  border: 1px solid var(--gold-300);
+  color: var(--gold-700);
+}
+
+:deep(.el-tag--info) {
+  background: linear-gradient(135deg, var(--gold-100) 0%, var(--gold-200) 100%);
+  border: 1px solid var(--gold-300);
+  color: var(--gold-700);
+}
+
+:deep(.el-tag--danger) {
+  background: linear-gradient(135deg, #f8e5e0 0%, #e8c5bb 100%);
+  border: 1px solid #d4a596;
+  color: #a66b58;
+}
+
+/* ═══ 操作按钮增强 ═══ */
+:deep(.el-button--small) {
+  border-radius: var(--radius-sm);
+  transition: all 0.2s ease;
+}
+
+:deep(.el-button--small:hover) {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+:deep(.el-button--danger) {
+  background: linear-gradient(135deg, #f8e5e0 0%, #e8c5bb 100%);
+  border: 1px solid #d4a596;
+  color: #a66b58;
+}
+
+:deep(.el-button--danger:hover) {
+  background: linear-gradient(135deg, #e8c5bb 0%, #d4a596 100%);
+  color: var(--white);
+}
+
+/* ═══ 分页增强 ═══ */
+:deep(.el-pagination) {
+  margin-top: 20px;
+}
+
+:deep(.el-pagination .el-pager li.is-active) {
+  background: var(--gradient-button);
+  color: var(--white);
+  border-radius: var(--radius-sm);
+}
+
+/* ═══ 对话框增强 ═══ */
+:deep(.el-dialog) {
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+}
+
+:deep(.el-dialog__header) {
+  background: linear-gradient(135deg, var(--surface-alt) 0%, var(--gold-100) 100%);
+  border-bottom: 1px solid var(--gold-200);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+}
+
+:deep(.el-dialog__title) {
+  color: var(--gold-700);
+  font-weight: 700;
+}
+
+/* ═══ 图片增强 ═══ */
+:deep(.el-image) {
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-sm);
+}
+
+/* ═══ 卡片增强 ═══ */
+:deep(.el-card) {
+  background: var(--gradient-card);
+  border: 1px solid var(--gold-100);
+  box-shadow: var(--shadow-card);
+  border-radius: var(--radius-md);
+  transition: all 0.3s ease;
+}
+
+:deep(.el-card:hover) {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-card-hover);
+}
+
+/* ═══ 进度条增强 ═══ */
+:deep(.el-progress-bar__outer) {
+  background: linear-gradient(135deg, var(--gold-100) 0%, var(--gold-200) 100%);
+}
+
+:deep(.el-progress-bar__inner) {
+  background: var(--gradient-button);
+}
+
+/* ═══ 表单增强 ═══ */
+:deep(.el-form) {
+  background: var(--gradient-card);
+  border: 1px solid var(--gold-100);
+  box-shadow: var(--shadow-card);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+}
+
+:deep(.el-input__wrapper) {
+  background: var(--gradient-input);
+  border: 1.5px solid var(--gold-200);
+  box-shadow: none;
+  transition: all 0.2s ease;
+}
+
+:deep(.el-input__wrapper:focus-within) {
+  border-color: var(--admin-accent);
+  background: var(--white);
+  box-shadow: 0 0 0 3px rgba(193, 154, 80, 0.1);
+}
+
+:deep(.el-textarea__inner) {
+  background: var(--gradient-input);
+  border: 1.5px solid var(--gold-200);
+  box-shadow: none;
+  transition: all 0.2s ease;
+}
+
+:deep(.el-textarea__inner:focus) {
+  border-color: var(--admin-accent);
+  background: var(--white);
+  box-shadow: 0 0 0 3px rgba(193, 154, 80, 0.1);
+}
+
+:deep(.el-form-item__label) {
+  color: var(--gold-700);
+  font-weight: 600;
+}
+
+:deep(.el-rate__icon) {
+  color: var(--gold-300);
+}
+
+:deep(.el-rate__item:hover .el-rate__icon) {
+  color: var(--admin-accent);
+}

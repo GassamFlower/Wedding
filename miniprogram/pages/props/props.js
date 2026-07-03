@@ -1,5 +1,6 @@
 // pages/props/props.js
 const api = require('../../services/api');
+const app = getApp();
 
 const DEMO_PROPS = [
   { id: 'd1', name: '梅花背景架', category: 'bg', total: 2, inUse: 2, available: 0, unit: '架', notes: '主舞台使用', categoryName: '背景架/桁架' },
@@ -44,9 +45,30 @@ Page({
     loading: true,
     error: false,
     errorMsg: '',
+    showLoginModal: false,
   },
 
-  onLoad() { this.loadData(); },
+  onLoad() {
+    // 登录守卫
+    if (!app.globalData.isLoggedIn) {
+      api.requireLogin(() => { this.loadData(); });
+    }
+    this._loginModalShowFn = (show) => { this.setData({ showLoginModal: show }); };
+    app.registerLoginModal(this._loginModalShowFn);
+    this.loadData();
+  },
+  onUnload() {
+    if (this._loginModalShowFn) app.unregisterLoginModal(this._loginModalShowFn);
+  },
+
+  onLoginSuccess() {
+    this.setData({ showLoginModal: false });
+    this.loadData();
+  },
+
+  onLoginClose() {
+    this.setData({ showLoginModal: false });
+  },
 
   loadData() {
     this.setData({ loading: true, error: false });
@@ -80,6 +102,8 @@ Page({
 
   // ===== 表单操作 =====
   openCreate() {
+    // 防止重复触发
+    if (this.data.showForm) return;
     this.setData({
       showForm: true,
       formMode: 'create',
@@ -132,6 +156,14 @@ Page({
       wx.showToast({ title: '请输入道具名称', icon: 'none' });
       return;
     }
+    if (!formData.total || isNaN(formData.total) || parseInt(formData.total) <= 0) {
+      wx.showToast({ title: '请输入正确的总数', icon: 'none' });
+      return;
+    }
+    if (formData.inUse && isNaN(formData.inUse)) {
+      wx.showToast({ title: '请输入正确的使用数', icon: 'none' });
+      return;
+    }
     const data = {
       name: formData.name.trim(),
       category: formData.category,
@@ -155,8 +187,9 @@ Page({
       } else {
         wx.showToast({ title: (res && res.msg) || '操作失败', icon: 'none' });
       }
-    }).catch(() => {
-      wx.showToast({ title: '操作失败，请重试', icon: 'none' });
+    }).catch((err) => {
+      console.error('[props] submitForm error:', err);
+      wx.showToast({ title: '操作失败: ' + (err.message || '请重试'), icon: 'none', duration: 3000 });
     });
   },
 
@@ -188,7 +221,11 @@ Page({
   addProp() { this.openCreate(); },
 
   goPropMarket() {
-    wx.navigateTo({ url: '/pages/prop-market/prop-market' });
+    wx.showToast({ title: '市场参考功能待开发，后续由Web端管理后台提供数据', icon: 'none', duration: 2000 });
+  },
+
+  showComingSoon() {
+    wx.showToast({ title: '市场参考功能待开发，后续由Web端管理后台提供数据', icon: 'none', duration: 2000 });
   },
 
   filterByCategory(e) {

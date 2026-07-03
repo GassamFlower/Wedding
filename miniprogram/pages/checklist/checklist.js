@@ -129,10 +129,34 @@ Page({
     totalItems: 0,
     checkedCount: 0,
     overallPct: 0,
+    showLoginModal: false,
   },
 
   onLoad() {
     this.initChecklist();
+
+    // 注册登录弹窗到全局
+    const app = getApp();
+    this._loginModalShowFn = (show) => {
+      this.setData({ showLoginModal: show });
+    };
+    app.registerLoginModal(this._loginModalShowFn);
+  },
+
+  onUnload() {
+    // 页面卸载时注销登录弹窗
+    if (this._loginModalShowFn) {
+      const app = getApp();
+      app.unregisterLoginModal(this._loginModalShowFn);
+    }
+  },
+
+  onLoginSuccess() {
+    this.setData({ showLoginModal: false });
+  },
+
+  onLoginClose() {
+    this.setData({ showLoginModal: false });
   },
 
   initChecklist() {
@@ -202,6 +226,16 @@ Page({
   },
 
   goContact() {
+    // 检查登录状态
+    const app = getApp();
+    if (!app.globalData.isLoggedIn) {
+      const api = require('../../services/api');
+      api.requireLogin(() => {
+        // 登录成功后继续跳转
+        wx.switchTab({ url: '/pages/home/home' });
+      });
+      return;
+    }
     wx.switchTab({ url: '/pages/home/home' });
   },
 

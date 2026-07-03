@@ -19,10 +19,34 @@ Page({
     filteredCases: [],
     leftCol: [],
     rightCol: [],
+    showLoginModal: false,
   },
 
   onLoad() {
     this.loadCases();
+    
+    // 注册登录弹窗到全局
+    const app = getApp();
+    this._loginModalShowFn = (show) => {
+      this.setData({ showLoginModal: show });
+    };
+    app.registerLoginModal(this._loginModalShowFn);
+  },
+
+  onUnload() {
+    // 页面卸载时注销登录弹窗
+    if (this._loginModalShowFn) {
+      const app = getApp();
+      app.unregisterLoginModal(this._loginModalShowFn);
+    }
+  },
+
+  onLoginSuccess() {
+    this.setData({ showLoginModal: false });
+  },
+
+  onLoginClose() {
+    this.setData({ showLoginModal: false });
   },
 
   onShow() {
@@ -171,10 +195,30 @@ Page({
 
   goDetail(e) {
     const id = e.currentTarget.dataset.id;
+    
+    // 检查登录状态
+    const app = getApp();
+    if (!app.globalData.isLoggedIn) {
+      api.requireLogin(() => {
+        // 登录成功后继续跳转
+        wx.navigateTo({ url: `/pages/case-detail/case-detail?id=${id}` });
+      });
+      return;
+    }
+    
     wx.navigateTo({ url: `/pages/case-detail/case-detail?id=${id}` });
   },
 
   goAIDesign() {
+    // 检查登录状态
+    const app = getApp();
+    if (!app.globalData.isLoggedIn) {
+      api.requireLogin(() => {
+        // 登录成功后继续跳转
+        wx.switchTab({ url: '/pages/home/home' });
+      });
+      return;
+    }
     wx.switchTab({ url: '/pages/home/home' });
   },
 

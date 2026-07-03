@@ -28,7 +28,7 @@
   <view class="insight-row">
     <view class="insight-card card-premium" catchtap="goSchedule">
       <view class="insight-icon-wrap" style="background:linear-gradient(135deg,var(--gold),var(--gold-mid));">
-        <view class="icon icon-ring" style="width:36rpx;height:36rpx;color:#fff;"></view>
+        <view class="svg-icon icon-18 icon-ring-white" style="width:36rpx;height:36rpx;"></view>
       </view>
       <view class="insight-info">
         <text class="insight-value">{{activeOrders}}场</text>
@@ -37,7 +37,7 @@
     </view>
     <view class="insight-card card-premium" catchtap="goContracts">
       <view class="insight-icon-wrap" style="background:linear-gradient(135deg,var(--gold-mid),var(--gold-dark));">
-        <view class="icon icon-budget" style="width:36rpx;height:36rpx;color:#fff;"></view>
+        <view class="svg-icon icon-18 icon-wallet-white" style="width:36rpx;height:36rpx;"></view>
       </view>
       <view class="insight-info">
         <text class="insight-value" style="{{pendingBalance > 0 ? 'color:var(--gold-dark);' : ''}}">{{pendingBalance > 0 ? '¥'+pendingBalance : '已结清'}}</text>
@@ -90,10 +90,17 @@
     </view>
   </view>
 
+  <!-- 错误状态 -->
+  <view wx:if="{{error && !loading}}" class="error-state">
+    <view class="error-icon">⚠</view>
+    <text class="error-text">{{errorMsg || '数据加载失败'}}</text>
+    <button class="retry-btn" catchtap="loadData">重新加载</button>
+  </view>
+
   <!-- 近期婚礼 -->
-  <view class="section-title"><view class="gold-bar"></view>近期婚礼</view>
-  <view wx:if="{{orders.length===0 && !loading}}" class="empty-state">
-      <view wx:if="{{orders.length===0 && !loading}}" class="empty-wrap">
+  <view wx:else class="section-title"><view class="gold-bar"></view>近期婚礼</view>
+  <view wx:if="{{orders.length===0 && !loading && !error}}" class="empty-state">
+      <view wx:if="{{orders.length===0 && !loading && !error}}" class="empty-wrap">
     <view class="empty-illustration-gift">
       <view class="gift-box"></view><view class="gift-lid"></view><view class="gift-ribbon"></view><view class="gift-bow"></view>
     </view>
@@ -146,3 +153,6 @@
     </view>
   </view>
 </view>
+
+<!-- 登录弹窗 -->
+<login-modal visible="{{showLoginModal}}" bind:success="onLoginSuccess" bind:close="onLoginClose" />

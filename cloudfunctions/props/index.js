@@ -148,10 +148,15 @@ async function detail(openid, { id } = {}) {
 async function create(openid, { data } = {}) {
   const err = requireFields(data, ['name', 'category']);
   if (err) return fail(err);
-  const total = validateAmount(data.total);
-  const inUse = validateAmount(data.inUse);
-  if (data.total !== undefined && total === null) return fail('道具总数不合法');
-  if (data.inUse !== undefined && inUse === null) return fail('使用数不合法');
+  // 校验数量（仅当字段存在时校验）
+  if (data.total !== undefined && data.total !== null && data.total !== '') {
+    const total = validateAmount(data.total);
+    if (total === null) return fail('道具总数不合法');
+  }
+  if (data.inUse !== undefined && data.inUse !== null && data.inUse !== '') {
+    const inUse = validateAmount(data.inUse);
+    if (inUse === null) return fail('使用数不合法');
+  }
   const now = new Date();
   const doc = normalize(data);
   const res = await db.collection(COL).add({

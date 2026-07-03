@@ -17,7 +17,13 @@
     </view>
   </view>
 
-  <view wx:elif="{{leads.length===0}}" class="empty-state">
+  <view wx:elif="{{error && !loading}}" class="error-state">
+    <view class="error-icon">⚠</view>
+    <text class="error-text">{{errorMsg || '数据加载失败'}}</text>
+    <button class="retry-btn" catchtap="fetchLeads">重新加载</button>
+  </view>
+
+  <view wx:elif="{{leads.length===0 && !loading && !error}}" class="empty-state">
     <text class="empty-title">暂无线索</text>
     <text class="empty-desc">新人提交咨询后会出现在这里</text>
   </view>
@@ -48,3 +54,6 @@
     </view>
   </view>
 </view>
+
+<!-- 登录弹窗 -->
+<login-modal visible="{{showLoginModal}}" bind:success="onLoginSuccess" bind:close="onLoginClose" />

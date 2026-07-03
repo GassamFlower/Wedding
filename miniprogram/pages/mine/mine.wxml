@@ -5,15 +5,24 @@
   <view class="mine-header">
     <view class="avatar-wrap">
       <image wx:if="{{avatarUrl}}" class="avatar" src="{{avatarUrl}}" mode="aspectFill" />
-      <text wx:else class="avatar-text">{{nickName[0]}}</text>
+      <view wx:else class="avatar-default">
+        <text class="avatar-text">{{nickName[0] || '?'}}</text>
+      </view>
     </view>
     <view class="user-info">
       <text class="user-name">{{nickName}}</text>
-      <view class="countdown-wrap">
-        <view class="svg-icon icon-12 icon-countdown-white"></view>
-        <text class="countdown-text">婚礼倒计时：87 天</text>
-      </view>
+      <text wx:if="{{phone}}" class="user-phone">{{phone}}</text>
+      <text wx:elif="{{isLoggedIn}}" class="user-hint">完善资料，体验更多功能</text>
     </view>
+  </view>
+
+  <!-- 登录提示（未登录时显示） -->
+  <view wx:if="{{!isLoggedIn}}" class="login-hint-card" catchtap="onLoginTap">
+    <view class="login-hint-icon">
+      <view class="svg-icon icon-24 icon-user-gold"></view>
+    </view>
+    <text class="login-hint-text">登录后享受更多功能</text>
+    <view class="login-hint-btn">去登录</view>
   </view>
 
   <!-- 婚礼工具箱 -->
@@ -78,10 +87,21 @@
     <text wx:if="{{verifyError}}" class="verify-error">{{verifyError}}</text>
   </view>
 
-  <!-- 当前为策划师模式 -->
-  <view wx:if="{{isPlanner}}" class="planner-tip">
-    <text class="planner-tip-text">当前为策划师模式</text>
-    <view class="switch-btn" catchtap="switchToNewbie">切换到新人</view>
+  <!-- 策划师身份卡片 -->
+  <view wx:if="{{isPlanner}}" class="planner-card">
+    <view class="planner-card-header">
+      <view class="planner-card-icon">
+        <view class="svg-icon icon-24 icon-dashboard-gold"></view>
+      </view>
+      <view class="planner-card-info">
+        <text class="planner-card-title">策划师工作台</text>
+        <text class="planner-card-desc">管理订单、客户、道具、排期</text>
+      </view>
+    </view>
+    <view class="planner-card-actions">
+      <view class="planner-btn-primary" catchtap="goPlannerDashboard">进入工作台</view>
+      <view class="planner-btn-secondary" catchtap="switchToNewbie">切换回新人</view>
+    </view>
   </view>
 
   <view class="mine-footer">
@@ -89,3 +109,10 @@
     <text style="margin-top:8rpx;">武汉 · 湖北</text>
   </view>
 </view>
+
+<!-- 登录弹窗 -->
+<login-modal
+  visible="{{showLoginModal}}"
+  bind:close="onLoginModalClose"
+  bind:success="onLoginSuccess"
+/>

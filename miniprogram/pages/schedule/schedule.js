@@ -1,19 +1,42 @@
 const api = require('../../services/api');
 const { updateTabBar } = require('../../utils/tabBar');
 const { generateCalendar } = require('../../utils/calendar');
+const app = getApp();
 Page({
   data: {
     year: 2026, month: 6,
     cells: [],
-    weddings: [], loading: true,
-    eventDays: [15, 28],
+    weddings: [], loading: true, error: false, errorMsg: '',
+    eventDays: [],
+    showLoginModal: false,
   },
   onLoad() {
+    this._loginModalShowFn = (show) => { this.setData({ showLoginModal: show }); };
+    app.registerLoginModal(this._loginModalShowFn);
+
     const now = new Date();
     const year = now.getFullYear(), month = now.getMonth() + 1;
     this.setData({ year, month });
     this.buildCalendar(year, month);
+    
+    // 登录守卫
+    if (!app.globalData.isLoggedIn) {
+      api.requireLogin(() => { this.loadData(); });
+    } else {
+      this.loadData();
+    }
+  },
+  onUnload() {
+    if (this._loginModalShowFn) app.unregisterLoginModal(this._loginModalShowFn);
+  },
+
+  onLoginSuccess() {
+    this.setData({ showLoginModal: false });
     this.loadData();
+  },
+
+  onLoginClose() {
+    this.setData({ showLoginModal: false });
   },
   onShow() {
     updateTabBar(this, 2);
@@ -23,7 +46,7 @@ Page({
     this.setData({ cells });
   },
   loadData() {
-    this.setData({ loading: true });
+    this.setData({ loading: true, error: false, errorMsg: '' });
     api.schedule.list({ rangeDays: 90 }, null).then(data => {
       this.setData({ loading: false });
       if (data && Array.isArray(data.weddings)) {
@@ -32,12 +55,17 @@ Page({
         this.setData({ eventDays: days });
         this.buildCalendar(this.data.year, this.data.month);
       } else {
-        this.setData({ weddings: [
-          { id: 'd1', client: '张先生 & 李女士', date: '6月15日', venue: '万达酒店', statusClass: 'progress' },
-          { id: 'd2', client: '王先生 & 赵女士', date: '6月28日', venue: '湖滨酒店', statusClass: 'pending' },
-        ]});
+        this.setData({ weddings: [], eventDays: [] });
+        this.buildCalendar(this.data.year, this.data.month);
       }
-    }).catch(() => this.setData({ loading: false }));
+    }).catch(err => {
+      console.error('排期加载失败:', err);
+      this.setData({
+        loading: false,
+        error: true,
+        errorMsg: '数据加载失败，请下拉刷新重试'
+      });
+    });
   },
   goPrev() {
     let { year, month } = this.data;

@@ -1,6 +1,7 @@
 {
   "navigationBarTitleText": "全局搜索",
   "usingComponents": {
-    "nav-bar": "/components/nav-bar/nav-bar"
+    "nav-bar": "/components/nav-bar/nav-bar",
+    "login-modal": "/components/login-modal/login-modal"
   }
 }

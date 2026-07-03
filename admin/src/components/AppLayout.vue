@@ -1,9 +1,9 @@
 <template>
   <el-container style="min-height:100vh">
-    <el-aside :width="collapse ? '64px' : '220px'" style="background:#1a1a2e;transition:width 0.3s">
+    <el-aside :width="collapse ? '64px' : '220px'" :style="{ background: 'var(--admin-sidebar-bg)', transition: 'width 0.3s' }">
       <div class="logo" :style="{ padding: collapse ? '12px 8px' : '16px' }">
-        <span v-if="!collapse" style="color:#c19a50;font-size:18px;font-weight:700">大喜·管理</span>
-        <span v-else style="color:#c19a50;font-size:20px">⬡</span>
+        <span v-if="!collapse" :style="{ color: 'var(--admin-accent)', fontSize: '18px', fontWeight: '700' }">大喜·管理</span>
+        <span v-else :style="{ color: 'var(--admin-accent)', fontSize: '20px' }">⬡</span>
       </div>
       <el-menu :default-active="route.path" router :collapse="collapse" style="border-right:none;background:transparent">
         <el-menu-item index="/"><el-icon><DataBoard /></el-icon><span>仪表盘</span></el-menu-item>
@@ -18,11 +18,11 @@
       </el-menu>
     </el-aside>
     <el-container>
-      <el-header style="background:#fff;border-bottom:1px solid #eee;display:flex;align-items:center;justify-content:space-between;padding:0 20px;height:50px">
+      <el-header :style="{ background: 'var(--white)', borderBottom: '1px solid var(--border-light)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 20px', height: '50px' }">
         <el-button :icon="collapse ? 'Expand' : 'Fold'" text @click="collapse=!collapse" />
         <div><el-tag type="warning" size="small">管理后台</el-tag><el-button text type="danger" size="small" @click="logout" style="margin-left:12px">退出</el-button></div>
       </el-header>
-      <el-main style="background:#f5f5f5;padding:16px"><router-view /></el-main>
+      <el-main :style="{ background: 'var(--surface)', padding: '16px' }"><router-view /></el-main>
     </el-container>
   </el-container>
 </template>
@@ -36,8 +36,8 @@ function logout() { auth.logout(); router.push('/login') }
 </script>
 <style scoped>
 .el-aside { overflow:hidden }
-.el-menu { --el-menu-bg-color:transparent;--el-menu-text-color:rgba(255,255,255,0.75);--el-menu-active-color:#c19a50;--el-menu-hover-bg-color:rgba(201,169,110,0.15) }
-.el-menu-item.is-active { background:rgba(201,169,110,0.2)!important }
+.el-menu { --el-menu-bg-color:transparent;--el-menu-text-color:rgba(255,255,255,0.75);--el-menu-active-color:var(--admin-accent);--el-menu-hover-bg-color:var(--admin-accent-light) }
+.el-menu-item.is-active { background:var(--admin-accent-bg)!important }
 .logo { text-align:center;border-bottom:1px solid rgba(255,255,255,0.08) }
 
 /* ═══════════════════════════════════════════════
@@ -47,14 +47,14 @@ function logout() { auth.logout(); router.push('/login') }
 
 /* ---------- 侧边栏增强 ---------- */
 .el-aside {
-  background: linear-gradient(180deg, #1a1a2e 0%, #2d2d44 100%);
+  background: var(--gradient-sidebar);
   box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
 }
 
 /* ---------- Logo增强 ---------- */
 .logo {
   background: linear-gradient(135deg, rgba(193, 154, 80, 0.1) 0%, rgba(193, 154, 80, 0.05) 100%);
-  border-bottom: 1px solid rgba(193, 154, 80, 0.2);
+  border-bottom: 1px solid var(--admin-border);
 }
 
 .logo span {
@@ -69,26 +69,26 @@ function logout() { auth.logout(); router.push('/login') }
 }
 
 .el-menu-item:hover {
-  background: rgba(193, 154, 80, 0.15) !important;
+  background: var(--admin-accent-light) !important;
   transform: translateX(4px);
 }
 
 .el-menu-item.is-active {
-  background: linear-gradient(135deg, rgba(193, 154, 80, 0.2) 0%, rgba(193, 154, 80, 0.1) 100%) !important;
+  background: var(--admin-accent-bg) !important;
   box-shadow: 0 2px 8px rgba(193, 154, 80, 0.2);
   font-weight: 700;
 }
 
 /* ---------- 顶部导航增强 ---------- */
 .el-header {
-  background: linear-gradient(135deg, #ffffff 0%, #faf7f0 100%);
-  border-bottom: 1px solid #e8d5a8;
+  background: var(--gradient-card);
+  border-bottom: 1px solid var(--gold-200);
   box-shadow: 0 2px 8px rgba(58, 40, 15, 0.05);
 }
 
 /* ---------- 主内容区增强 ---------- */
 .el-main {
-  background: linear-gradient(135deg, #f5f5f5 0%, #faf7f0 100%);
+  background: var(--gradient-card);
   position: relative;
 }
 
@@ -108,9 +108,9 @@ function logout() { auth.logout(); router.push('/login') }
 
 /* ---------- 标签增强 ---------- */
 :deep(.el-tag) {
-  background: linear-gradient(135deg, #f5ebd4 0%, #e8d5a8 100%);
-  border: 1px solid #d4b87c;
-  color: #6f4e1f;
+  background: var(--gradient-gold);
+  border: 1px solid var(--gold-300);
+  color: var(--gold-700);
   font-weight: 600;
 }
 </style>

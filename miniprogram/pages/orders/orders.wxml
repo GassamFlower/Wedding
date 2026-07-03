@@ -1,4 +1,4 @@
-<nav-bar title="婚礼订单" />
+<nav-bar title="婚礼订单" show-back="{{true}}" />
 <view class="page">
   <!-- 统计卡片 -->
   <view class="stat-row">
@@ -36,8 +36,33 @@
     </view>
   </scroll-view>
 
+  <!-- 新建表单（内联，置顶显示） -->
+  <view wx:if="{{showForm}}" class="form-inline">
+    <view class="form-title">新建订单</view>
+    <view class="form-scroll-body">
+      <view class="form-group"><text class="form-label">新人姓名 *</text><input class="form-input" placeholder="如：张先生 & 李女士" value="{{formData.clientName}}" bindinput="onFormInput" data-field="clientName" /></view>
+      <view class="form-row">
+        <view class="form-group" style="flex:1;"><text class="form-label">婚礼日期</text><input class="form-input" placeholder="如：6月15日" value="{{formData.weddingDate}}" bindinput="onFormInput" data-field="weddingDate" /></view>
+        <view class="form-group" style="flex:1;"><text class="form-label">预算(¥)</text><input class="form-input" type="number" placeholder="如：12000" value="{{formData.budget}}" bindinput="onFormInput" data-field="budget" /></view>
+      </view>
+      <view class="form-group"><text class="form-label">场地</text><input class="form-input" placeholder="如：万达酒店·宴会厅" value="{{formData.venue}}" bindinput="onFormInput" data-field="venue" /></view>
+      <view class="form-row">
+        <view class="form-group" style="flex:1;"><text class="form-label">风格</text><input class="form-input" placeholder="新中式/韩式/森系" value="{{formData.style}}" bindinput="onFormInput" data-field="style" /></view>
+        <view class="form-group" style="flex:1;"><text class="form-label">电话</text><input class="form-input" type="number" maxlength="11" placeholder="手机号" value="{{formData.phone}}" bindinput="onFormInput" data-field="phone" /></view>
+      </view>
+    </view>
+    <view class="form-btns"><button class="btn-cancel" catchtap="closeForm">取消</button><button class="btn-primary" catchtap="submitForm">创建</button></view>
+  </view>
+
+  <!-- 错误状态 -->
+  <view wx:if="{{error && !loading}}" class="error-state">
+    <view class="error-icon">⚠</view>
+    <text class="error-text">{{errorMsg || '数据加载失败'}}</text>
+    <button class="retry-btn" catchtap="loadData">重新加载</button>
+  </view>
+
   <!-- 订单列表 -->
-  <view wx:if="{{filtered.length===0 && !loading}}" class="empty-state">
+  <view wx:elif="{{filtered.length===0 && !loading && !error}}" class="empty-state">
     <text>暂无订单</text>
     <text class="text-sm text-gold mt-8" catchtap="openCreate">新建第一笔订单 →</text>
   </view>
@@ -61,7 +86,7 @@
       <text class="text-sm">¥{{item.budget}}</text>
       <view class="flex-row gap-8">
         <text class="text-xs text-muted">已付 ¥{{item.paid}}</text>
-        <text wx:if="{{item.balance !== '' && item.balance !== '0'}}" class="text-xs" style="color:#DC2626;">待收 ¥{{item.balance}}</text>
+        <text wx:if="{{item.balance !== '' && item.balance !== '0'}}" class="text-xs" style="color:var(--error);">待收 ¥{{item.balance}}</text>
       </view>
     </view>
   </view>
@@ -69,24 +94,12 @@
   <!-- Loading -->
   <view wx:if="{{loading}}" class="loading-center"><view class="loading-spinner"></view><text>加载中...</text></view>
 
-  <!-- FAB -->
-  <view class="fab" catchtap="openCreate">+</view>
-
-  <!-- 新建弹窗 -->
-  <view wx:if="{{showForm}}" class="form-overlay" catchtap="closeForm">
-    <view class="form-modal" catchtap="">
-      <view class="form-title">新建订单</view>
-      <view class="form-group"><text class="form-label">新人姓名 *</text><input class="form-input" placeholder="如：张先生 & 李女士" value="{{formData.clientName}}" bindinput="onFormInput" data-field="clientName" /></view>
-      <view class="form-row">
-        <view class="form-group" style="flex:1;"><text class="form-label">婚礼日期</text><input class="form-input" placeholder="如：6月15日" value="{{formData.weddingDate}}" bindinput="onFormInput" data-field="weddingDate" /></view>
-        <view class="form-group" style="flex:1;"><text class="form-label">预算(¥)</text><input class="form-input" type="number" placeholder="如：12000" value="{{formData.budget}}" bindinput="onFormInput" data-field="budget" /></view>
-      </view>
-      <view class="form-group"><text class="form-label">场地</text><input class="form-input" placeholder="如：万达酒店·宴会厅" value="{{formData.venue}}" bindinput="onFormInput" data-field="venue" /></view>
-      <view class="form-row">
-        <view class="form-group" style="flex:1;"><text class="form-label">风格</text><input class="form-input" placeholder="新中式/韩式/森系" value="{{formData.style}}" bindinput="onFormInput" data-field="style" /></view>
-        <view class="form-group" style="flex:1;"><text class="form-label">电话</text><input class="form-input" type="number" maxlength="11" placeholder="手机号" value="{{formData.phone}}" bindinput="onFormInput" data-field="phone" /></view>
-      </view>
-      <view class="form-btns"><button class="btn-cancel" catchtap="closeForm">取消</button><button class="btn-primary" catchtap="submitForm">创建</button></view>
-    </view>
+  <!-- FAB 新增按钮 -->
+  <view wx:if="{{!showForm}}" class="fab-btn" catchtap="openCreate">
+    <view class="fab-icon-wrap"><view class="svg-icon icon-16 icon-add-white"></view></view>
+    <text class="fab-label">新增</text>
   </view>
 </view>
+
+<!-- 登录弹窗 -->
+<login-modal visible="{{showLoginModal}}" bind:success="onLoginSuccess" bind:close="onLoginClose" />

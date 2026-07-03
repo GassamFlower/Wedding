@@ -160,3 +160,10 @@
     </view>
   </view>
 </view>
+
+<!-- 登录弹窗 -->
+<login-modal
+  visible="{{showLoginModal}}"
+  bind:close="onLoginModalClose"
+  bind:success="onLoginSuccess"
+/>

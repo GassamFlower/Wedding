@@ -55,6 +55,8 @@ async function listOrders(openid, { keyword = '', status = '', page = 1, pageSiz
     col.where(where).count(),
   ]);
 
+  console.log('[listOrders] openid:', openid, 'where:', JSON.stringify(where), 'total:', countRes.total, 'listLen:', listRes.data.length);
+
   return ok({
     total: countRes.total,
     page,
@@ -112,19 +114,35 @@ async function detailOrder(openid, { id } = {}) {
   });
 }
 
-async function createOrder(openid, { data } = {}) {
+async function createOrder(openid, event = {}) {
+  const data = event.data;
+  console.log('[createOrder] event:', JSON.stringify(event));
+  console.log('[createOrder] data:', JSON.stringify(data));
+  console.log('[createOrder] data.clientName:', JSON.stringify(data && data.clientName));
+  
   const err = requireFields(data, ['clientName']);
   if (err) return fail(err);
 
-  // 校验金额
-  const budget = validateAmount(data.budget);
-  const paid = validateAmount(data.paid);
-  if (data.budget !== undefined && budget === null) return fail('预算金额不合法');
-  if (data.paid !== undefined && paid === null) return fail('已付金额不合法');
+  // 校验金额（仅当字段存在时校验）
+  if (data.budget !== undefined && data.budget !== null && data.budget !== '') {
+    const budget = validateAmount(data.budget);
+    if (budget === null) return fail('预算金额不合法');
+  }
+  if (data.paid !== undefined && data.paid !== null && data.paid !== '') {
+    const paid = validateAmount(data.paid);
+    if (paid === null) return fail('已付金额不合法');
+  }
 
-  // 校验日期
+  // 校验日期 - 先解析中文格式（如 "10月15号"、"6月15日"），再验证
   if (data.weddingDate) {
-    const d = validateDate(data.weddingDate, 2024, 2030);
+    let dateVal = data.weddingDate;
+    // 兼容中文格式："10月15号" / "10月15日" / "6月15"
+    const m = String(dateVal).match(/(\d{1,2})月(\d{1,2})/);
+    if (m) {
+      const year = new Date().getFullYear();
+      dateVal = new Date(year, parseInt(m[1]) - 1, parseInt(m[2]));
+    }
+    const d = validateDate(dateVal, 2024, 2030);
     if (!d) return fail('婚礼日期不合法');
     data.weddingDate = d;
   }
@@ -211,7 +229,21 @@ function normalizeOrder(data, isUpdate = false) {
     if (data[k] !== undefined) out[k] = data[k];
   });
   if (data.weddingDate !== undefined) {
-    out.weddingDate = data.weddingDate ? new Date(data.weddingDate) : null;
+    if (!data.weddingDate) {
+      out.weddingDate = null;
+    } else if (data.weddingDate instanceof Date) {
+      out.weddingDate = data.weddingDate;
+    } else {
+      // 兼容前端 "6月15日" / "6月15" / "2026-06-15" 等格式
+      const m = String(data.weddingDate).match(/(\d{1,2})月(\d{1,2})/);
+      if (m) {
+        const year = new Date().getFullYear();
+        out.weddingDate = new Date(year, parseInt(m[1]) - 1, parseInt(m[2]));
+      } else {
+        const d = new Date(data.weddingDate);
+        out.weddingDate = isNaN(d.getTime()) ? null : d;
+      }
+    }
   }
   // 自动结算尾款
   if (!isUpdate && out.budget != null && out.paid != null && out.balance == null) {

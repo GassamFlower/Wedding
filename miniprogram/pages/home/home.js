@@ -42,10 +42,16 @@ Page({
     // 精选案例 — 在对话中作为参考卡片展示
     referenceCases: [],
     showCaseRef: false,
+    showLoginModal: false,
   },
 
   onLoad() {
     const app = getApp();
+    // 注册登录弹窗到全局
+    this._loginModalShowFn = (show) => {
+      this.setData({ showLoginModal: show });
+    };
+    app.registerLoginModal(this._loginModalShowFn);
     // 如果有待处理的数据（来自其他页面传来的预算/风格偏好）
     const pendingBudget = app.globalData?.pendingBudget;
     const stylePref = app.globalData?.stylePref;
@@ -77,6 +83,17 @@ Page({
 
   onShow() {
     updateTabBar(this, 0);
+    // 重新注册登录弹窗
+    if (this._loginModalShowFn) {
+      app.registerLoginModal(this._loginModalShowFn);
+    }
+  },
+
+  onUnload() {
+    // 页面卸载时注销登录弹窗
+    if (this._loginModalShowFn) {
+      app.unregisterLoginModal(this._loginModalShowFn);
+    }
   },
 
   // ====================== 发送消息 ======================
@@ -85,6 +102,20 @@ Page({
     const text = this.data.inputText.trim();
     if (!text || this.data.sending) return;
 
+    // 检查登录状态
+    const app = getApp();
+    if (!app.globalData.isLoggedIn) {
+      api.requireLogin(() => {
+        // 登录成功后继续发送
+        this._doSendMessage(text);
+      });
+      return;
+    }
+
+    this._doSendMessage(text);
+  },
+
+  _doSendMessage(text) {
     const userMsg = { role: 'user', content: text, type: 'text', time: this._now() };
     const messages = [...this.data.messages, userMsg];
     this.setData({
@@ -164,6 +195,20 @@ Page({
   generateProposal() {
     if (!this.data.sessionId || this.data.sending) return;
 
+    // 检查登录状态
+    const app = getApp();
+    if (!app.globalData.isLoggedIn) {
+      api.requireLogin(() => {
+        // 登录成功后继续生成
+        this._doGenerateProposal();
+      });
+      return;
+    }
+
+    this._doGenerateProposal();
+  },
+
+  _doGenerateProposal() {
     this.setData({ sending: true });
 
     api.proposalAi.generate({
@@ -314,7 +359,19 @@ Page({
 
   goCaseDetail(e) {
     const id = e.currentTarget.dataset.id;
-    if (id) wx.navigateTo({ url: '/pages/case-detail/case-detail?id=' + id });
+    if (!id) return;
+    
+    // 检查登录状态
+    const app = getApp();
+    if (!app.globalData.isLoggedIn) {
+      api.requireLogin(() => {
+        // 登录成功后继续跳转
+        wx.navigateTo({ url: '/pages/case-detail/case-detail?id=' + id });
+      });
+      return;
+    }
+    
+    wx.navigateTo({ url: '/pages/case-detail/case-detail?id=' + id });
   },
 
   hideCaseRef() {
@@ -324,10 +381,28 @@ Page({
   // ====================== 工具入口 ======================
 
   goBudgetCalc() {
+    // 检查登录状态
+    const app = getApp();
+    if (!app.globalData.isLoggedIn) {
+      api.requireLogin(() => {
+        // 登录成功后继续跳转
+        wx.navigateTo({ url: '/pages/budget-calc/budget-calc' });
+      });
+      return;
+    }
     wx.navigateTo({ url: '/pages/budget-calc/budget-calc' });
   },
 
   goChecklist() {
+    // 检查登录状态
+    const app = getApp();
+    if (!app.globalData.isLoggedIn) {
+      api.requireLogin(() => {
+        // 登录成功后继续跳转
+        wx.navigateTo({ url: '/pages/checklist/checklist' });
+      });
+      return;
+    }
     wx.navigateTo({ url: '/pages/checklist/checklist' });
   },
 
@@ -335,6 +410,21 @@ Page({
 
   loadHistory() {
     if (this.data.sending) return;
+
+    // 检查登录状态
+    const app = getApp();
+    if (!app.globalData.isLoggedIn) {
+      api.requireLogin(() => {
+        // 登录成功后继续加载历史会话
+        this._doLoadHistory();
+      });
+      return;
+    }
+
+    this._doLoadHistory();
+  },
+
+  _doLoadHistory() {
     api.aiChat.sessions({ page: 1, pageSize: 5 }).then(res => {
       const sessions = (res && res.sessions) || [];
       if (sessions.length === 0) {
@@ -391,5 +481,16 @@ Page({
       title: '大喜的日子·AI婚礼设计',
       path: '/pages/home/home',
     };
+  },
+
+  // ====================== 登录弹窗 ======================
+
+  onLoginModalClose() {
+    this.setData({ showLoginModal: false });
+  },
+
+  onLoginSuccess() {
+    this.setData({ showLoginModal: false });
+    wx.showToast({ title: '登录成功', icon: 'success' });
   },
 });

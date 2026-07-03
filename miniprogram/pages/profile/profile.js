@@ -14,10 +14,35 @@ Page({
       { icon: 'search', label: '全局搜索', page: '/pages/search/search' },
     ],
     seedReady: false,
+    showLoginModal: false,
   },
   onLoad() {
+    this._loginModalShowFn = (show) => { this.setData({ showLoginModal: show }); };
+    app.registerLoginModal(this._loginModalShowFn);
+    
+    // 登录守卫：个人中心需要登录
+    if (!app.globalData.isLoggedIn) {
+      api.requireLogin(() => {
+        this.loadProfile();
+        this.loadStats();
+      });
+    } else {
+      this.loadProfile();
+      this.loadStats();
+    }
+  },
+  onUnload() {
+    if (this._loginModalShowFn) app.unregisterLoginModal(this._loginModalShowFn);
+  },
+
+  onLoginSuccess() {
+    this.setData({ showLoginModal: false });
     this.loadProfile();
     this.loadStats();
+  },
+
+  onLoginClose() {
+    this.setData({ showLoginModal: false });
   },
   loadProfile() {
     const savedName = wx.getStorageSync('plannerName');
@@ -52,7 +77,13 @@ Page({
   },
   goPage(e) {
     const page = e.currentTarget.dataset.page;
-    if (page) wx.navigateTo({ url: page });
+    if (!page) return;
+    const tabBarPages = ['/pages/home/home', '/pages/contact/contact', '/pages/mine/mine', '/pages/dashboard/dashboard', '/pages/orders/orders', '/pages/schedule/schedule', '/pages/contracts/contracts'];
+    if (tabBarPages.includes(page)) {
+      wx.switchTab({ url: page });
+    } else {
+      wx.navigateTo({ url: page });
+    }
   },
   switchToNewbie() {
     wx.showModal({

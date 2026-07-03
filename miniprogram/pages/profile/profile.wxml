@@ -37,11 +37,11 @@
     </view>
   </view>
 
-  <!-- 角色切换 -->
+  <!-- 体验新人端 -->
   <view class="card" style="margin-top:24rpx;background:rgba(202,138,4,0.06);">
-    <view class="flex-between">
-      <view><text class="text-sm text-gold">当前为策划师模式</text><text class="text-xs text-muted" style="display:block;margin-top:8rpx;">点击下方按钮可切换回新人端</text></view>
-      <button class="btn-switch" catchtap="switchToNewbie">切换到新人</button>
+    <view class="flex-between" style="align-items:center;">
+      <view><text class="text-sm text-gold">体验新人端</text><text class="text-xs text-muted" style="display:block;margin-top:8rpx;">以新人视角体验 AI 设计对话和案例浏览</text></view>
+      <button class="btn-switch" catchtap="switchToNewbie">去体验</button>
     </view>
   </view>
 
@@ -50,3 +50,6 @@
     <text class="text-xs text-muted" style="margin-top:8rpx;">版本 v1.0</text>
   </view>
 </view>
+
+<!-- 登录弹窗 -->
+<login-modal visible="{{showLoginModal}}" bind:success="onLoginSuccess" bind:close="onLoginClose" />

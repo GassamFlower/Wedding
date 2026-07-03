@@ -92,7 +92,7 @@
       <text class="text-body" style="display:block;margin-top:8rpx;color:var(--text);">{{caseData.challengeAndSolve.challenge}}</text>
     </view>
     <view>
-      <text class="text-sm font-600" style="color:#059669;">我们的方案</text>
+      <text class="text-sm font-600" style="color:var(--success);">我们的方案</text>
       <text class="text-body" style="display:block;margin-top:8rpx;color:var(--text);">{{caseData.challengeAndSolve.solve}}</text>
     </view>
   </view>
@@ -177,4 +177,7 @@
   <text class="loading-text">加载中...</text>
   <canvas canvas-id="shareCanvas" style="width:1280rpx;height:1920rpx;position:fixed;left:-9999rpx;top:0;z-index:-1;"></canvas>
 </view>
+
+<!-- 登录弹窗 -->
+<login-modal visible="{{showLoginModal}}" bind:success="onLoginSuccess" bind:close="onLoginClose" />
 </view>

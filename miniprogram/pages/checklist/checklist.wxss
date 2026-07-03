@@ -1,4 +1,22 @@
 /* 筹备清单专属样式 */
+
+/* 按钮重置：覆盖原生 button 默认样式 */
+.checklist-actions button {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  line-height: 1;
+  font-size: inherit;
+  font-weight: inherit;
+  color: inherit;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+}
+.checklist-actions button::after {
+  display: none;
+}
+
 .checklist-stage-icon {
   width:72rpx; height:72rpx;
   border-radius:50%;

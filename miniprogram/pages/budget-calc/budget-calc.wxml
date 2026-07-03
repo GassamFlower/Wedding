@@ -8,7 +8,7 @@
   </view>
 
   <!-- 预算参考条 -->
-  <view class="card--premium" style="padding:24rpx;">
+  <view class="card-premium" style="padding:24rpx;">
     <text class="text-xs text-muted" style="display:block;margin-bottom:12rpx;">预算区间参考</text>
     <view class="budget-bars">
       <view wx:for="{{referenceBars}}" wx:key="label" class="budget-bar-item" style="flex:1;">
@@ -19,7 +19,7 @@
   </view>
 
   <!-- 各项预算输入 -->
-  <view class="card--premium">
+  <view class="card-premium">
     <view class="section-title"><view class="gold-bar"></view><view class="icon icon-budget" style="width:26rpx;height:26rpx;color:var(--gold);vertical-align:-4rpx;margin-right:10rpx;"></view>费用分配</view>
     <view wx:for="{{categories}}" wx:key="key" class="budget-category">
       <view class="flex-between" style="margin-bottom:8rpx;">
@@ -49,7 +49,7 @@
   </view>
 
   <!-- 占比分析 -->
-  <view class="card--premium">
+  <view class="card-premium">
     <view class="section-title"><view class="gold-bar"></view><view class="icon icon-target" style="width:26rpx;height:26rpx;color:var(--gold);vertical-align:-4rpx;margin-right:10rpx;"></view>费用占比</view>
     <view wx:for="{{categories}}" wx:key="key" class="budget-pie-item">
       <view class="flex-row gap-8" style="align-items:center;">

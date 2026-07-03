@@ -32,7 +32,7 @@
     <!-- 阶段头部 -->
     <view class="flex-row gap-10" style="margin-bottom:20rpx;">
       <view class="checklist-stage-icon {{item.stageChecked?'stage-done':''}}">
-        <view wx:if="{{item.stageChecked}}" class="icon icon-check" style="width:32rpx;height:32rpx;color:#fff;"></view>
+        <view wx:if="{{item.stageChecked}}" class="icon icon-check" style="width:32rpx;height:32rpx;color:var(--white);"></view>
         <view wx:else class="icon icon-{{item.icon}}" style="width:32rpx;height:32rpx;"></view>
       </view>
       <view class="flex-1">
@@ -52,7 +52,7 @@
     <!-- 清单项 -->
     <view wx:for="{{item.items}}" wx:for-item="task" wx:for-index="ti" wx:key="id" class="checklist-item {{task.checked?'checked':''}}" catchtap="toggleItem" data-id="{{task.id}}" data-stage-idx="{{index}}">
       <view class="checklist-check">
-        <view wx:if="{{task.checked}}" class="icon icon-check" style="width:28rpx;height:28rpx;color:#fff;"></view>
+        <view wx:if="{{task.checked}}" class="icon icon-check" style="width:28rpx;height:28rpx;color:var(--white);"></view>
       </view>
       <text class="text-sm checklist-text">{{task.text}}</text>
     </view>
@@ -65,7 +65,7 @@
   </view>
 
   <!-- 底部操作 -->
-  <view class="flex-row gap-10" style="margin-top:32rpx;padding-bottom:32rpx;">
+  <view class="checklist-actions flex-row gap-10" style="margin-top:32rpx;padding-bottom:32rpx;">
     <button class="btn-outline" style="flex:1;text-align:center;" catchtap="resetAll">重置进度</button>
     <button class="btn-gold" style="flex:1;text-align:center;" catchtap="goContact">AI 设计婚礼方案</button>
   </view>
@@ -73,3 +73,6 @@
   <!-- 底部留白 -->
   <view style="height:80rpx;"></view>
 </view>
+
+<!-- 登录弹窗 -->
+<login-modal visible="{{showLoginModal}}" bind:success="onLoginSuccess" bind:close="onLoginClose" />

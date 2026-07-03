@@ -1,6 +1,6 @@
 // 云函数：user
-// 用户档案（与 registerUser 配合：registerUser 负责注册写入，本函数负责读取/更新）
-// actions: profile / update / switchRole
+// 用户档案 + 登录认证
+// actions: login / profile / update / switchRole / updatePhone
 
 const cloud = require('wx-server-sdk');
 cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV });
@@ -18,9 +18,11 @@ exports.main = async (event) => {
 
   try {
     switch (action) {
+      case 'login':      return await login(OPENID);
       case 'profile':    return await getProfile(OPENID);
       case 'update':     return await updateProfile(OPENID, event);
       case 'switchRole': return await switchRole(OPENID, event);
+      case 'updatePhone': return await updatePhone(OPENID, event);
       default:
         return fail('未知操作: ' + action);
     }
@@ -28,6 +30,98 @@ exports.main = async (event) => {
     return fail(err && err.message ? err.message : String(err));
   }
 };
+
+// 静默登录：查找或创建用户，更新最后登录时间
+async function login(openid) {
+  const found = await findUser(openid);
+  const now = new Date();
+
+  if (found) {
+    // 更新最后登录时间
+    await db.collection(found.col).doc(found.doc._id).update({
+      data: { lastLoginAt: now, updatedAt: now },
+    });
+    return ok({
+      _id: found.doc._id,
+      openid,
+      nickName: found.doc.nickName || '',
+      avatarUrl: found.doc.avatarUrl || '',
+      phone: found.doc.phone || '',
+      phoneVerified: !!found.doc.phoneVerified,
+      role: found.doc.role || 'newbie',
+      lastLoginAt: now,
+      exists: true,
+    });
+  }
+
+  // 新用户：创建记录
+  const res = await db.collection('users').add({
+    data: {
+      _openid: openid,
+      nickName: '',
+      avatarUrl: '',
+      phone: '',
+      phoneVerified: false,
+      role: 'newbie',
+      isPlannerVerified: false,
+      lastLoginAt: now,
+      loginMethod: 'wechat',
+      createdAt: now,
+      updatedAt: now,
+    },
+  });
+
+  return ok({
+    _id: res._id,
+    openid,
+    nickName: '',
+    avatarUrl: '',
+    phone: '',
+    phoneVerified: false,
+    role: 'newbie',
+    lastLoginAt: now,
+    exists: false,
+  });
+}
+
+// 手机号授权登录：解密手机号并更新用户记录
+async function updatePhone(openid, { code } = {}) {
+  if (!code) return fail('缺少手机号授权 code');
+
+  try {
+    // 使用微信云开发的 getOpenData 解密手机号
+    const res = await cloud.getOpenData({
+      list: [{ cloudID: code }],
+    });
+
+    if (!res.list || !res.list[0] || !res.list[0].data) {
+      return fail('手机号解密失败');
+    }
+
+    const phoneInfo = res.list[0].data;
+    const phone = phoneInfo.phoneNumber || phoneInfo.purePhoneNumber;
+
+    if (!phone) return fail('未获取到手机号');
+
+    // 更新用户记录
+    const found = await findUser(openid);
+    const now = new Date();
+    const payload = { phone, phoneVerified: true, loginMethod: 'phone', updatedAt: now };
+
+    if (found) {
+      await db.collection(found.col).doc(found.doc._id).update({ data: payload });
+    } else {
+      await db.collection('users').add({
+        data: { _openid: openid, ...payload, nickName: '', avatarUrl: '', role: 'newbie', createdAt: now },
+      });
+    }
+
+    return ok({ phone });
+  } catch (err) {
+    console.error('[user] updatePhone error:', err);
+    return fail('手机号获取失败：' + (err.message || String(err)));
+  }
+}
 
 async function findUser(openid) {
   for (const name of COLS) {

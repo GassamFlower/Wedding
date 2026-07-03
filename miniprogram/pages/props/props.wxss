@@ -28,6 +28,27 @@
   font-weight: 600;
 }
 
+.action-btn-disabled {
+  opacity: 0.5;
+  position: relative;
+}
+
+.action-btn-disabled:active {
+  transform: none;
+}
+
+.action-badge {
+  position: absolute;
+  top: 8rpx;
+  right: 8rpx;
+  padding: 4rpx 12rpx;
+  background: var(--gold-300);
+  color: var(--gold-700);
+  font-size: 18rpx;
+  border-radius: 8rpx;
+  font-weight: 500;
+}
+
 /* ═══ 道具分类网格 - 3列布局 ═══ */
 .prop-cat-grid {
   display: grid;

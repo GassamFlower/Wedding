@@ -1,4 +1,5 @@
 const api = require('../../services/api');
+const app = getApp();
 
 Page({
   data: {
@@ -7,12 +8,32 @@ Page({
     noteText: '',
     statusOptions: ['待跟进', '已联系', '已转化', '已关闭'],
     statusIndex: 0,
+    showLoginModal: false,
+    _leadId: '',
   },
 
   onLoad(options) {
+    this._loginModalShowFn = (show) => { this.setData({ showLoginModal: show }); };
+    app.registerLoginModal(this._loginModalShowFn);
+
     if (options.id) {
-      this.loadLead(options.id);
+      this.setData({ _leadId: options.id });
+      if (!app.globalData.isLoggedIn) {
+        api.requireLogin(() => { this.loadLead(options.id); });
+      } else {
+        this.loadLead(options.id);
+      }
     }
+  },
+  onUnload() {
+    if (this._loginModalShowFn) app.unregisterLoginModal(this._loginModalShowFn);
+  },
+  onLoginSuccess() {
+    this.setData({ showLoginModal: false });
+    if (this.data._leadId) this.loadLead(this.data._leadId);
+  },
+  onLoginClose() {
+    this.setData({ showLoginModal: false });
   },
 
   loadLead(id) {

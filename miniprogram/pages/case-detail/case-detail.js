@@ -3,16 +3,52 @@ const api = require('../../services/api');
 const fav = require('../../utils/favorites');
 
 Page({
-  data: { caseData: null, loading: true, isFav: false, favCount: 0, shareCardImage: '' },
+  data: { caseData: null, loading: true, isFav: false, favCount: 0, shareCardImage: '', showLoginModal: false },
 
   onLoad(options) {
     const id = options && options.id;
+    
+    // 注册登录弹窗到全局
+    const app = getApp();
+    this._loginModalShowFn = (show) => {
+      this.setData({ showLoginModal: show });
+    };
+    app.registerLoginModal(this._loginModalShowFn);
+    
+    this.setData({ favCount: fav.count() });
+    
+    // 登录守卫：查看案例详情需要登录
+    if (!app.globalData.isLoggedIn) {
+      api.requireLogin(() => {
+        // 登录成功后加载数据
+        if (id) {
+          this.loadCaseDetail(id);
+        }
+      });
+      return;
+    }
+    
     if (id) {
       this.loadCaseDetail(id);
     } else {
       this.setData({ loading: false });
     }
-    this.setData({ favCount: fav.count() });
+  },
+
+  onUnload() {
+    // 页面卸载时注销登录弹窗
+    if (this._loginModalShowFn) {
+      const app = getApp();
+      app.unregisterLoginModal(this._loginModalShowFn);
+    }
+  },
+
+  onLoginSuccess() {
+    this.setData({ showLoginModal: false });
+  },
+
+  onLoginClose() {
+    this.setData({ showLoginModal: false });
   },
 
   loadCaseDetail(id) {
@@ -70,12 +106,36 @@ Page({
 
   toggleFav() {
     if (!this.data.caseData) return;
+
+    // 检查登录状态
+    const app = getApp();
+    if (!app.globalData.isLoggedIn) {
+      api.requireLogin(() => {
+        // 登录成功后继续收藏操作
+        this._doToggleFav();
+      });
+      return;
+    }
+
+    this._doToggleFav();
+  },
+
+  _doToggleFav() {
     var newList = fav.toggle(this.data.caseData);
     this.setData({ isFav: !this.data.isFav, favCount: newList.length });
     wx.showToast({ title: this.data.isFav ? '已收藏' : '已取消收藏', icon: 'none' });
   },
 
   goContact() {
+    // 检查登录状态
+    const app = getApp();
+    if (!app.globalData.isLoggedIn) {
+      api.requireLogin(() => {
+        // 登录成功后继续跳转
+        wx.switchTab({ url: '/pages/home/home' });
+      });
+      return;
+    }
     wx.switchTab({ url: '/pages/home/home' });
   },
 

@@ -1,0 +1,54 @@
+<view wx:if="{{visible}}" class="login-overlay" catchtap="onOverlayTap">
+  <view class="login-modal" catchtap="stopPropagation">
+    <!-- Logo -->
+    <view class="login-logo-wrap">
+      <view class="login-logo-icon">
+        <view class="svg-icon icon-48 icon-logo-red"></view>
+      </view>
+    </view>
+    <text class="login-title">大喜的日子</text>
+    <text class="login-subtitle">登录后享受更多功能</text>
+
+    <!-- 头像选择 -->
+    <view class="avatar-wrapper">
+      <button class="avatar-btn" open-type="chooseAvatar" bindchooseavatar="onChooseAvatar"></button>
+      <image wx:if="{{avatarUrl}}" class="avatar-img" src="{{avatarUrl}}" mode="aspectFill"></image>
+      <view wx:else class="avatar-default">
+        <view class="svg-icon icon-32 icon-user-gold"></view>
+      </view>
+    </view>
+
+    <!-- 昵称输入 -->
+    <input type="nickname" class="nickname-input" placeholder="输入昵称" bindinput="onNicknameInput" bindblur="onNicknameBlur" />
+
+    <!-- 用户协议 -->
+    <view class="agreement-row" catchtap="toggleAgreement">
+      <view class="agreement-checkbox {{agreed ? 'checked' : ''}}">
+        <view wx:if="{{agreed}}" class="agreement-check-icon"></view>
+      </view>
+      <text class="agreement-text">我已阅读并同意</text>
+      <text class="agreement-link" catchtap="onShowAgreement">《用户协议》</text>
+      <text class="agreement-text">和</text>
+      <text class="agreement-link" catchtap="onShowPrivacy">《隐私政策》</text>
+    </view>
+
+    <!-- 微信授权按钮 -->
+    <button class="login-btn login-btn-wechat" bindtap="onWechatAuth" disabled="{{!canWechatAuth || !agreed}}">
+      <view class="login-btn-inner">
+        <view class="svg-icon icon-16 icon-wechat-white"></view>
+        <text>微信授权登录</text>
+      </view>
+    </button>
+
+    <!-- 手机号授权登录 -->
+    <button class="login-btn login-btn-phone" open-type="getPhoneNumber" bindgetphonenumber="onPhoneAuth" disabled="{{!agreed}}">
+      <view class="login-btn-inner">
+        <view class="svg-icon icon-16 icon-phone-white"></view>
+        <text>手机号快捷登录</text>
+      </view>
+    </button>
+
+    <!-- 暂不登录 -->
+    <view class="login-skip" catchtap="onSkip">暂不登录</view>
+  </view>
+</view>

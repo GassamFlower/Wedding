@@ -8,7 +8,7 @@
       <el-col :span="6"><el-card shadow="hover"><div class="stat"><div class="num">{{data.pendingTodos}}</div><div class="label">待办事项</div></div></el-card></el-col>
     </el-row>
     <el-row :gutter="16">
-      <el-col :span="12"><el-card shadow="hover"><div class="stat"><div class="num" style="color:#c19a50">&yen;{{data.monthIncome}}</div><div class="label">本月收入</div></div></el-card></el-col>
+      <el-col :span="12"><el-card shadow="hover"><div class="stat"><div class="num" :style="{ color: 'var(--admin-accent)' }">&yen;{{data.monthIncome}}</div><div class="label">本月收入</div></div></el-card></el-col>
       <el-col :span="12"><el-card shadow="hover"><div class="stat"><div class="num">{{data.totalOrders}}</div><div class="label">管理项目数</div></div></el-card></el-col>
     </el-row>
     <el-card style="margin-top:16px" shadow="hover">
@@ -37,8 +37,8 @@ onMounted(async () => {
 </script>
 <style scoped>
 .stat { text-align:center;padding:8px }
-.num { font-size:32px;font-weight:700;color:#303133 }
-.label { font-size:14px;color:#909399;margin-top:4px }
+.num { font-size:32px;font-weight:700;color:var(--primary) }
+.label { font-size:14px;color:var(--text-secondary);margin-top:4px }
 
 /* ═══════════════════════════════════════════════
    ENHANCED DASHBOARD — Design Canvas Migration
@@ -47,35 +47,35 @@ onMounted(async () => {
 
 /* ---------- 统计卡片增强 ---------- */
 :deep(.el-card) {
-  background: linear-gradient(135deg, #ffffff 0%, #faf7f0 100%);
-  border: 1px solid #f5ebd4;
-  box-shadow: 0 4px 8px rgba(58, 40, 15, 0.08);
+  background: var(--gradient-card);
+  border: 1px solid var(--gold-100);
+  box-shadow: var(--shadow-card);
   transition: all 0.3s ease;
 }
 
 :deep(.el-card:hover) {
   transform: translateY(-4px);
-  box-shadow: 0 8px 16px rgba(58, 40, 15, 0.12);
+  box-shadow: var(--shadow-card-hover);
 }
 
 /* ---------- 统计数字增强 ---------- */
 .num {
   font-family: 'Playfair Display', Georgia, serif;
-  color: #c19a50;
+  color: var(--admin-accent);
   text-shadow: 0 2px 8px rgba(193, 154, 80, 0.15);
 }
 
 /* ---------- 快捷入口按钮增强 ---------- */
 :deep(.el-button) {
-  background: linear-gradient(135deg, #f5ebd4 0%, #e8d5a8 100%);
-  border: 1px solid #d4b87c;
-  color: #6f4e1f;
+  background: var(--gradient-gold);
+  border: 1px solid var(--gold-300);
+  color: var(--gold-700);
   font-weight: 600;
   transition: all 0.2s ease;
 }
 
 :deep(.el-button:hover) {
-  background: linear-gradient(135deg, #e8d5a8 0%, #d4b87c 100%);
+  background: var(--gradient-gold);
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(193, 154, 80, 0.2);
 }
@@ -86,10 +86,10 @@ onMounted(async () => {
 
 /* ---------- 卡片头部增强 ---------- */
 :deep(.el-card__header) {
-  background: linear-gradient(135deg, #faf7f0 0%, #f5ebd4 100%);
-  border-bottom: 1px solid #e8d5a8;
+  background: var(--gradient-card);
+  border-bottom: 1px solid var(--gold-200);
   font-weight: 700;
-  color: #6f4e1f;
+  color: var(--gold-700);
 }
 </style>
 
