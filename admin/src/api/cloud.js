@@ -1,34 +1,85 @@
-import { useAuthStore } from "@/stores/auth"
+import cloudbase from '@cloudbase/js-sdk'
 
-const API_BASE = "https://cloud1-d3gt5vpbuf8acec14.service.tcloudbase.com/admin-api"
+// 云环境ID
+const ENV_ID = 'cloud1-d3gt5vpbuf8acec14'
 
-async function apiCall(data) {
-  const res = await fetch(API_BASE, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data) })
-  const text = await res.text()
-  let d
-  try { d = JSON.parse(text) } catch(e) { throw new Error("bad response") }
-  if (d.body) { try { return JSON.parse(d.body) } catch(e) { return d } }
-  return d
+const app = cloudbase.init({
+  env: ENV_ID
+})
+
+const auth = app.auth()
+
+// 登录函数
+export const login = async (secret) => {
+  // 1. 先匿名登录获取 OpenID (Web端 OpenID)
+  const loginState = await auth.getLoginState()
+  if (!loginState) {
+    await auth.signInAnonymously()
+  }
+  
+  // 2. 调用云函数验证密钥并绑定管理员
+  const res = await app.callFunction({
+    name: 'admin-api',
+    data: {
+      action: 'adminLogin',
+      payload: { secret }
+    }
+  })
+  
+  if (res.result.code === 0) {
+    // 登录成功，保存密钥到本地
+    localStorage.setItem('admin_secret', secret)
+    return res.result.data
+  }
+  throw new Error(res.result.msg || '登录失败')
 }
 
-export async function login(password) {
-  const r = await apiCall({ action: "login", password })
-  if (r.code === 0) { localStorage.setItem("admin_secret", password); return r.data }
-  throw new Error(r.msg || "\u767b\u5f55\u5931\u8d25")
+// 检查是否已登录
+export const checkIsAdmin = async () => {
+  const secret = localStorage.getItem('admin_secret')
+  if (!secret) return false
+  
+  const res = await app.callFunction({
+    name: 'admin-api',
+    data: {
+      action: 'checkIsAdmin',
+      payload: { secret }
+    }
+  })
+  
+  return res.result.code === 0 && res.result.data?.isAdmin === true
 }
 
-export async function checkIsAdmin() {
-  const s = localStorage.getItem("admin_secret")
-  if (!s) return false
-  const r = await apiCall({ action: "checkIsAdmin", secret: s })
-  return !!(r.data && r.data.isAdmin)
+// 调用管理端API
+export const callAdmin = async (action, payload = {}) => {
+  const secret = localStorage.getItem('admin_secret')
+  if (!secret) {
+    throw new Error('未登录')
+  }
+  
+  const res = await app.callFunction({
+    name: 'admin-api',
+    data: {
+      action,
+      secret,
+      ...payload
+    }
+  })
+  
+  if (res.result.code === 0) {
+    return res.result.data
+  }
+  
+  if (res.result.code === 403) {
+    localStorage.removeItem('admin_secret')
+    throw new Error(res.result.msg || '无权限')
+  }
+  
+  throw new Error(res.result.msg || '操作失败')
 }
 
-export async function callAdmin(action, payload = {}) {
-  const s = localStorage.getItem("admin_secret")
-  if (!s) { useAuthStore().setAdmin(false); throw new Error("\u672a\u767b\u5f55") }
-  const r = await apiCall({ action, secret: s, ...payload })
-  if (r.code === 0) return r.data
-  if (r.code === 403) { useAuthStore().setAdmin(false); throw new Error(r.msg) }
-  throw new Error(r.msg || "\u64cd\u4f5c\u5931\u8d25")
+// 登出
+export const logout = async () => {
+  localStorage.removeItem('admin_secret')
+  await auth.signOut()
 }

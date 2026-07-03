@@ -1,10 +1,12 @@
 // 云函数：admin-api
-// 管理后台 HTTP API 入口（云托管 HTTP 触发）
-// 直接操作数据库，不转发到其他云函数
+// 管理后台 API 入口
+// 支持两种调用方式：
+//   1. Web SDK 直接调用（@cloudbase/js-sdk → app.callFunction）— 自动携带 Web OpenID
+//   2. HTTP 触发（云托管 HTTP 触发）— 用于小程序或外部调用
+// 认证方案：密钥验证 + admin_users 集合绑定 Web OpenID
 
 const cloud = require('wx-server-sdk');
 
-// 云托管环境需要显式指定环境 ID
 const envId = process.env.CLOUD_ENV_ID || 'cloud1-d3gt5vpbuf8acec14';
 cloud.init({ env: envId });
 const db = cloud.database();
@@ -13,19 +15,153 @@ const _ = db.command;
 // 管理密钥（从环境变量读取，默认 DaxiAdmin2026）
 const ADMIN_SECRET = process.env.ADMIN_SECRET || 'DaxiAdmin2026';
 
+// ========== 统一入口 ==========
+exports.main = async (event, context) => {
+  // 获取调用方身份（Web SDK 调用时自动注入）
+  const wxContext = cloud.getWXContext();
+  const webOpenId = wxContext.OPENID || null;
+
+  // 兼容 HTTP 触发和 SDK 直接调用两种模式
+  let p;
+  if (event && typeof event.body === 'string') {
+    // HTTP 模式：请求体是 JSON 字符串
+    try { p = JSON.parse(event.body); } catch (e) { p = {}; }
+  } else {
+    // SDK 直接调用模式
+    p = event || {};
+  }
+
+  const { action, payload = {} } = p;
+  const secret = p.secret || payload.secret || '';
+
+  // 路由
+  switch (action) {
+    case 'adminLogin':
+      return await adminLogin(webOpenId, payload);
+    case 'checkIsAdmin':
+      return await checkIsAdmin(webOpenId, secret);
+    case 'ping':
+      return ok({ msg: 'pong' });
+    case 'logout':
+      return ok({ loggedOut: true });
+    default:
+      break;
+  }
+
+  // ---- 以下为业务操作，需要管理员认证 ----
+
+  // 公开可读接口（无需认证）
+  const PUBLIC_ACTIONS = ['cases:list', 'cases:featured', 'cases:get', 'articles:list', 'articles:get', 'knowledge:search'];
+  if (PUBLIC_ACTIONS.includes(action)) {
+    return await handleAction(action, payload);
+  }
+
+  // 公开写操作（无需认证）
+  if (action === 'leads:create') {
+    return await createWebsiteLead(payload);
+  }
+
+  // 需要认证的操作：先验证密钥，再验证 admin_users
+  if (secret !== ADMIN_SECRET) {
+    return err(403, '无权限');
+  }
+
+  // 如果有 Web OpenID，验证是否在管理员列表中
+  if (webOpenId) {
+    const isAdmin = await isAdminUser(webOpenId);
+    if (!isAdmin) {
+      return err(403, '未授权的管理员');
+    }
+  }
+
+  return await handleAction(action, payload);
+};
+
+// ========== 管理员认证 ==========
+
+// 管理员登录：验证密钥 + 绑定 Web OpenID
+async function adminLogin(webOpenId, payload) {
+  const secret = String(payload?.secret || '').trim();
+  if (secret !== ADMIN_SECRET) {
+    return err(403, '密钥错误');
+  }
+
+  // 如果有 Web OpenID，绑定到 admin_users
+  if (webOpenId) {
+    await bindAdminUser(webOpenId);
+  }
+
+  return ok({ isAdmin: true, msg: '登录成功' });
+}
+
+// 检查是否已登录（密钥有效 + OpenID 在管理员列表中）
+async function checkIsAdmin(webOpenId, secret) {
+  // 先验证密钥
+  if (secret !== ADMIN_SECRET) {
+    return err(403, '无权限');
+  }
+
+  // 如果有 Web OpenID，检查是否在管理员列表中
+  if (webOpenId) {
+    const isAdmin = await isAdminUser(webOpenId);
+    return ok({ isAdmin });
+  }
+
+  // 没有 Web OpenID（HTTP 模式），仅验证密钥
+  return ok({ isAdmin: true });
+}
+
+// 绑定管理员用户
+async function bindAdminUser(openid) {
+  const col = db.collection('admin_users');
+  const existing = await col.where({ openid }).limit(1).get();
+  if (existing.data.length > 0) return;
+  await col.add({
+    data: {
+      openid,
+      role: 'admin',
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    }
+  });
+  console.log('[admin-api] 新管理员已绑定:', openid);
+}
+
+// 检查是否是管理员
+async function isAdminUser(openid) {
+  const res = await db.collection('admin_users')
+    .where({ openid })
+    .limit(1)
+    .get();
+  return res.data.length > 0;
+}
+
+// ========== 工具函数 ==========
+
+function ok(data) { return { code: 0, data }; }
+function err(code, msg) { return { code, msg }; }
+
+// ========== HTTP 响应包装（仅 HTTP 模式需要） ==========
 function httpRes(data, sc) {
   return {
     isBase64Encoded: false,
     statusCode: sc || (data.code === 0 ? 200 : 400),
-    headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*", "Access-Control-Allow-Headers": "Content-Type,Authorization", "Access-Control-Allow-Methods": "POST,OPTIONS" },
-    body: JSON.stringify(data)
+    headers: {
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Headers': 'Content-Type,Authorization',
+      'Access-Control-Allow-Methods': 'POST,OPTIONS',
+    },
+    body: JSON.stringify(data),
   };
 }
 
-// action 到数据库集合的映射
+// ========== 业务操作路由 ==========
+
+// action → 数据库集合映射
 const COLLECTION_MAP = {
   'orders': 'orders',
-  'cases': 'orders', // cases 也是存储在 orders 集合，通过 isCase 字段区分
+  'cases': 'orders',
   'articles': 'articles',
   'clients': 'clients',
   'contracts': 'contracts',
@@ -36,100 +172,41 @@ const COLLECTION_MAP = {
   'todos': 'todos',
 };
 
-// 公开可读的 action（网站无需认证即可访问）
-const PUBLIC_ACTIONS = ['cases:list', 'cases:featured', 'cases:get', 'articles:list', 'articles:get', 'knowledge:search'];
-
-// 网站公开写操作
-const PUBLIC_WRITE_ACTIONS = ['leads:create'];
-
-exports.main = async (event) => {
-  // CORS 预检
-  if (event && event.method === "OPTIONS") return httpRes({ code: 0 }, 200);
-
-  // 解析请求体
-  let p = event;
-  if (event && typeof event.body === "string") { try { p = JSON.parse(event.body); } catch(e) { p = {}; } }
-
-  const s = p.password || p.secret;
-
-  // ping 健康检查（无需认证）
-  if (p.action === "ping") return httpRes({ code: 0, data: { msg: "pong" } });
-
-  // 认证接口（无需 secret 校验）
-  if (p.action === "login" || p.action === "checkIsAdmin") {
-    // 验证密钥
-    if (s !== ADMIN_SECRET) return httpRes({ code: 403, msg: "无权限" }, 403);
-    return httpRes({ code: 0, data: { isAdmin: true } });
-  }
-  if (p.action === "logout") return httpRes({ code: 0, data: { loggedOut: true } });
-
-  // 网站公开写操作
-  if (PUBLIC_WRITE_ACTIONS.includes(p.action)) {
-    const result = await handlePublicWrite(p.action, p);
-    return httpRes(result, result.code === 0 ? 200 : 400);
-  }
-
-  // 公开可读接口
-  if (PUBLIC_ACTIONS.includes(p.action)) {
-    const result = await handleAction(p.action, p);
-    return httpRes(result, result.code === 0 ? 200 : 400);
-  }
-
-  // 业务接口需要认证
-  if (s !== ADMIN_SECRET) return httpRes({ code: 403, msg: "无权限" }, 403);
-
-  // 处理业务操作
-  const result = await handleAction(p.action, p);
-  return httpRes(result, result.code === 0 ? 200 : 400);
-};
-
-// 处理各种 action
 async function handleAction(action, payload) {
   try {
-    // 解析 action
     const parts = action.split(':');
     const module = parts[0];
     const op = parts[1] || 'list';
 
-    // 特殊处理 dashboard
     if (module === 'dashboard') {
       return await handleDashboard();
     }
 
-    // 获取集合名
     const collection = COLLECTION_MAP[module];
     if (!collection) {
-      return { code: -1, msg: "未知模块: " + module };
+      return err(-1, '未知模块: ' + module);
     }
 
-    // 根据操作类型处理
     switch (op) {
-      case 'list':
-        return await handleList(collection, payload, module);
+      case 'list':      return await handleList(collection, payload, module);
       case 'get':
-      case 'detail':
-        return await handleGet(collection, payload);
+      case 'detail':    return await handleGet(collection, payload);
       case 'save':
       case 'create':
-      case 'update':
-        return await handleSave(collection, payload);
+      case 'update':    return await handleSave(collection, payload);
       case 'remove':
-      case 'delete':
-        return await handleRemove(collection, payload);
-      case 'featured':
-        return await handleFeatured(collection, payload);
-      case 'categories':
-        return await handleCategories(collection, payload);
-      default:
-        return { code: -1, msg: "未知操作: " + op };
+      case 'delete':    return await handleRemove(collection, payload);
+      case 'featured':  return await handleFeatured(collection, payload);
+      case 'categories': return await handleCategories(collection, payload);
+      default:          return err(-1, '未知操作: ' + op);
     }
   } catch (err) {
     console.error('处理失败:', err);
-    return { code: -1, msg: err.message || "操作失败" };
+    return { code: -1, msg: err.message || '操作失败' };
   }
 }
 
-// 仪表盘统计
+// ========== 仪表盘 ==========
 async function handleDashboard() {
   const now = new Date();
   const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
@@ -141,36 +218,30 @@ async function handleDashboard() {
     db.collection('todos').where({ completed: _.neq(true) }).count(),
   ]);
 
-  // 计算本月收入
   const monthIncomeRes = await db.collection('orders')
     .where({ isDeleted: _.neq(true), createdAt: _.gte(monthStart) })
     .get();
   const monthIncome = monthIncomeRes.data.reduce((sum, o) => sum + (o.paid || 0), 0);
 
-  return {
-    code: 0,
-    data: {
-      totalOrders: ordersRes.total,
-      monthOrders: monthOrdersRes.total,
-      monthIncome,
-      totalLeads: leadsRes.total,
-      pendingTodos: todosRes.total,
-    }
-  };
+  return ok({
+    totalOrders: ordersRes.total,
+    monthOrders: monthOrdersRes.total,
+    monthIncome,
+    totalLeads: leadsRes.total,
+    pendingTodos: todosRes.total,
+  });
 }
 
-// 列表查询
+// ========== 列表查询 ==========
 async function handleList(collection, payload, module) {
   const { page = 1, pageSize = 20 } = payload;
   const skip = (page - 1) * pageSize;
 
   let query = db.collection(collection);
 
-  // cases 模块只查询 isCase=true 的记录
   if (module === 'cases') {
     query = query.where({ isCase: true, isDeleted: _.neq(true) });
   } else if (module === 'orders') {
-    // orders 模块查询 isCase!=true 的记录
     query = query.where({ isDeleted: _.neq(true), isCase: _.neq(true) });
   } else {
     query = query.where({ isDeleted: _.neq(true) });
@@ -178,101 +249,71 @@ async function handleList(collection, payload, module) {
 
   const [countRes, listRes] = await Promise.all([
     query.count(),
-    query.skip(skip).limit(pageSize).orderBy('createdAt', 'desc').get()
+    query.skip(skip).limit(pageSize).orderBy('createdAt', 'desc').get(),
   ]);
 
-  return {
-    code: 0,
-    data: {
-      list: listRes.data,
-      total: countRes.total
-    }
-  };
+  return ok({ list: listRes.data, total: countRes.total });
 }
 
-// 获取详情
+// ========== 详情 ==========
 async function handleGet(collection, payload) {
   const { id } = payload;
-  if (!id) return { code: -1, msg: "缺少 id" };
-
+  if (!id) return err(-1, '缺少 id');
   const res = await db.collection(collection).doc(id).get();
-  return { code: 0, data: res.data };
+  return ok(res.data);
 }
 
-// 保存/更新
+// ========== 保存/更新 ==========
 async function handleSave(collection, payload) {
   const { id, data } = payload;
-  if (!data) return { code: -1, msg: "缺少 data" };
-
+  if (!data) return err(-1, '缺少 data');
   const now = new Date();
 
   if (id) {
-    // 更新
-    await db.collection(collection).doc(id).update({
-      ...data,
-      updatedAt: now
-    });
-    return { code: 0, data: { id } };
+    await db.collection(collection).doc(id).update({ ...data, updatedAt: now });
+    return ok({ id });
   } else {
-    // 新增
     const res = await db.collection(collection).add({
       ...data,
       isDeleted: false,
       createdAt: now,
-      updatedAt: now
+      updatedAt: now,
     });
-    return { code: 0, data: { id: res._id } };
+    return ok({ id: res._id });
   }
 }
 
-// 删除（软删除）
+// ========== 删除（软删除） ==========
 async function handleRemove(collection, payload) {
   const { id } = payload;
-  if (!id) return { code: -1, msg: "缺少 id" };
-
-  await db.collection(collection).doc(id).update({
-    isDeleted: true,
-    updatedAt: new Date()
-  });
-  return { code: 0, data: { id } };
+  if (!id) return err(-1, '缺少 id');
+  await db.collection(collection).doc(id).update({ isDeleted: true, updatedAt: new Date() });
+  return ok({ id });
 }
 
-// 推荐/取消推荐（cases）
+// ========== 推荐 ==========
 async function handleFeatured(collection, payload) {
   const { id, featured } = payload;
-  if (!id) return { code: -1, msg: "缺少 id" };
-
-  await db.collection(collection).doc(id).update({
-    isFeatured: featured !== false,
-    updatedAt: new Date()
-  });
-  return { code: 0, data: { id } };
+  if (!id) return err(-1, '缺少 id');
+  await db.collection(collection).doc(id).update({ isFeatured: featured !== false, updatedAt: new Date() });
+  return ok({ id });
 }
 
-// 获取分类
+// ========== 分类 ==========
 async function handleCategories(collection, payload) {
   const res = await db.collection(collection).where({ isDeleted: _.neq(true) }).get();
   const categories = [...new Set(res.data.map(item => item.category).filter(Boolean))];
-  return { code: 0, data: categories };
+  return ok(categories);
 }
 
-// 公开写操作
-async function handlePublicWrite(action, p) {
-  switch (action) {
-    case 'leads:create':
-      return await createWebsiteLead(p);
-    default:
-      return { code: -1, msg: '未支持的公开写操作: ' + action };
-  }
-}
-
+// ========== 网站公开写操作 ==========
 async function createWebsiteLead(p) {
   const data = p.data || p;
   if (!data.name || !data.phone) {
-    return { code: -1, msg: '请填写姓名和电话' };
+    return err(-1, '请填写姓名和电话');
   }
   if (!/^1[3-9]\d{9}$/.test(String(data.phone).trim())) {
-    return { code: -1, msg: '手机号格式不正确' };
+    return err(-1, '手机号格式不正确');
   }
 
   try {
@@ -292,9 +333,9 @@ async function createWebsiteLead(p) {
         updatedAt: new Date(),
       },
     });
-    return { code: 0, data: { id: res._id } };
+    return ok({ id: res._id });
   } catch (err) {
     console.error('website lead create error:', err);
-    return { code: -1, msg: '提交失败，请稍后重试' };
+    return err(-1, '提交失败，请稍后重试');
   }
 }

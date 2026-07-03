@@ -3,8 +3,8 @@
     <el-card style="width:400px;padding:20px" shadow="xl">
       <h2 class="login-title">大喜的日子 · 管理后台</h2>
       <el-form label-position="top">
-        <el-form-item label="管理员密码">
-          <el-input v-model="password" type="password" placeholder="请输入管理密码" show-password @keyup.enter="handleLogin" />
+        <el-form-item label="管理员密钥">
+          <el-input v-model="secret" type="password" placeholder="请输入管理密钥" show-password @keyup.enter="handleLogin" />
         </el-form-item>
         <el-form-item>
           <el-button type="primary" :loading="loading" class="login-btn" @click="handleLogin">{{ loading ? '验证中...' : '登录 / 初始化' }}</el-button>
@@ -15,28 +15,40 @@
     </el-card>
   </div>
 </template>
+
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { login } from '@/api/cloud'
+import { ElMessage } from 'element-plus'
 
 const router = useRouter()
 const auth = useAuthStore()
-const password = ref('')
+const secret = ref('')
 const loading = ref(false)
 const error = ref('')
 
-async function handleLogin() {
-  if (!password.value) { error.value = '请输入密码'; return }
-  loading.value = true; error.value = ''
+const handleLogin = async () => {
+  if (!secret.value) {
+    error.value = '请输入密钥'
+    return
+  }
+  
+  loading.value = true
+  error.value = ''
+  
   try {
-    await login(password.value)
+    await login(secret.value)
+    ElMessage.success('登录成功')
     auth.setAdmin(true)
     router.push('/')
   } catch (e) {
     error.value = e.message || '登录失败'
-  } finally { loading.value = false }
+    ElMessage.error('登录失败: ' + e.message)
+  } finally {
+    loading.value = false
+  }
 }
 </script>
 <style scoped>
