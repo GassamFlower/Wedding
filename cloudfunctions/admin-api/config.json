@@ -1,5 +1,15 @@
 {
   "permissions": {
     "openapi": []
-  }
+  },
+  "triggers": [
+    {
+      "name": "httpTrigger",
+      "type": "http",
+      "config": {
+        "method": "POST",
+        "path": "/admin-api"
+      }
+    }
+  ]
 }
