@@ -1,147 +1,30 @@
 // 云函数：admin-api
-// 管理后台 API 入口
-// 支持两种调用方式：
-//   1. Web SDK 直接调用（@cloudbase/js-sdk → app.callFunction）— 自动携带 Web OpenID
-//   2. HTTP 触发（云托管 HTTP 触发）— 用于小程序或外部调用
-// 认证方案：密钥验证 + admin_users 集合绑定 Web OpenID
+// 管理后台 HTTP API 入口（云托管 HTTP 触发）
+// 使用 @cloudbase/node-sdk 直接操作数据库
 
-const cloud = require('wx-server-sdk');
+const cloudbase = require('@cloudbase/node-sdk');
 
+// 从环境变量读取配置
 const envId = process.env.CLOUD_ENV_ID || 'cloud1-d3gt5vpbuf8acec14';
-cloud.init({ env: envId });
-const db = cloud.database();
-const _ = db.command;
-
-// 管理密钥（从环境变量读取，默认 DaxiAdmin2026）
 const ADMIN_SECRET = process.env.ADMIN_SECRET || 'DaxiAdmin2026';
 
-// ========== 统一入口 ==========
-exports.main = async (event, context) => {
-  // 获取调用方身份（Web SDK 调用时自动注入）
-  const wxContext = cloud.getWXContext();
-  const webOpenId = wxContext.OPENID || null;
-
-  // 兼容 HTTP 触发和 SDK 直接调用两种模式
-  let p;
-  if (event && typeof event.body === 'string') {
-    // HTTP 模式：请求体是 JSON 字符串
-    try { p = JSON.parse(event.body); } catch (e) { p = {}; }
-  } else {
-    // SDK 直接调用模式
-    p = event || {};
+// 初始化 CloudBase Admin SDK（需要腾讯云密钥）
+const app = cloudbase.init({
+  envId,
+  credentials: {
+    secretId: process.env.TENCENT_SECRET_ID,
+    secretKey: process.env.TENCENT_SECRET_KEY,
   }
+});
 
-  const { action, payload = {} } = p;
-  const secret = p.secret || payload.secret || '';
-
-  // 路由
-  switch (action) {
-    case 'adminLogin':
-      return await adminLogin(webOpenId, payload);
-    case 'checkIsAdmin':
-      return await checkIsAdmin(webOpenId, secret);
-    case 'ping':
-      return ok({ msg: 'pong' });
-    case 'logout':
-      return ok({ loggedOut: true });
-    default:
-      break;
-  }
-
-  // ---- 以下为业务操作，需要管理员认证 ----
-
-  // 公开可读接口（无需认证）
-  const PUBLIC_ACTIONS = ['cases:list', 'cases:featured', 'cases:get', 'articles:list', 'articles:get', 'knowledge:search'];
-  if (PUBLIC_ACTIONS.includes(action)) {
-    return await handleAction(action, payload);
-  }
-
-  // 公开写操作（无需认证）
-  if (action === 'leads:create') {
-    return await createWebsiteLead(payload);
-  }
-
-  // 需要认证的操作：先验证密钥，再验证 admin_users
-  if (secret !== ADMIN_SECRET) {
-    return err(403, '无权限');
-  }
-
-  // 如果有 Web OpenID，验证是否在管理员列表中
-  if (webOpenId) {
-    const isAdmin = await isAdminUser(webOpenId);
-    if (!isAdmin) {
-      return err(403, '未授权的管理员');
-    }
-  }
-
-  return await handleAction(action, payload);
-};
-
-// ========== 管理员认证 ==========
-
-// 管理员登录：验证密钥 + 绑定 Web OpenID
-async function adminLogin(webOpenId, payload) {
-  const secret = String(payload?.secret || '').trim();
-  if (secret !== ADMIN_SECRET) {
-    return err(403, '密钥错误');
-  }
-
-  // 如果有 Web OpenID，绑定到 admin_users
-  if (webOpenId) {
-    await bindAdminUser(webOpenId);
-  }
-
-  return ok({ isAdmin: true, msg: '登录成功' });
-}
-
-// 检查是否已登录（密钥有效 + OpenID 在管理员列表中）
-async function checkIsAdmin(webOpenId, secret) {
-  // 先验证密钥
-  if (secret !== ADMIN_SECRET) {
-    return err(403, '无权限');
-  }
-
-  // 如果有 Web OpenID，检查是否在管理员列表中
-  if (webOpenId) {
-    const isAdmin = await isAdminUser(webOpenId);
-    return ok({ isAdmin });
-  }
-
-  // 没有 Web OpenID（HTTP 模式），仅验证密钥
-  return ok({ isAdmin: true });
-}
-
-// 绑定管理员用户
-async function bindAdminUser(openid) {
-  const col = db.collection('admin_users');
-  const existing = await col.where({ openid }).limit(1).get();
-  if (existing.data.length > 0) return;
-  await col.add({
-    data: {
-      openid,
-      role: 'admin',
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    }
-  });
-  console.log('[admin-api] 新管理员已绑定:', openid);
-}
-
-// 检查是否是管理员
-async function isAdminUser(openid) {
-  const res = await db.collection('admin_users')
-    .where({ openid })
-    .limit(1)
-    .get();
-  return res.data.length > 0;
-}
+const db = app.database();
+const _ = db.command;
 
 // ========== 工具函数 ==========
-
 function ok(data) { return { code: 0, data }; }
 function err(code, msg) { return { code, msg }; }
 
-// ========== HTTP 响应包装（仅 HTTP 模式需要） ==========
+// ========== HTTP 响应包装 ==========
 function httpRes(data, sc) {
   return {
     isBase64Encoded: false,
@@ -154,6 +37,74 @@ function httpRes(data, sc) {
     },
     body: JSON.stringify(data),
   };
+}
+
+// ========== 统一入口 ==========
+exports.main = async (event) => {
+  // CORS 预检
+  if (event && event.method === 'OPTIONS') return httpRes({ code: 0 }, 200);
+
+  // 解析请求体
+  let p = event;
+  if (event && typeof event.body === 'string') {
+    try { p = JSON.parse(event.body); } catch (e) { p = {}; }
+  }
+
+  const { action, payload = {} } = p;
+  const secret = p.secret || payload.secret || '';
+
+  // 路由
+  switch (action) {
+    case 'adminLogin':
+      return httpRes(await adminLogin(payload));
+    case 'checkIsAdmin':
+      return httpRes(await checkIsAdmin(secret));
+    case 'ping':
+      return httpRes(ok({ msg: 'pong' }));
+    case 'logout':
+      return httpRes(ok({ loggedOut: true }));
+    default:
+      break;
+  }
+
+  // ---- 以下为业务操作，需要管理员认证 ----
+
+  // 公开可读接口（无需认证）
+  const PUBLIC_ACTIONS = ['cases:list', 'cases:featured', 'cases:get', 'articles:list', 'articles:get', 'knowledge:search'];
+  if (PUBLIC_ACTIONS.includes(action)) {
+    return httpRes(await handleAction(action, payload));
+  }
+
+  // 公开写操作（无需认证）
+  if (action === 'leads:create') {
+    return httpRes(await createWebsiteLead(payload));
+  }
+
+  // 需要认证的操作
+  if (secret !== ADMIN_SECRET) {
+    return httpRes(err(403, '无权限'), 403);
+  }
+
+  return httpRes(await handleAction(action, payload));
+};
+
+// ========== 管理员认证 ==========
+
+// 管理员登录：验证密钥
+async function adminLogin(payload) {
+  const secret = String(payload?.secret || '').trim();
+  if (secret !== ADMIN_SECRET) {
+    return err(403, '密钥错误');
+  }
+  return ok({ isAdmin: true, msg: '登录成功' });
+}
+
+// 检查是否已登录
+async function checkIsAdmin(secret) {
+  if (secret !== ADMIN_SECRET) {
+    return err(403, '无权限');
+  }
+  return ok({ isAdmin: true });
 }
 
 // ========== 业务操作路由 ==========
@@ -279,7 +230,7 @@ async function handleSave(collection, payload) {
       createdAt: now,
       updatedAt: now,
     });
-    return ok({ id: res._id });
+    return ok({ id: res.id });
   }
 }
 
@@ -333,7 +284,7 @@ async function createWebsiteLead(p) {
         updatedAt: new Date(),
       },
     });
-    return ok({ id: res._id });
+    return ok({ id: res.id });
   } catch (err) {
     console.error('website lead create error:', err);
     return err(-1, '提交失败，请稍后重试');
