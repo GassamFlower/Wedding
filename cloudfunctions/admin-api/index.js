@@ -1,96 +1,60 @@
 // 云函数：admin-api
-// 管理后台 HTTP API 入口（云托管 HTTP 触发）
-// 使用 @cloudbase/node-sdk 直接操作数据库
+// 管理后台 API（通过 @cloudbase/js-sdk callFunction 调用）
+// 使用 wx-server-sdk 操作数据库（云函数运行时自动注入凭据）
 
-const cloudbase = require('@cloudbase/node-sdk');
-
-// 从环境变量读取配置
-const envId = process.env.CLOUD_ENV_ID || 'cloud1-d3gt5vpbuf8acec14';
-const ADMIN_SECRET = process.env.ADMIN_SECRET || 'DaxiAdmin2026';
-
-// 初始化 CloudBase Admin SDK（需要腾讯云密钥）
-const app = cloudbase.init({
-  envId,
-  credentials: {
-    secretId: process.env.TENCENT_SECRET_ID,
-    secretKey: process.env.TENCENT_SECRET_KEY,
-  }
-});
-
-const db = app.database();
+const cloud = require('wx-server-sdk');
+cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV });
+const db = cloud.database();
 const _ = db.command;
+
+// 管理密钥（从环境变量读取，默认硬编码）
+const ADMIN_SECRET = process.env.ADMIN_SECRET || 'DaxiAdmin2026';
 
 // ========== 工具函数 ==========
 function ok(data) { return { code: 0, data }; }
 function err(code, msg) { return { code, msg }; }
 
-// ========== HTTP 响应包装 ==========
-function httpRes(data, sc) {
-  return {
-    isBase64Encoded: false,
-    statusCode: sc || (data.code === 0 ? 200 : 400),
-    headers: {
-      'Content-Type': 'application/json',
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Headers': 'Content-Type,Authorization',
-      'Access-Control-Allow-Methods': 'POST,OPTIONS',
-    },
-    body: JSON.stringify(data),
-  };
-}
-
 // ========== 统一入口 ==========
-exports.main = async (event) => {
-  // CORS 预检
-  if (event && event.method === 'OPTIONS') return httpRes({ code: 0 }, 200);
+exports.main = async (event, context) => {
+  const { action, payload = {}, secret = '' } = event;
 
-  // 解析请求体
-  let p = event;
-  if (event && typeof event.body === 'string') {
-    try { p = JSON.parse(event.body); } catch (e) { p = {}; }
-  }
-
-  const { action, payload = {} } = p;
-  const secret = p.secret || payload.secret || '';
-
-  // 路由
+  // 路由：认证相关
   switch (action) {
     case 'adminLogin':
-      return httpRes(await adminLogin(payload));
+      return await adminLogin(payload);
     case 'checkIsAdmin':
-      return httpRes(await checkIsAdmin(secret));
+      return await checkIsAdmin(secret);
     case 'ping':
-      return httpRes(ok({ msg: 'pong' }));
+      return ok({ msg: 'pong' });
     case 'logout':
-      return httpRes(ok({ loggedOut: true }));
+      return ok({ loggedOut: true });
     default:
       break;
   }
 
-  // ---- 以下为业务操作，需要管理员认证 ----
+  // ---- 以下为业务操作 ----
 
   // 公开可读接口（无需认证）
-  const PUBLIC_ACTIONS = ['cases:list', 'cases:featured', 'cases:get', 'articles:list', 'articles:get', 'knowledge:search'];
+  const PUBLIC_ACTIONS = ['cases:list', 'cases:featured', 'cases:get', 'articles:list', 'articles:get', 'knowledge:search', 'dashboard'];
   if (PUBLIC_ACTIONS.includes(action)) {
-    return httpRes(await handleAction(action, payload));
+    return await handleAction(action, payload);
   }
 
   // 公开写操作（无需认证）
   if (action === 'leads:create') {
-    return httpRes(await createWebsiteLead(payload));
+    return await createWebsiteLead(payload);
   }
 
   // 需要认证的操作
   if (secret !== ADMIN_SECRET) {
-    return httpRes(err(403, '无权限'), 403);
+    return err(403, '无权限');
   }
 
-  return httpRes(await handleAction(action, payload));
+  return await handleAction(action, payload);
 };
 
 // ========== 管理员认证 ==========
 
-// 管理员登录：验证密钥
 async function adminLogin(payload) {
   const secret = String(payload?.secret || '').trim();
   if (secret !== ADMIN_SECRET) {
@@ -99,7 +63,6 @@ async function adminLogin(payload) {
   return ok({ isAdmin: true, msg: '登录成功' });
 }
 
-// 检查是否已登录
 async function checkIsAdmin(secret) {
   if (secret !== ADMIN_SECRET) {
     return err(403, '无权限');
@@ -109,7 +72,6 @@ async function checkIsAdmin(secret) {
 
 // ========== 业务操作路由 ==========
 
-// action → 数据库集合映射
 const COLLECTION_MAP = {
   'orders': 'orders',
   'cases': 'orders',
@@ -139,17 +101,17 @@ async function handleAction(action, payload) {
     }
 
     switch (op) {
-      case 'list':      return await handleList(collection, payload, module);
+      case 'list':        return await handleList(collection, payload, module);
       case 'get':
-      case 'detail':    return await handleGet(collection, payload);
+      case 'detail':      return await handleGet(collection, payload);
       case 'save':
       case 'create':
-      case 'update':    return await handleSave(collection, payload);
+      case 'update':      return await handleSave(collection, payload);
       case 'remove':
-      case 'delete':    return await handleRemove(collection, payload);
-      case 'featured':  return await handleFeatured(collection, payload);
-      case 'categories': return await handleCategories(collection, payload);
-      default:          return err(-1, '未知操作: ' + op);
+      case 'delete':      return await handleRemove(collection, payload);
+      case 'featured':    return await handleFeatured(collection, payload);
+      case 'categories':  return await handleCategories(collection, payload);
+      default:            return err(-1, '未知操作: ' + op);
     }
   } catch (err) {
     console.error('处理失败:', err);
@@ -230,7 +192,7 @@ async function handleSave(collection, payload) {
       createdAt: now,
       updatedAt: now,
     });
-    return ok({ id: res.id });
+    return ok({ id: res._id });
   }
 }
 
@@ -284,7 +246,7 @@ async function createWebsiteLead(p) {
         updatedAt: new Date(),
       },
     });
-    return ok({ id: res.id });
+    return ok({ id: res._id });
   } catch (err) {
     console.error('website lead create error:', err);
     return err(-1, '提交失败，请稍后重试');
